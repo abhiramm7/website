@@ -49,6 +49,77 @@ I am interested in optimization, real-time control, and machine learning, and th
           <tr onmouseout="nightsight_stop()" onmouseover="nightsight_start()">
             <td style="padding:20px;width:25%;vertical-align:middle">
               <div class="one">
+                <div class="two" id="nightsight_image" style="opacity: 0;"><img src="data/images/b35.png" style="width:150px;height:120px;"></div>
+                <img src="data/images/b10.png" style="width:150px;height:120px;">
+              </div>
+              <script type="text/javascript">
+                function nightsight_start() {
+                  document.getElementById('nightsight_image').style.opacity = "1";
+                }
+
+                function nightsight_stop() {
+                  document.getElementById('nightsight_image').style.opacity = "0";
+                }
+                nightsight_stop()
+              </script>
+            </td>
+            <td style="padding:20px;width:75%;vertical-align:middle">
+              <a href="data/papers/bayes_poster.pdf">
+                <papertitle>Bayesian optimization for shaping the response of stormwater systems</papertitle>
+              </a>
+              <br>
+                  <strong>Abhiram Mullapudi</strong>,
+                  <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
+              <br>
+              <em>In preparation</em>, 2020
+	            <br>
+              <a href="data/papers/pystorms_exabs.pdf">poster</a>
+              <br>
+              <p></p>
+              <p> Bayesian optimization is a automated data-driven approach for identifying a control strategy that achieves the desired response from the stormwater network.</p>
+            </td>
+          </tr>
+
+          <tr onmouseout="nightsight_stop()" onmouseover="nightsight_start()">
+            <td style="padding:20px;width:25%;vertical-align:middle">
+              <div class="one">
+                <div class="two" id="nightsight_image" style="opacity: 0;"><img src="data/images/pystorms.png" style="width:135px;height:150px;"></div>
+                <img src="data/images/pystorms.png" style="width:135px;height:150px;">
+              </div>
+              <script type="text/javascript">
+                function nightsight_start() {
+                  document.getElementById('nightsight_image').style.opacity = "1";
+                }
+
+                function nightsight_stop() {
+                  document.getElementById('nightsight_image').style.opacity = "0";
+                }
+                nightsight_stop()
+              </script>
+            </td>
+            <td style="padding:20px;width:75%;vertical-align:middle">
+              <a href="data/papers/pystorms_exabs.pdf">
+                <papertitle>pystorms: Simulation sandbox for the evaluation and design of stormwater control algorithms</papertitle>
+              </a>
+              <br>
+                  <a href="http://lightscalar.com/about/">Sara P. Rimer</a>,
+                  <strong>Abhiram Mullapudi</strong>,
+                  <a href="https://scholar.google.com/citations?user=-JQusO0AAAAJ&hl=en">Sara Troutman</a>,
+                  <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
+              <br>
+              <em>In preparation</em>, 2020
+	            <br>
+              <a href="https://github.com/kLabUM/pystorms">code</a> /
+              <a href="data/papers/pystorms_exabs.pdf">extended abstract</a>
+              <br>
+              <p></p>
+              <p> pystorms provides a collection of anonymized stormwater networks to enable the development and quantitative comparison of stormwater control algorithms.  </p>
+            </td>
+          </tr>
+
+          <tr onmouseout="nightsight_stop()" onmouseover="nightsight_start()">
+            <td style="padding:20px;width:25%;vertical-align:middle">
+              <div class="one">
                 <div class="two" id="nightsight_image" style="opacity: 0;"><img src="data/images/deeprl.png" style="width:135px;height:150px;"></div>
                 <img src="data/images/deeprl.png" style="width:135px;height:150px;">
               </div>
@@ -74,7 +145,7 @@ I am interested in optimization, real-time control, and machine learning, and th
                   <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
               <br>
               <em>In review</em>, 2019
-	      <br>
+	            <br>
               <a href="https://github.com/kLabUM/rl-storm-control">code</a> /
               <a href="data/papers/rl-preprint.pdf">manuscript</a>
               <br>
