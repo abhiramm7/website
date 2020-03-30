@@ -36,6 +36,7 @@
 
 .header-logo {
   border: 1px solid white;  /* For debugging */
+  width:500px;
   display: flex;
 }
 
@@ -113,6 +114,7 @@
   border: 1px solid white;  /* For debugging */
   display: flex;
   justify-content: flex-end;
+  align-items: right;
   }
 
 
