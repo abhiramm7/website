@@ -1,70 +1,37 @@
-<link rel="stylesheet" href="./tufte.css"/>
+---
+title: Typo_Layout
+---
 
-Tufte CSS
-=========
+Typography and Layout
+=====================
 
-Dave Liepmann
+This layout is adopted from Tufts CSS by Dave Liepmann.
 
-::: {.section}
-Tufte CSS provides tools to style web articles using the ideas
-demonstrated by Edward Tufte's books and handouts. Tufte's style is
-known for its simplicity, extensive use of sidenotes, tight integration
-of graphics with text, and carefully chosen typography.
+Using Template
+--------------
 
-Tufte CSS was created by [Dave Liepmann](http://www.daveliepmann.com)
-and is now an Edward Tufte project. The original idea was cribbed from
-[Tufte-[L[a]{.latex-sup}T[e]{.latex-sub}X]{.latex}](https://tufte-latex.github.io/tufte-latex/)
-and [R Markdown's Tufte Handout
-format](http://rmarkdown.rstudio.com/tufte_handout_format.html). We give
-hearty thanks to all the people who have contributed to those projects.
+Style sheets with fonts and layout are embedded in the in the `template.html` file.
+Template file draws from the `.css` files in the `stylesheets` folder.
 
-If you see anything that Tufte CSS could improve, we welcome your
-contribution in the form of an issue or pull request on the GitHub
-project: [tufte-css](https://github.com/edwardtufte/tufte-css). Please
-note the [contribution
-guidelines](https://github.com/edwardtufte/tufte-css#contributing).
+* **blog_style.css** controls the header and page dimensions 
+* **tufte.css** control the article typesetting and layout
 
-Finally, a reminder about the goal of this project. The web is not
-print. Webpages are not books. Therefore, the goal of Tufte CSS is not
-to say "websites should look like this interpretation of Tufte's books"
-but rather "here are some techniques Tufte developed that we've found
-useful in print; maybe you can find a way to make them useful on the
-web". Tufte CSS is merely a sketch of one way to implement this
-particular set of ideas. It should be a starting point, not a design
-goal, because any project should present their information as best suits
-their particular circumstances.
-:::
+Content for the blog is written in markdown and then populated into a html using pandoc. 
 
-::: {.section}
-Getting Started
----------------
+    ;; shell script 
+    pandoc -f markdown -t html <.md> --template=<.html> -o <.html>
 
-To use Tufte CSS, copy `tufte.css` and the `et-book` directory of font
-files to your project directory, then add the following to your HTML
-document's `head` block:
+[A vim function to automate it might be simpler]{.sidenote}
 
-    <link rel="stylesheet" href="tufte.css"/>
+Outline of Elements 
+-------------------
 
-Now you just have to use the provided CSS rules, and the Tufte CSS
-conventions described in this document. For best results, View Source
-and Inspect Element frequently.
-:::
+# Heading 1
+## Heading 2
+### Heading 3
 
-::: {.section}
-Fundamentals
-------------
 
-### Sections and Headings {#fundamentals--sections-and-headers}
-
-Organize your document with an `article` element inside your `body` tag.
-Inside that, use `section` tags around each logical grouping of text and
-headings.
-
-Tufte CSS uses `h1` for the document title, `p` with class `subtitle`
-for the document subtitle, `h2` for section headings, and `h3` for
-low-level headings. More specific headings are not supported. If you
-feel the urge to reach for a heading of level 4 or greater, consider
-redesigning your document:
+Example of quoted text:
 
 > \[It is\] notable that the Feynman lectures (3 volumes) write about
 > all of physics in 1800 pages, using only 2 levels of hierarchical
@@ -77,69 +44,11 @@ redesigning your document:
 > [Edward Tufte, forum post, 'Book design: advice and examples'
 > thread](http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB)
 
-As a bonus, this excerpt regarding the use of headings provides an
-example of block quotes. In Tufte CSS they are just lightly styled,
-semantically correct HTML using `blockquote` and `footer` elements. See
-page 20 of [The Visual Display of Quantitative
-Information](https://www.edwardtufte.com/tufte/books_vdqi) for an
-example in print.
-
-[In his later books]{.newthought}[[*Beautiful
-Evidence*](http://www.edwardtufte.com/tufte/books_be)]{.sidenote}, Tufte
-starts each section with a bit of vertical space, a non-indented
-paragraph, and the first few words of the sentence set in small caps.
-For this we use a span with the class `newthought`, as demonstrated at
-the beginning of this paragraph. Vertical spacing is accomplished
-separately through `<section>` tags. Be consistent: though we do so in
-this paragraph for the purpose of demonstration, do not alternate use of
-header elements and the `newthought` technique. Pick one approach and
-stick to it.
-
-### Text {#fundamentals--text}
-
-Although paper handouts obviously have a pure white background, the web
-is better served by the use of slightly off-white and off-black colors.
-Tufte CSS uses `#fffff8` and `#111111` because they are nearly
-indistinguishable from their 'pure' cousins, but dial down the harsh
-contrast. We stick to the greyscale for text, reserving color for
-specific, careful use in figures and images.
-
-In print, Tufte has used the proprietary Monotype Bembo[See Tufte's
-comment in the [Tufte book
-fonts](http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt)
-thread.]{.sidenote} font. A similar effect is achieved in digital
-formats with the now open-source
-[ETBook](https://github.com/edwardtufte/et-book), which Tufte CSS
-supplies with a `@font-face` reference to a .ttf file. In case ETBook
-somehow doesn't work, Tufte CSS shifts gracefully to other serif fonts
-like Palatino and Georgia.
-
-Also notice how Tufte CSS includes separate font files for bold (strong)
-and italic (emphasis), instead of relying on the browser to mechanically
-transform the text. This is typographic best practice.
-
-If you prefer sans-serifs, use the `sans` class. It relies on Gill Sans,
-Tufte's sans-serif font of choice.
-
-Links in Tufte CSS match the body text in color and do not change on
-mouseover or when clicked. Here is a [dummy example](#) that goes
-nowhere. These links are underlined, since this is the most widely
-recognized indicator of clickable text. ⊕[Blue text, while also a widely
+Links aren't highlighted in color. ⊕[Blue text, while also a widely
 recognizable clickable-text indicator, is crass and distracting.
 Luckily, it is also rendered unnecessary by the use of
-underlining.]{.marginnote} However, because most browsers' default
-underlining does not clear descenders and is so thick and distracting,
-the underline effect is instead achieved using CSS trickery involving
-background gradients instead of standard `text-decoration`. Credit goes
-to Adam Schwartz for that technique.
+underlining.]{.marginnote}
 
-As always, these design choices are merely one approach that Tufte CSS
-provides by default. Other approaches can also be made to work. The goal
-is to make sentences readable without interference from links, as well
-as to make links immediately identifiable even by casual web users.
-:::
-
-::: {.section}
 Epigraphs
 ---------
 
@@ -161,18 +70,7 @@ Epigraphs
 > 1943), 37
 :::
 
-If you'd like to introduce your page or a section of your page with some
-quotes, use epigraphs. Modeled after chapter epigraphs in Tufte's books
-(particularly *Beautiful Evidence*), these are `blockquote` elements
-with a bit of specialized styling. Quoted text is italicized. The source
-goes in a `footer` element inside the `blockquote`. We have provided
-three examples in the epigraph of this section, demonstrating shorter
-and longer quotes, with and without a paragraph tag, and showing how
-multiple quotes within an epigraph fit together with the use of a
-wrapper class.
-:::
 
-::: {.section}
 Sidenotes: Footnotes and Marginal Notes {#sidenotes}
 ---------------------------------------
 
