@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang='en'> <!-- Opening Tag -->
+	<head>
+    		<!-- Metadata goes here -->
+		<meta charset='UTF-8'/>
+    		<link rel="stylesheet" type="text/css" href="../stylesheets/blog_style.css">
+		<link rel="stylesheet" href="../stylesheets/tufte.css"/>
+    		<title>log/Gaussian Processes</title>
+		<meta name="author" content="Abhiram Mullapudi">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+
+
+	<body>
+		<div class="master-container">
+    		<!-- Content -->
+    		<!-- Header -->
+		<div class='header-container'>
+      			<div class='header-logo'>
+				<div class='logo'><img src='../data/images/logo.png' style="height:60%;width:60%" alt="Random Storms Logo"/></div>
+      			</div>
+			<div class='header-menu'>
+				<div class='usr'><a href="../index.html" style="color:black">./usr</a></div>
+				<div class='log'><a href="./log.html" style="color:black">./log</a></div>
+				<div class='archives'>./archives</div>
+        			<div class='untitled'>./untitled</div>
+			</div>
+    		</div>
+		<h1 id="gaussian-processes">Gaussian Processes</h1>
+  <h2 id="regression">Regression</h2>
+  <p>Consider the problem of classical problem of regression, where given a set of data points <span class="math inline"><strong>X</strong>, <strong>y</strong></span>, we want to learn the mapping <span class="math inline"><em>f</em> : <em>x</em> → <em>y</em></span> so that we can predict the value of the y for the data we have not encountered. There are two ways we can approach this,</p>
+  <ol type="1">
+  <li>Assume a structure of the <span class="math inline"><em>f</em></span> and find the parameters that best represent the mapping the given data points.</li>
+  <li>Make no assumptions on the structure of <span class="math inline"><em>f</em></span>, but rather look at all the possible functions that fit the data assign probabilities based on the likely hood of the function representing the data.</li>
+  </ol>
+  <p>Linear regression, polynomial fit are the best examples of the first approach. But making such an assumption the structure of mapping, introduces a strong bias. Though such an approach is advantageous when we know the relationship between the data-points. But in the instances where we have no idea on how the data looks like, such an approach might not be useful.</p>
+  <p><br /><span class="math display">𝒩</span><br /></p>
+		</div>
+	</body>
+</html> <!-- Closing Tag -->
