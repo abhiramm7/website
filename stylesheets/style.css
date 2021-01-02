@@ -34,6 +34,14 @@
  flex-direction: column;
 }
 
+.log-content-container{
+  font-family: 'ZillaSlab';
+  padding: 10px 10px 10px 10px;
+  border: 1px solid white;
+  display: flex;
+  flex-direction: column;
+}
+
 hr {
   border: 0;
   clear:both;
