@@ -23,6 +23,13 @@
   box-sizing: border-box;
 }
 
+.photo-grid{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
 .master-container {
  display: flex;
  width:70%;
