@@ -68,4 +68,7 @@
 }
 
 % Name and contact details
-\newcommand{\name}[3]{\noindent{\Huge{#1}} \\ Web : \href{https://#2}{\textbf{#2}}\\ Email : #3} 
+\newcommand{\name}[3]{\noindent{\Huge{#1}} \\ Web : \href{https://#2}{\textbf{#2}}\\ Email : #3}
+
+% Multi Column
+\usepackage{multicol} 
