@@ -1,3 +1,11 @@
 .DS_Store
 tufte-css/*
 tags
+
+*.aux
+*.bbl
+*.blg
+*.fls
+*.log
+*.synctex.gz
+*.fdb_latexmk
