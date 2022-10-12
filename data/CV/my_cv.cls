@@ -27,7 +27,6 @@
   BoldItalicFont=* Black Oblique, % or Medium Oblique
 ]
 
-%\usepackage[margin=1in]{geometry}
 \usepackage{bibentry}
 \usepackage{tabularx}
 \usepackage{multicol}
