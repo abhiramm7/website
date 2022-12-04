@@ -1,3 +1,8 @@
+.dark-mode {
+  background-color: black;
+  color: white;
+}
+
 @font-face {
   font-family: 'ZillaSlab';
   src: url('./fonts/zilla/woff/ZillaSlab-Regular.woff') format('woff');
