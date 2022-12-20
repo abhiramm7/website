@@ -28,6 +28,23 @@
   box-sizing: border-box;
 }
 
+pre {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    /*border-left: 3px solid #f36d33;*/
+    color: #666;
+    page-break-inside: avoid;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.0;
+    margin-bottom: 1.0em;
+    /*max-width: 100%;*/
+    overflow: auto;
+    padding: 1em 1em;
+    /*display: block;*/
+    word-wrap: break-word;
+}
+
 .photo-grid{
 	display: flex;
 	flex-wrap: wrap;
@@ -50,6 +67,13 @@
   font-family: 'ZillaSlab';
   padding: 10px 10px 10px 10px;
   border: 1px solid white;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-body{
+  font-family: 'ZillaSlab';
+  padding: 10px 10px 0px 0px;
   display: flex;
   flex-direction: column;
 }

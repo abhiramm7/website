@@ -1,15 +1,13 @@
-% Blog Generation
+% Blog Generation 
 % Abhiram Mullapudi
 % May 8, 2021
 
 
-# Blog Generation
+### Blog generation with pandoc using a html template
 
-This blog uses `Tufte.css` style and is built in markdown.
-
-I use pandoc to convert markdown files into static html pages.
+I use pandoc to convert markdown files into static html pages using a template file.
 
 ```sh
-pandoc -f markdown -t html <markdown file path> -o < html file path> --self-contained --css=<path to css>
+pandoc --template blog_log_template.html <source.md> -o <target.html>
 
 ```
