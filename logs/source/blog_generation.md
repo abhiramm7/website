@@ -8,6 +8,6 @@
 I use pandoc to convert markdown files into static html pages using a template file.
 
 ```sh
-pandoc --template blog_log_template.html <source.md> -o <target.html>
+pandoc --template blog_log_template.html <source.md> -o <target.html> --mathjax
 
 ```

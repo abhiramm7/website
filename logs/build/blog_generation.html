@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="../../stylesheets/style.css">
+		<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 		<meta name="author" content="Abhiram Mullapudi">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	</head>
@@ -32,7 +33,7 @@
 generation with pandoc using a html template</h3>
 <p>I use pandoc to convert markdown files into static html pages using a
 template file.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">--template</span> blog_log_template.html <span class="op">&lt;</span>source.md<span class="op">&gt;</span> -o <span class="op">&lt;</span>target.html<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">--template</span> blog_log_template.html <span class="op">&lt;</span>source.md<span class="op">&gt;</span> -o <span class="op">&lt;</span>target.html<span class="op">&gt;</span> --mathjax</span></code></pre></div>
 				</div>
 			</div>
 			<hr/>
