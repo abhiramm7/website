@@ -3,7 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="../../stylesheets/style.css">
-		<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+		<script src="../../stylesheets/mathjax.js" defer></script>
+		<script type="text/javascript" async
+			src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>	
 		<meta name="author" content="Abhiram Mullapudi">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	</head>
@@ -30,21 +33,18 @@ convolution</h1>
 															<p class="date">January 2, 2023</p>
 									</header>
 				<div class='blog-body'>
-				<h2 id="convolution">Convolution</h2>
+					<h2 id="convolution">Convolution</h2>
 <p>Convolution is a mathematical operation akin to addition or
-multiplication. It operates on two signals<a href="#fn1"
-class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> to
-generate a combined signal.</p>
-<p><span class="math display">\[ (f * g)(t):=\int_{-\infty}^{\infty}
-f(\tau) g(t-\tau) d \tau \]</span></p>
-<section id="footnotes" class="footnotes footnotes-end-of-document"
-role="doc-endnotes">
-<hr />
-<ol>
-<li id="fn1"><p>Signals in this context can be continuous or discrete.<a
-href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
+multiplication. Convolution operation is described by (1). It processes
+on two signals, described by <span class="math inline">\(f\)</span> and
+<span class="math inline">\(g\)</span>, to generate a third new
+signal.</p>
+<p><span class="math display">\[(f * g)(t):=\int_{-\infty}^{\infty}
+f(\tau) g(t-\tau) d \tau \tag{1}\]</span></p>
+<p>The above equation can be interpreted as flipping <span
+class="math inline">\(g(t)\)</span> and scanning the <span
+class="math inline">\(f(t)\)</span>. Convolution operation returns the
+function that is created by scanning these signals over each other.</p>
 				</div>
 			</div>
 			<hr/>

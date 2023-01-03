@@ -5,10 +5,15 @@
 ## Convolution
 
 Convolution is a mathematical operation akin to addition or multiplication.
+Convolution operation is described by \eqref(1).
+It processes on two signals, described by $f$ and $g$, to generate a third new signal.
 
-It operates on two signals[^1] to generate a signal that combines the . 
+$$(f * g)(t):=\int_{-\infty}^{\infty} f(\tau) g(t-\tau) d \tau \tag{1}$$
 
-$$ (f * g)(t):=\int_{-\infty}^{\infty} f(\tau) g(t-\tau) d \tau $$
+The above equation can be interpreted as flipping $g(t)$ and scanning the $f(t)$.
+Convolution operation returns the function that is created by scanning these signals over each other.
 
 
-[^1]: Signals in this context can be continuous or discrete. 
+
+
+

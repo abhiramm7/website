@@ -3,6 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="../../stylesheets/style.css">
+		<script src="../../stylesheets/mathjax.js" defer></script>
+		<script type="text/javascript" async
+			src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>	
 		<meta name="author" content="Abhiram Mullapudi">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	</head>
@@ -23,25 +27,24 @@
 
 			<div class="log-content-container">
 				<header id="title-block-header">
-					<h1 class="title">Handling Background tasks in UNIX</h1>
+					<h1 class="title">Data Pipelines</h1>
 															<p class="author">Abhiram Mullapudi</p>
-															<p class="date">April 11, 2022</p>
+															<p class="date">March 22, 2022</p>
 									</header>
 				<div class='blog-body'>
-				<h2 id="launching-a-background-task">Launching a background task</h2>
-<ol type="1">
-<li>Create a shell script that monitors the task that is running and
-restarts it if it dies.</li>
-</ol>
-<pre class="shell"><code>#!bin/bash
-until &lt;python python_scipt.py&gt;; do
-    echo &quot;script died with error #?. Restarting it&quot; &gt;&amp;2
-    sleep 1
-done</code></pre>
-<ol start="2" type="1">
-<li>Launch it with nohup</li>
-</ol>
-<pre class="shell"><code>nohup &lt;path to your shell script&gt; &amp;</code></pre>
+					<h1 id="data-pipelines">Data pipelines</h1>
+<p>We are often asked to build data pipes that route data from one
+source to the other. Like everything in life, we can approach the design
+of data pipelines in multiple ways. Data pipelines can be abstracted in
+multiple ways: by the types of databases they are are interfacing with,
+the type of hardware it is running on or the language it is developed
+in, etc. I personally believe an abstraction based on how the data
+pipeline is moving data is the best way to think about these data pipes.
+By moving data, I specifically mean the frequency with which we are
+receiving and pushing data.</p>
+<p>Any data pipe has three components 1. Data Ingestion 2. Data
+Processing 3. Data Transmission</p>
+<p>Usually this can be thought of as a state machine</p>
 <h2 id="how-to-kill-a-running-background-task">How to kill a running
 background task</h2>
 <ol type="1">
