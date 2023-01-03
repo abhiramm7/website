@@ -12,6 +12,7 @@ $$(f * g)(t):=\int_{-\infty}^{\infty} f(\tau) g(t-\tau) d \tau \tag{1}$$
 
 The above equation can be interpreted as flipping $g(t)$ and scanning the $f(t)$.
 Convolution operation returns the function that is created by scanning these signals over each other.
+Convolution is closely realted to correlation.
 
 
 
