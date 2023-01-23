@@ -6,7 +6,7 @@ logs_source_dir="./source/"
 logs_source_type=".md"
 logs_target_dir="./build/"
 logs_target_type=".html"
-logs_content=("git_worktree" "git_workflows" "gnu_stow" "compile_swmm_python" "blog_generation" "python_background_process" "convolution" ":")
+logs_content=("git_worktree" "git_workflows" "gnu_stow" "compile_swmm_python" "blog_generation" "python_background_process" "convolution" "bias_and_variance" ":")
 
 
 #pandoc --template build/template.html ./source/RunPython_BackgroundProcess.md -o ./build/python_background_task.html --mathjax

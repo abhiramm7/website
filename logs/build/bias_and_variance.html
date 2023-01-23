@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="../../stylesheets/style.css">
+		<script src="../../stylesheets/mathjax.js" defer></script>
+		<script type="text/javascript" async
+			src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>	
+		<meta name="author" content="Abhiram Mullapudi">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	</head>
+	<body>
+		<div class="master-container">
+			<div class='header-container'>
+				<div class='header-logo'>
+					<div class='logo'><img src='../../data/images/logo.png' style="height:99%;width:99%" alt="Random Storms Logo"/></div>
+				</div>
+				<div class='header-menu'>
+					<div class='usr'><a href="../../index.html" style="color:black">./usr</a></div>
+					<div class='log'><a href="../logs.html" style="color:black">./log</a></div>
+					<div class='archives'><a href="../../archives/archives.html" style="color:black">./archives</a></div>
+					<div class='untitled'><a href="./untitled.html" style="color:black">./untitled</a></div>
+				</div>
+			</div>	
+			<hr/>
+
+			<div class="log-content-container">
+				<header id="title-block-header">
+					<h1 class="title">bias-variance trade-off</h1>
+															<p class="author">Abhiram Mullapudi</p>
+															<p class="date">January 8, 2023</p>
+									</header>
+				<div class='blog-body'>
+					<h2 id="bias-and-variance">Bias and Variance</h2>
+<p>Bias-Variance trade-off is used to quantify the efficiency of
+statistically-driven regression models. In this post, I define the
+bias-variance trade-off and demonstrate it use for evaluating regression
+methodologies.</p>
+<p><br />
+</p>
+<h4 id="bias">Bias</h4>
+<p><strong>Bias</strong> of an estimator is defined as follows: let
+<span class="math inline">\(T\)</span> be a statistic used to estimate
+<span class="math inline">\(\theta\)</span>, and <span
+class="math inline">\(E(T)\)</span> is the expected value of T. Then,
+<span class="math display">\[
+bias(T; \theta) = E(T) - \theta
+\]</span> If the <span class="math inline">\(bias(T)\)</span> is 0, then
+<span class="math inline">\(T\)</span> is said to be an unbiased
+estimator of <span class="math inline">\(\theta\)</span><a href="#fn1"
+class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a>.</p>
+<p><br />
+</p>
+<h4 id="variance">Variance</h4>
+<p><strong>Variance</strong> of random variable <span
+class="math inline">\(X\)</span> is defined as <span
+class="math display">\[
+var(X) = E[(X - E[X]))^2]
+\]</span> Where <span class="math inline">\(E[X]\)</span> is the
+expected value of random variable <span
+class="math inline">\(X\)</span>. The above equation can be further
+simplified as, <span class="math display">\[
+\begin{align}
+var(X) &amp;= E[(X - E[X]))^2] \\
+&amp;= E[ (X^2 +  E[X]^2 - 2XE[X]) ] \\
+&amp;= E[X^2] + E[E[X]^2] - 2E[XE[X]] \\
+&amp;= E[X^2] + E[X]^2 - 2E[X]E[X] \\
+&amp;= E[X^2] - E[X]^2
+\end{align}
+\]</span></p>
+<p><br />
+</p>
+<p>Before we see how bias and variance can help us evaluate regression
+models, let us formally define regression.</p>
+<p><br />
+</p>
+<h4 id="regression-model">Regression Model</h4>
+<p>Given a dataset <span class="math inline">\(D_{0:N}:\{x_{0:N},
+y_{0:N}\}\)</span>, a regression model, <span
+class="math inline">\(f\)</span>, aims to estimate <span
+class="math inline">\(y_i\)</span> based on <span
+class="math inline">\(x_i\)</span> with error <span
+class="math inline">\(\epsilon \sim N(0, \sigma^2)\)</span>. Let <span
+class="math inline">\(\mathbf{x}\)</span> and <span
+class="math inline">\(\mathbf{y}\)</span> represent the vectors of
+elements in dataset <span class="math inline">\(D\)</span>. Then, <span
+class="math display">\[
+\begin{equation}
+\mathbf{y} = f(\mathbf{x}) + \epsilon \\
+\end{equation}
+\]</span></p>
+<h4 id="regression-error">Regression error</h4>
+<p><span class="math display">\[
+\begin{align}
+MSE &amp;= E[(\hat{y} - y)^2] \\
+&amp;= E[(\hat{y} + \bar{y} - \bar{y} + y)^2] \\
+&amp;= E[(\hat{y} + \bar{y})^2 + (\bar{y} + y)^2 - 2(\hat{y} +
+\bar{y})(\bar{y} + y)]
+\end{align}
+\]</span></p>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>There are multiple bias, see <a
+href="https://en.wikipedia.org/wiki/Bias_(statistics)">wikipedia.org/bias</a>
+for more information.<a href="#fnref1" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+				</div>
+			</div>
+			<hr/>
+			<div class='footer-container'>
+				<p style="font-size:small;">
+				Font design and elements inspired from  <a href="https://www.johnsonbanks.co.uk/work/mozilla"> Johnson Banks/<em>mozilla</em></a> <br>
+				Theme inspired from <a href="https://github.com/jonbarron/website"> Jon Barron</a>
+				</p>
+			</div>
+		</div>
+	</body>
+</html>
