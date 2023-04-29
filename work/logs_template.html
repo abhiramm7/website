@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="../../stylesheets/style.css">
+		<script src="../../stylesheets/mathjax.js" defer></script>
+		<script type="text/javascript" async
+			src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>	
+		<meta name="author" content="Abhiram Mullapudi">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	</head>
+	<body>
+		<div class="master-container">
+			<div class='header-container'>
+				<div class='header-logo'>
+					<div class='logo'><img src='../../data/images/logo.png' style="height:99%;width:99%" alt="Random Storms Logo"/></div>
+				</div>
+				<div class='header-menu'>
+					<div class='usr'><a href="../../index.html" style="color:black">./usr</a></div>
+					<div class='log'><a href="../logs.html" style="color:black">./log</a></div>
+					<div class='archives'><a href="../../archives/archives.html" style="color:black">./archives</a></div>
+					<div class='untitled'><a href="./untitled.html" style="color:black">./untitled</a></div>
+				</div>
+			</div>	
+			<hr/>
+
+			<div class="log-content-container">
+				<header id="title-block-header">
+					<h1 class="title">$title$</h1>
+					$if(subtitle)$
+					<p class="subtitle">$subtitle$</p>
+					$endif$
+					$for(author)$
+					<p class="author">$author$</p>
+					$endfor$
+					$if(date)$
+					<p class="date">$date$</p>
+					$endif$
+				</header>
+				<div class='blog-body'>
+					$body$
+				</div>
+			</div>
+			<hr/>
+			<div class='footer-container'>
+				<p style="font-size:small;">
+				Font design and elements inspired from  <a href="https://www.johnsonbanks.co.uk/work/mozilla"> Johnson Banks/<em>mozilla</em></a> <br>
+				Theme inspired from <a href="https://github.com/jonbarron/website"> Jon Barron</a>
+				</p>
+			</div>
+		</div>
+	</body>
+</html>
