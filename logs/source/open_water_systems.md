@@ -54,7 +54,7 @@ These guidelines are network agnostic and provide a methodology and a set of met
 These guidelines and standards aid in building community trust in technologies.
 Drawing on these ideas, combining the evaluation frameworks with a set of standards can help stakeholders better understand the benefits and risks associated with digital water technologies and facilitate their adoption.
 Furthermore, developing these standards in an open environment with urban water stakeholder voices is vital to ensure that these standards represent the community’s concerns.
-Though efforts are being led in professional organizations toward defining digital water technologies, there is a need for community-led efforts like the Linux Foundation [15] to develop and maintain standards and evaluation guidelines.
+Though efforts are being led in professional organizations toward defining digital water technologies, there is a need for community-led efforts like the Linux Foundation to develop and maintain standards and evaluation guidelines.
 
 \
 
