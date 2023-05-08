@@ -133,9 +133,9 @@ hr {
 
 .content-description-content {
 	font-family: 'ZillaSlab';
-	font-size: 11pt;
-	width: 600px;
-	padding: 10px 10px 10px 10px;
+	font-size: 12pt;
+	width: 400px;
+	padding: 0px 10px 10px 10px;
 	font-style: normal;
 	/* color: black; */
 	/* border: 1px solid white; */
@@ -146,7 +146,7 @@ hr {
 }
 
 .content-description-image {
-	width: 300px;
+	width: 600px;
 	padding: 0px 0px 0px 0px;
 	/* border: 1px solid white; */
 	/* For debugging */
@@ -157,7 +157,7 @@ hr {
 
 .contact-container {
 	font-family: 'ZillaSlab';
-	font-size: 11pt;
+	font-size: 13pt;
 	padding: 0px 0px 10px 0px;
 	display: flex;
 	justify-content: center;
@@ -277,7 +277,7 @@ hr {
 	}
 	.contact-container {
 		font-family: 'ZillaSlab';
-		font-size: 11pt;
+		font-size: 13pt;
 		padding: 0px 0px 10px 0px;
 		display: flex;
 		justify-content: center;
@@ -527,7 +527,7 @@ hr {
 	}
 	.contact-container {
 		font-family: 'ZillaSlab';
-		font-size: 11pt;
+		font-size: 13pt;
 		padding: 0px 0px 10px 0px;
 		display: flex;
 		justify-content: center;
