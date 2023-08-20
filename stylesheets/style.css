@@ -1,3 +1,7 @@
+a:link {
+  color: #A2678A;
+}
+
 @font-face {
 	font-family: 'ZillaSlab';
 	src: url('./fonts/zilla/woff/ZillaSlab-Regular.woff') format('woff');
