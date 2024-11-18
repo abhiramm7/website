@@ -1,0 +1,243 @@
+%!TEX TS-program = lualatex
+%!TEX encoding   = UTF-8 Unicode
+
+% This is the simplest class to start with. You may want to change the
+% paper format or the standard font size.
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{fontspec}    % Font selection
+\usepackage{fontawesome} % Symbols/icons
+
+% Change this depending on your own preferences. I personally prefer
+% nice ligatures and 'old style' numbers. Additionally, the way each
+% font is set up ensures that the layout is very uniform---mostly, I
+% achieve this effect using `MatchLowercase`.
+%
+% TODO: Make sure you select a font with small caps here, unless you
+% also change the section style. See below.
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont[Renderer=Basic,Numbers={Proportional,OldStyle}]{Minion Pro}
+\setsansfont[Scale=MatchLowercase]{Cabin Regular}
+\setmonofont[Scale=MatchLowercase]{Fira Mono}
+
+\setlength{\marginparsep}{10pt} % Separation of margin notes
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Document layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Permits a very precise adjustment of all the margins. Since a CV is
+% a document where *you* should exhibit *your* preferences, feel free
+% to adjust this the way you want.
+%
+% I am not aware of any good rules here.
+\usepackage{geometry}
+\geometry{a4paper, textwidth=14.0cm,textheight=25.0cm,marginparwidth=2.5cm}
+
+\setlength{\parindent}{0pt}     % No indentations for paragraphs
+\setlength{\skip\footins}{2cm}  % Reduced footer distance
+
+% A nice way to typeset proper ordinal superscripts
+\newcommand{\rd}{\textsuperscript{\textup{rd}}\xspace}
+\newcommand{\nd}{\textsuperscript{\textup{nd}}\xspace}
+\renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
+
+% To be used to indicate equal contributions of two or more authors in
+% a paper.
+\newcommand{\authorequal}{\kern-0.1em\textsuperscript{\dagger}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Margins macro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This permits you to put some comments into the margins of the
+% document; I borrowed this idea from Tufte's works, but in the
+% CV, I only use it to indicate durations.
+
+\usepackage{marginnote}
+\renewcommand*{\raggedleftmarginnote}{}
+\newcommand{\years}[1]{%
+  % Forces notes to appear on the left
+  {\reversemarginpar\strut\marginnote{{\small#1}}}%
+}
+
+
+% Required to support footnote references; has to come *after* the
+% `marginnote` package, though, because it redefines some things.
+\usepackage{scrextend}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Section style
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% This styles *all* the sections exactly the same: regular font, with
+% small caps.
+%
+% TODO: Adjust this if you change the font---otherwise, everything will
+% look super strange.
+\usepackage{sectsty}
+\allsectionsfont{\mdseries\scshape}
+
+% Typographical adjustments. If you have longer blocks of texts, such as
+% publications, in your CV, this will give the text a more natural look.
+%
+% TODO: Some people do not like this. If you are among them, just change
+% this or remove it
+\usepackage{microtype}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colours
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TODO: redefine this colour if you do not like it.
+\usepackage[usenames,dvipsnames]{color}
+\definecolor{cardinal}{RGB}{196, 30, 58}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PDF setup
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[
+  bookmarks,  % Create PDF bookmarks
+  colorlinks, % Use the link colour from above
+  breaklinks  % Break links in the text
+]{hyperref}
+
+\hypersetup{%
+  urlcolor=cardinal,
+  pdfauthor={Abhiram Mullapudi},                  
+  pdftitle={Abhiram Mullapudi: Curriculum vitae},
+  pdfproducer={}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Penalties
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clubpenalty=10000
+\displaywidowpenalty=10000
+\widowpenalty=10000
+
+\usepackage[defaultlines=100,all]{nowidow} % rejects all orphaned and widowed lines
+\setlength\parindent{0pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Main document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+{\huge \textsc{Abhiram Mullapudi}}\\
+{\small \textit{Curriculum vitae} (\today)}\\
+
+
+{\scriptsize
+\faEnvelope\space{\href{mailto:abhiramm@umich.edu}{abhiramm@umich.edu \textsuperscript{\faExternalLink}}}
+\faHome\space{\href{https://randomstorms.net}{randomstorms.net \textsuperscript{\faExternalLink}}}
+\faGithub\space{\href{https://github.com/abhiramm7}{github/abhiramm7 \textsuperscript{\faExternalLink}}}
+\faLeanpub\space{\href{https://scholar.google.com/citations?user=W9mUihUAAAAJ&hl=en}{google-scholor/abhiramm \textsuperscript{\faExternalLink}}}}
+
+
+\section*{Positions}
+
+\years{2023--}
+\textbf{Senior Data Scientist} at Xylem
+\begin{itemize}
+	\item \textbf{Timeseries forecasting \& Anomaly Detection}: I develop algorithms for filtering timeseries data from sensors and detecting anamolous behaiours and forecasting 
+	\item \textbf{MLOps}: I work on development of flyte-based mlops-platform for the developing and deployment machine-learning-based analytical services.
+\item \end{itemize}
+
+\years{2020--2023}
+\textbf{Hydraulic Control and Optimization Engineer} at Xylem
+\begin{itemize}
+\item Timeseries forecasting: Developed a one-dimentional convoluttional neural network for predicting 24 hours flows at the treatmeant plant in near-real time. 
+\item Timeseries filtering: Developed a one-dimentional convolution neural network model for filtering and interpolating timeseries spatio-temporally.
+\item Simlation of stormwater systems: Developed an extension for EPA-SWMM to identify travel-times and extended EPA-SWMM to assimilate sensor data into simulation by dynamially updating swmm files.
+\item Real-time applications:
+- Developed an real-time timeseries processing module for filtering sensor data streams, applying aribary equations using symbolic programming, and  detect anamoloues behaviour in water networks using 
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Education}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\years{2017--2020}%
+\textbf{Ph.D.}\ in Civil Engineering at University of Michigan, Ann Arbor, USA\\
+\emph{Statistical Learning Approaches for the Control of Stormwater Systems}; Advisor: Branko Kerkez \\[.1cm]
+
+\years{2015--2017}%
+\textbf{M.Sc.Eng.}\ in Civil Engineering at University of Michigan, Ann Arbor, USA\\[.1cm]
+
+\years{2011--2015}%
+\textbf{B.Tech}\ in Civil Engineering at Amrita Vishwa Vidyapeetham, Coimbatore, India\\[.1cm]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Publications}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\years{2023} Abhiram Mullapudi and Branko Kerkez. Bayesian optimization for shaping
+the response of stromwater networks.
+
+\years{2023} Sara P. Rimer, Abhiram Mullapudi, Sara C. Troutman, Gregory Ewing, Jef-
+frey M. Sadler, Jonathan L. Goodall, Ruben Kertesz, Jon M. Hathaway, and
+Branko Kerkez. pystorms: a simulation sandbox for the design and evaluation
+of stormwater control algorithms. Environmental Modelling and Software,
+2023
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Honours}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\years{2018}
+Winner of LIFT challange 
+
+\section*{Skills}
+
+\section*{Professional Service}
+\begin{itemize}
+	\item Vice-chair of Emerging and Innovative Technologies subcommittee for American Socity of Civil Engneering's Environmental and Water Research Congress. 
+	\item Part of the organizing committee at 2024 NURAL-IPS Gaussian Processes workshop
+\end{itemize}
+\subsection*{Journal Review}
+\begin{itemize}
+	\item \textit{HardwareX}
+	\item \textit{IEEE-CDC 2020}
+	\item \textit{Journal of Hydrology}
+	\item \textit{Water Resources Research}
+	\item \textit{Journal of Hydroinformatics}
+	\item \textit{Water Science and Technology}
+	\item \textit{Journal of Open Source Software}
+	\item \textit{Journal of Computing in Civil Engineering}
+	\item \textit{Journal of Irrigation and Drainage Engineering}
+	\item \textit{Journal of Water Resources Planning and Management}
+	\item \textit{Environmental Science: Water Research \& Technology}
+\end{itemize}
+
+\section*{Conference}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{About this template}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This document is modelled after the style of
+\href{https://bastian.rieck.me}{my} own CV, which you can find
+\href{https://bastian.rieck.me/about/cv.pdf}{here}. It was originally
+inspired by the CV of \href{http://nitens.org/taraborelli/cvtex}{Dario
+Taraborelli}, but has since somewhat evolved---or so I like to tell
+myself---from the original template.\\
+
+This document does not offer many special features, except for the
+\verb|\years| macro, which can be used to typeset small notes in the
+margin of the document. I use them to indicate \emph{durations}, but you
+could also repurpose it to have small annotations in the style of Edward
+Tufte. In addition, the template uses two special fonts for sans-serif
+typesetting and monospace typesetting. I do not tend to use the former
+for many things, but you might like it for typesetting the titles of
+publications. The latter font type, though, I often use in order to
+describe software projects or packages, such as \texttt{PyTorch} or
+\texttt{scikit-learn}.\\
+
+That's all there is to it---enjoy the template \& feel free to open
+tickets for comments or feedback.
+
+\end{document}
