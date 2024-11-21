@@ -1,116 +1,326 @@
-\documentclass{my_cv}
+%!TEX TS-program = lualatex
+%!TEX encoding   = UTF-8 Unicode
 
+% This is the simplest class to start with. You may want to change the
+% paper format or the standard font size.
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{fontspec}    % Font selection
+\usepackage{fontawesome} % Symbols/icons
+
+% Change this depending on your own preferences. I personally prefer
+% nice ligatures and 'old style' numbers. Additionally, the way each
+% font is set up ensures that the layout is very uniform---mostly, I
+% achieve this effect using `MatchLowercase`.
+%
+% TODO: Make sure you select a font with small caps here, unless you
+% also change the section style. See below.
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont[Renderer=Basic,Numbers={Proportional,OldStyle}]{Minion Pro}
+\setsansfont[Scale=MatchLowercase]{Cabin Regular}
+\setmonofont[Scale=MatchLowercase]{Fira Mono}
+
+\setlength{\marginparsep}{10pt} % Separation of margin notes
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Document layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Permits a very precise adjustment of all the margins. Since a CV is
+% a document where *you* should exhibit *your* preferences, feel free
+% to adjust this the way you want.
+%
+% I am not aware of any good rules here.
+\usepackage{geometry}
+\geometry{a4paper, textwidth=14.0cm,textheight=26.0cm,marginparwidth=2.5cm}
+
+\setlength{\parindent}{0pt}     % No indentations for paragraphs
+\setlength{\skip\footins}{2cm}  % Reduced footer distance
+
+% A nice way to typeset proper ordinal superscripts
+\newcommand{\rd}{\textsuperscript{\textup{rd}}\xspace}
+\newcommand{\nd}{\textsuperscript{\textup{nd}}\xspace}
+\renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
+
+% To be used to indicate equal contributions of two or more authors in
+% a paper.
+\newcommand{\authorequal}{\kern-0.1em\textsuperscript{\dagger}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Margins macro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This permits you to put some comments into the margins of the
+% document; I borrowed this idea from Tufte's works, but in the
+% CV, I only use it to indicate durations.
+
+\usepackage{marginnote}
+\renewcommand*{\raggedleftmarginnote}{}
+\newcommand{\years}[1]{%
+  % Forces notes to appear on the left
+  {\reversemarginpar\strut\marginnote{{\small#1}}}%
+}
+
+
+% Required to support footnote references; has to come *after* the
+% `marginnote` package, though, because it redefines some things.
+\usepackage{scrextend}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Section style
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% This styles *all* the sections exactly the same: regular font, with
+% small caps.
+%
+% TODO: Adjust this if you change the font---otherwise, everything will
+% look super strange.
+\usepackage{sectsty}
+\allsectionsfont{\mdseries\scshape}
+
+% Typographical adjustments. If you have longer blocks of texts, such as
+% publications, in your CV, this will give the text a more natural look.
+%
+% TODO: Some people do not like this. If you are among them, just change
+% this or remove it
+\usepackage{microtype}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colours
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TODO: redefine this colour if you do not like it.
+\usepackage[usenames,dvipsnames]{color}
+\definecolor{cardinal}{RGB}{196, 30, 58}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PDF setup
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[
+  bookmarks,  % Create PDF bookmarks
+  colorlinks, % Use the link colour from above
+  breaklinks  % Break links in the text
+]{hyperref}
+
+\hypersetup{%
+  urlcolor=cardinal,
+  pdfauthor={Abhiram Mullapudi},                  
+  pdftitle={Abhiram Mullapudi: Curriculum vitae},
+  pdfproducer={}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Penalties
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clubpenalty=10000
+\displaywidowpenalty=10000
+\widowpenalty=10000
+
+\usepackage[defaultlines=100,all]{nowidow} % rejects all orphaned and widowed lines
+\setlength\parindent{0pt}
+\usepackage{vwcol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Main document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-% bibliography
-\nobibliography{mypub}
-\bibliographystyle{unsrt}
-\thispagestyle{plain}
-\name{\textbf{Abhiram Mullapudi}}{randomstorms.net}{abhiramm@umich.edu}
 
-\section*{EXPERIENCE}
-\datedsubsection{\textbf{Senior Data Scientist}}{2023-}{\vspace*{-0.25cm}\textit{Xylem Inc.}}
-\noindent Devlopment of systems for timeseries forecasting 
+{\huge \textsc{Abhiram Mullapudi}}\\
+{\small \textit{Curriculum vitae} (\today)}\\
 
-\datedsubsection{\textbf{Hydraulic Control and Optimization Engineer}}{2020--2023}{\vspace*{-0.25cm}\textit{Xylem Inc.}}\\
-\noindent Development of machine learning-based prediction models and analytical software for monitoring and optimization of stormwater and wastewater collection systems.
+\begin{vwcol}[widths={0.78,0.22}]
+{\footnotesize Cyber-physical systems are a promising area of exploration for developing resilient urban water
+systems in the face of extreme weather events. I am interested in addressing knowledge gaps and building technologies to
+create a new generation of robust, equitable, and sustainable cyber-physical water infrastructure.}
 
-\datedsubsection{\textbf{Graduate Student Research Assistant}}{2016--2020}{\vspace*{-0.25cm}\textit{Real-time Water Systems Lab, University of Michigan}}\\
-\noindent Developed open source algorithms, simulation tools, and hardware solutions for monitoring and control of stormwater networks.
+{\scriptsize {\noindent {\faEnvelope\space{\href{mailto:abhiramm@umich.edu}{abhiramm@umich.edu}}}\\
+{\faHome\space{\href{https://randomstorms.net}{randomstorms.net}}}\\
+{\faGithub\space{\href{https://github.com/abhiramm7}{abhiramm7}}}\\}}
+\end{vwcol}
 
-\datedsubsection{\textbf{Research Assistant}}{2015}{\vspace*{-0.25cm}\textit{Love Biotechnology Group, University of Michigan}}\\
-\noindent Aided in the characterization of influent and calibration of process model for Detroit's waste water treatment plant. 
+\section*{Positions}
 
-\datedsubsection{\textbf{Research Assistant}}{2014}{\vspace*{-0.25cm}\textit{Department of Chemical Engineering, Amrita Vishwa Vidhyapeetham}}\\
-\noindent Aided in the design, construction, and monitoring of a vertical flow constructed wetland. 
+\years{2023--}
+\textbf{Senior Data Scientist} at Xylem\\[0.1cm]
+I design and implement end-to-end machine learning-based solutions that inform decision-making in urban water infrastructure systems.
 
-\section*{EDUCATION}
-\datedsubsection{\textbf{Ph.D in Civil Engineering} (Intelligent Systems)}{2020}{\vspace*{-0.25cm}\textit{University of Michigan, Ann Arbor, USA}}
-\datedsubsection{\textbf{M.Sc.Eng.\ in Civil Engineering} (Intelligent Systems)}{2017}{\vspace*{-0.25cm}\textit{University of Michigan, Ann Arbor, USA}}
-\datedsubsection{\textbf{B.Tech.\ (distinction) in Civil Engineering}}{2015}{\vspace*{-0.25cm}\textit{Amrita Vishwa Vidhyapeetham, Coimbatore, India}}
-
-\section*{AWARDS}
-\datedsubsection{Grand prize winner, LIFT Intelligent Water Systems Challenge}{2018}{}
-\datedsubsection{Academic Excellence, Amrita Vishwa Vidhyapeetham}{2013, 2015}{}
-
-\section*{PUBLICATIONS}	
-\begin{enumerate}
-	\item \bibentry{Mullapudi2019bay}\ (\href{https://randomstorms.net/data/papers/bayes_poster.pdf}{\textit{poster}})
-	\item \bibentry{Rimer2019bench} 
-	\item \bibentry{mason2022}
-	\item \bibentry{mason2021stormreactor}
-	\item \bibentry{mullapudi2020statistical}
-	\item \bibentry{Mullapudi2020pyswmm}
-	\item \bibentry{Mullapudi2020rl}
-	\item \bibentry{bartos2019rrcf} 
-	\item \bibentry{Mullapudi2018}
-	\item \bibentry{Mullapudi2017} 
-\end{enumerate}
-
-\section*{WORKSHOPS AND SPECIAL SESSIONS}
-%\datedsubsection{CPS-IoT Week - Smart Water, Smart Cities}{2020}{}
-\datedsubsection{\textit{Technical Workshop: Building the Next Generation of Intelligent Urban Water Systems: A Hands-on Workshop on Digital Twin-based Solutions}}{2023}
-
-Organized and led a workshop session at the ASCE's EWRI conference on building digital water systems.
-
-\datedsubsection{\textit{Moving towards an open urban water modeling paradigm: perspectives from academia and industry}}{2022}
-
-Organized a special session at the Urban Drainage Modeling conference on the role of open-source software in ushering the era of smart urban water systems.
-
-\datedsubsection{\textit{UDS-RTC 101: A hands-on workshop on the real-time control of the urban drainage systems}}{2022}
-
-Organized and led a pre-conference workshop at the Urban Drainage Modeling conference on the control of stormwater systems attended by an international group of researchers and practitioners. 
-
-\datedsubsection{\textit{CUAHSI Open Source Urban Hydrology Sensor Bootcamp}}{2017, 2019}{}
-
-Co-organized and led a three day workshop on the use open-storm's sensing stack for the monitoring and control of stormwater systems.
-
-\section*{CONFERENCES}
-\begin{enumerate}
-	\item \bibentry{2023EWRI}
-	\item \bibentry{2022EWRI}
-	\item \bibentry{2022ICWMM}
-	\item \bibentry{2021EWRI}
-	\item \bibentry{2021ICWMM}
-	\item \bibentry{2020Borch}
-	\item \bibentry{2019AGUFM}
-	\item \bibentry{2019UFKON}
-	\item \bibentry{2019watermatex}
-	\item \bibentry{2019ccwi}
-	\item \bibentry{2019ewri}
-	\item \bibentry{water[at]mich}
-	\item \bibentry{Rimer_2019}
-	\item \bibentry{2019midce}
-	\item \bibentry{2018weftec}
-	\item \bibentry{2018hic}
-	\item \bibentry{2018hicl}
-	\item \bibentry{2018ewri}
-	\item \bibentry{2018ewril}
-	\item \bibentry{2017AGUFM}
-	\item \bibentry{2017AEESP}
-	\item \bibentry{2017ica}
-	\item \bibentry{2017rldm}
-	\item \bibentry{2017ewri}
-	\item \bibentry{2017ewrip}
-	\item \bibentry{2016AGUFM}
-\end{enumerate}
-
-
-
-\section*{PROGRAMMING AND SCIENTIFIC COMPUTING}
+\vspace{2mm}
+{\small \textbf{Key Highlights:}}
+\vspace{-2mm}
 \begin{itemize}
-	\item Proficient in Python, MATLAB, C/C++, \LaTeX, and bash.
-	\item \textbf{Machine Learning Stack:} Experienced in using TensorFlow, PyTorch, GpyOpt for training large scale machine learning models in high performance clusters. 
-	\item \textbf{Embedded Systems:} Developer of Open-Storm's \href{https://github.com/open-storm/perfect-cell}{\texttt{perfect-cell}}, an open source operating system for environmental monitoring. Experienced in using EAGLE and Cypress modules for designing customized hardware.  
-	\item \textbf{Cloud Computing:} Experienced in using cloud computing services (AWS, Google cloud, and Azure) for creating backend systems. 
-	\item \textbf{Stormwater Modeling:} Creator of \href{https://klabum.github.io/pystorms/}{\texttt{pystorms}}, an open source python library for the design and evaluation of stormwater control algorithms. Maintainer of Open Water Analytics's \href{https://github.com/OpenWaterAnalytics/Stormwater-Management-Model}{SWMM} and \href{https://github.com/OpenWaterAnalytics/pyswmm}{pyswmm}, the industry standard for modeling stormwater systems. 
-	\item Contributor to \href{https://github.com/kLabUM/rrcf}{\texttt{rrcf}}, an open source implementation of an unsupervised learning algorithm for anomaly detection in live streaming data. 
+	\setlength\itemsep{1mm}
+	\item  Leading the development of statistical and machine learning-based methodologies for time-series filtering and anomaly detection for predictive maintenance and operational decision-making.
+	\item  Currently developing a Flyte-based MLOps platform to streamline end-to-end machine learning model development, deployment, and maintenance for Xylem's digital water products.
 \end{itemize}
 
+\years{2020--2023}
+\textbf{Hydraulic Control and Optimization Engineer} at Xylem\\[0.1cm]
+Pioneered advanced machine learning and data engineering solutions for urban water infrastructure, transforming raw sensor data into actionable intelligence that optimizes water network performance, predicts critical operational challenges, and enables data-driven decision-making for utilities and municipalities.
 
-\section*{PROFESSIONAL ACTIVITIES}
+\vspace{2mm}
+{\small \textbf{Key Highlights:}}
+\vspace{-2mm}
 \begin{itemize}
-	\item Member of ASCE-EWRI's Emerging and Innovative Technology Committee
-	\item Peer reviewed research for the following journals: 
+	\setlength\itemsep{1mm}
+	\item \textbf{Timeseries Forecasting}: Developed a 1D-CNN model that leverages NOAA rainfall forecasts and near-real-time flow measurements to accurately predict 24-hour inflow to water treatment plants.
+	\item \textbf{Geospatial Time Series Analytics}: Engineered an advanced 1D-CNN interpolation framework for processing spatially distributed river level data, enabling comprehensive environmental monitoring and regulatory compliance reporting.
+	\item \textbf{Anomaly Detection Infrastructure}: Designed a high-performance real-time processing system leveraging symbolic programming and advanced statistical techniques to detect network irregularities across 600+ concurrent data streams.
+	\item \textbf{Operational Intelligence Dashboards}: Created machine learning-powered visualization platforms that translate complex water network dynamics into intuitive, actionable insights, including predictive treatment plant inflow dashboards and public-facing Combined Sewer Overflow event tracking.
+	\item \textbf{Backend Management}Maintained and updated critical real-time services, ETL scripts, and internal databases to ensure seamless operation of Xylem Vue's Waste Water Network Optimization Solution.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Education}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\years{2017--2020}%
+\textbf{Ph.D.}\ in Civil Engineering at University of Michigan, Ann Arbor, USA\\[.1cm]
+\noindent \emph{Statistical Learning Approaches for the Control of Stormwater Systems}\\
+Advisor: Dr.\ Branko Kerkez\\[.1cm]
+
+\years{2015--2017}%
+\textbf{M.Sc.Eng.}\ in Civil Engineering at University of Michigan, Ann Arbor, USA\\[.1cm]
+
+\years{2011--2015}%
+\textbf{B.Tech}\ in Civil Engineering at Amrita Vishwa Vidyapeetham, Coimbatore, India
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Awards}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\years{2019} 
+Grand prize winner, LIFT Intelligent Water Systems Challenge\\
+
+\years{2013, 2015}
+Academic Excellence, Amrita Vishwa Vidhyapeetham
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Publications}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\years{2023} \textbf{Abhiram Mullapudi} and Branko Kerkez.\ \href{https://arxiv.org/abs/2305.18630}{\emph{Identification of stormwater control strategies and their associated uncertainties using Bayesian Optimization.}}\\[.1cm]
+
+\years{2023} Sara P. Rimer, \textbf{Abhiram Mullapudi}, Sara C. Troutman, Gregory Ewing, Jeffrey M. Sadler, Jonathan L. Goodall, Ruben Kertesz, Jon M. Hathaway, and Branko Kerkez.\ \href{https://www.sciencedirect.com/science/article/abs/pii/S136481522300021X}{\emph{pystorms: a simulation sandbox for the design and evaluation of stormwater control algorithms.}} Environmental Modelling and Software, 2023\\[.1cm]
+
+\years{2022} Brooke E. Mason, \textbf{Abhiram Mullapudi}, Cyndee Gruden, and Branko Kerkez.\ \href{https://www.tandfonline.com/doi/abs/10.1080/1573062X.2022.2108464}{\emph{Improvement of phosphorus removal in bioretention cells using real-time control}}. Urban Water Journal, 19(9):992–998, 2022\\[.1cm]
+
+
+\years{2021} Brooke E. Mason, \textbf{Abhiram Mullapudi}, and Branko Kerkez.\ \href{https://www.sciencedirect.com/science/article/abs/pii/S1364815221002176}{\emph{StormReactor: An open-source Python package for the integrated modeling of urban water quality and water balance}}. Environmental Modelling \& Software, 145:105175, 2021\\[.1cm]
+
+
+\years{2020} \textbf{Abhiram Mullapudi}.\ \href{https://github.com/abhiramm7/UofM-Doc-Thesis/blob/master/Dissertation_Abhi.pdf}{\emph{Statistical Learning Approaches For The Control Of Stormwater Systems}}. PhD thesis, University of Michigan, Ann Arbor, 2020\\[.1cm]
+
+
+\years{2020}  Bryant E. McDonnell, Katherine Ratliff, Michael E. Tryby, Jennifer Jia Xin Wu,
+and \textbf{Abhiram Mullapudi}.\ \href{https://joss.theoj.org/papers/10.21105/joss.02292.pdf}{\emph{PySWMM: The Python Interface to Stormwater Management Model (SWMM)}}. Journal of Open Source Software, 5(52):2292, 2020\\[.1cm]
+
+
+\years{2020}  \textbf{Abhiram Mullapudi}, Matthew Lewis, Cyndee Gruden, and Branko Kerkez.
+\href{http://www.sciencedirect.com/science/article/pii/S0309170820302499}{\emph{Deep Reinforcement Learning for the Real Time Control of Stormwater Systems}}. Advances in Water Resources, 2020\\[.1cm]
+
+
+\years{2019} Matthew D. Bartos, \textbf{Abhiram Mullapudi}, and Sara C. Troutman.\ \href{https://joss.theoj.org/papers/10.21105/joss.01336}{\emph{rrcf: Implementation of the Robust Random Cut Forest algorithm for anomaly detection on streams}}. The Journal of Open Source Software, 4:1336, 2019\\[.1cm]
+
+
+\years{2018} \textbf{Abhiram Mullapudi}, Matthew D. Bartos, Brandon P. Wong, and Branko Kerkez.
+\href{https://randomstorms.net/data/papers/shapingwater.pdf}{\emph{Shaping Streamflow Using a Real-Time Stormwater Control Network}}. Sensors, 18(7):2259, Jul 2018\\[.1cm]
+
+
+\years{2017} \textbf{Abhiram Mullapudi}, Brandon P. Wong, and Branko Kerkez.\ \href{https://randomstorms.net/data/papers/stormwatertheory.pdf}{\emph{Emerging investigators series: building a theory for smart stormwater systems}}. Environmental Science: Water Research \& Technology, 3(1):66–77, 2017
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Workshops and Special Sessions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\years{2024} \emph{From Code to Flow: Python-based Hydraulic Modeling}\\[0.2cm]
+Led a webinar hosted by Water Distribution Systems Analysis Graduate Student Group on modeling stromwater systems using Python and combining machine-learning methodologies with physical models for effective stormwater management.\\[.1cm]
+
+\years{2023} \emph{Technical Workshop: Building the Next Generation of Intelligent Urban Water
+Systems: A Hands-on Workshop on Digital Twin-based Solutions}\\[0.2cm]
+Organized and led a workshop session at the ASCE’s World Environmental \& Water Resources Congress conference on building
+digital water systems.\\[.1cm]
+
+\years{2022} \emph{Moving towards an open urban water modeling paradigm: perspectives from academia and industry}\\[.2cm]
+Organized a special session at the Urban Drainage Modeling conference on the
+role of open-source software in ushering the era of smart urban water systems.\\[.1cm]
+
+\years{2022} \emph{UDS-RTC 101: A hands-on workshop on the real-time control of the urban drainage systems}\\[.2cm]
+Organized and led a pre-conference workshop at the Urban Drainage Modeling
+conference on the control of stormwater systems attended by an international
+group of researchers and practitioners.\\[.1cm]
+
+\years{2017, 2019} \emph{CUAHSI Open Source Urban Hydrology Sensor Bootcamp}\\[.2cm]
+Co-organized and led a three day workshop on the use open-storm’s sensing stack
+for the monitoring and control of stormwater systems.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Conferences}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\years{2024} \textbf{Abhiram Mullapudi}, Nick Mills, and Richard Loeffler.\ \emph{Forecasting treatment plant influent using physics-informed convolution neural networks}. 14th IWA Specialized Conference on the Design, Operation and Economics of Large Wastewater Treatment Plants, August 2024\\[.1cm]
+
+\years{2024} \textbf{Abhiram Mullapudi}, Nick Mills, and Richard Loeffler.\ \emph{Physics-informed deep-learning model architecture design for time-series forecasting}.  World Environmental \& Water Resources Congress, May 2024\\[.1cm]
+
+\years{2023} \textbf{Abhiram Mullapudi}, Adam Erispaha, Bailey Johnston, and Sohil Manjiyani.\ \emph{Real-time monitoring and predictive maintenance of urban water networks using digital twins}. World Environmental \& Water Resources Congress, May 2023\\[.1cm]
+
+\years{2022} \textbf{Abhiram Mullapudi}, Caleb Buahin, and Ruben Kertesz.\ \emph{A software framework for automating hydroinformatics-based workflows for real-world applications}. World Environmental \& Water Resources Congress, May 2022\\[.1cm]
+
+\years{2022} \textbf{Abhiram Mullapudi}, Brooke E. Mason, Jennifer Wu, Constantine Karos, Branko
+Kerkez, Caleb Buahin, and Bryant E. McDonnell.\ \emph{Enhancing the pollutant modeling capabilities of epa-swmm using pyswmm and stormreactor}. International Conference on Water Management Modeling, March 2022\\[.1cm]
+
+\years{2021} Brooke E. Mason, \textbf{Abhiram Mullapudi}, and Branko Kerkez.\ \emph{Extending swmm’s water quality toolbox}. World Environmental \& Water Resources Congress, May 2021\\[.1cm]
+
+\years{2021} Jennifer Wu, Caleb Buahin, Bryant E. McDonnell, \textbf{Abhiram Mullapudi}, and Ruben Kertesz.\ \emph{Pyswmm-v1.0 release: Advancing the Python interface to stormwater management for now and into the future}. International Conference on Water Management Modeling, March 2021\\[.1cm]
+
+\years{2020} Brooke E. Mason,\textbf{Abhiram Mullapudi}, and Branko Kerkez.\ \emph{Improving pollutant removal with real-time control of stormwater networks}. Borchardt Conference: 25th Triennial Symposium on Advancements in Water \& Wastewater, March 2020\\[.1cm]
+
+\years{2019} Sara C. Troutman, Sara P. Rimer, \textbf{Abhiram Mullapudi}, and Branko Kerkez.\ \emph{A benchmarking library for making smart stormwater research accessible}. American Geophysical Union Annual Meeting, 2019\\[.1cm]
+
+\years{2019} \textbf{Abhiram Mullapudi}.\ \emph{Real-time monitoring and control of stormwater systems}. Urban Flooding Open Knowledge Network, November 2019\\[.1cm]
+
+\years{2019} \textbf{Abhiram Mullapudi}, Sara P. Rimer, Sara C. Troutman, and Branko Kerkez.\ \emph{A benchmarking framework for control of smart stormwater networks}. Watermatex, September 2019\\[.1cm]
+
+\years{2019} Sara C. Troutman, \textbf{Abhiram Mullapudi}, Sara P. Rimer, and Branko Kerkez.\ \emph{A benchmarking framework for evaluating the performance of control algorithms in smart stormwater networks}. International Joint Conference in Water Distribution Systems Analysis \& Computing and Control, September 2019\\[.1cm]
+
+\years{2019} Sara P. Rimer, \textbf{Abhiram Mullapudi}, Sara C. Troutman, and Branko Kerkez.\ \emph{A benchmarking framework for smart stormwater systems}. World Environmental \& Water Resources Congress, June 2019\\[.1cm]
+
+\years{2019} Sara C. Troutman, \textbf{Abhiram Mullapudi}, Gregory Ewing, Branko Kerkez, Wendy Barrott, and Christopher Nastally.\ \emph{Open-storm detroit dynamics}. Water at Michigan, June 2019\\[.1cm]
+
+\years{2019} Sara P. Rimer, \textbf{Abhiram Mullapudi}, Sara C. Troutman, and Branko Kerkez.\ \emph{A benchmarking framework for control and optimization of smart stormwater networks}. Proceedings of the 10th ACM/IEEE International Conference on Cyber-Physical Systems --- ICCPS ’19, 2019\\[.1cm]
+
+\years{2019} \textbf{Abhiram Mullapudi} and Branko Kerkez.\ \emph{Bayesian optimization for control of stormwater networks}. Michigan Institute for Computational Discovery \& Engineering Symposium, May 2019\\[.1cm]
+
+\years{2018} Gregory Ewing, \textbf{Abhiram Mullapudi}, Sara C. Troutman, Branko Kerkez, Wendy Barrott, and Christopher Nastally.\ \emph{LIFT smartwater challenge: Open-storm detroit dynamics}. Water Environment Federation's Technical Exhibition and Conference, October 2018\\[.1cm]
+
+\years{2018} \textbf{Abhiram Mullapudi} and Branko Kerkez.\ \emph{Autonomous control of urban storm water networks using reinforcement learning}. International Conference on Hydroinformatics, July 2018\\[.1cm]
+
+\years{2018} Branko Kerkez, \textbf{Abhiram Mullapudi}, Matthew D Bartos, and Brandon P. Wong.\ \emph{Characterizing a controllable urban watershed}. International Conference on Hydroinformatics, July 2018\\[.1cm]
+
+\years{2018} \textbf{Abhiram Mullapudi} and Branko Kerkez.\ \emph{Deep reinforcement learning based autonomous storm water networks}. World Environmental \& Water Resources Congress, June 2018\\[.1cm]
+
+\years{2018} Branko Kerkez, \textbf{Abhiram Mullapudi}, Matthew D Bartos, and Brandon P. Wong.\ \emph{Results from the real-time control of an urban watershed: coordinating outflows to shape flows and water quality}. World Environmental \& Water Resources Congress, June 2018\\[.1cm]
+
+\years{2017} Sara P. Rimer, \textbf{Abhiram Mullapudi}, and Branko Kerkez.\ \emph{Using Agent-Based Modeling to Enhance System-Level Real-time Control of Urban Stormwater Systems}. American Geophysical Union Annual Meeting, December 2017\\[.1cm]
+
+\years{2017} Branko Kerkez, \textbf{Abhiram Mullapudi}, and Brandon P. Wong.\ \emph{A modeling framework for the real-time control of distributed stormwater assets}. Research and Education Conference for the Association of Environmental Engineering \& Science Professors, June 2017\\[.1cm]
+
+\years{2017} \textbf{Abhiram Mullapudi}, Matthew Lewis, Cyndee Gruden, and Branko Kerkez.\ \emph{Real-time control of storm water using reinforcement learning}. IWA Conference on Instrumentation, Control and Automation, June 2017\\[.1cm]
+
+\years{2017} \textbf{Abhiram Mullapudi}, Matthew Lewis, Cyndee Gruden, and Branko Kerkez.\ \emph{Control of large scale storm-water networks using reinforcement learning}. The Multi-disciplinary Conference on Reinforcement Learning and Decision Making, June 2017\\[.1cm]
+
+\years{2017} \textbf{Abhiram Mullapudi}, Matthew Lewis, Cyndee Gruden, and Branko Kerkez.\ \emph{Real-time control of storm water using reinforcement learning}. World Environmental \& Water Resources Congress, May 2017\\[.1cm]
+
+\years{2017} Branko Kerkez, \textbf{Abhiram Mullapudi}, and Brandon P. Wong.\ \emph{An optimization and simulation framework for smart stormwater systems}. World Environmental \& Water Resources Congress, May 2017\\[.1cm]
+
+\years{2016} Branko Kerkez, \textbf{Abhiram Mullapudi}, and Brandon P. Wong.\ \emph{Toward city-scale water quality control: building a theory for smart stormwater systems}. American Geophysical Union Annual Meeting, December 2016
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Professional Service}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+	\item Vice-chair of Emerging and Innovative Technologies subcommittee, American Society of Civil Engineering's Environmental and Water Research Congress. 
+	\item Organizing Committee Member at NURAL-IPS Gaussian Processes Workshop 2024
+	\item Peer reviewed research for the following journals:
 	\begin{itemize}
 		\item \textit{HardwareX}
 		\item \textit{IEEE-CDC 2020}
@@ -126,18 +336,26 @@ Co-organized and led a three day workshop on the use open-storm's sensing stack 
 	\end{itemize}
 \end{itemize}
 
-\section*{MEDIA COVERAGE}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Programming and Scientific Computing}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{itemize}
-	\item 2018 LIFT Challenge: \href{https://cee.engin.umich.edu/stories/joint-u-m-and-glwa-team-wins-inaugural-intelligent-water-challenge/}{Grand Prize Winner}
-	\item NSF Science Nation: \href{https://www.youtube.com/watch?v=mStPThxAU08}{Smart stormwater solutions for aging infrastructure}
+\item \textbf{Programming Languages}: Python (advanced), MATLAB, C/C++, \LaTeX, SQL, Bash
+\item \textbf{Machine Learning and MLOps Ecosystem}: PyTorch, TensorFlow, JAX, scikit-learn, MLflow, Flyte
+\item \textbf{Embedded Systems}: Developer of Open-Storm's \href{https://github.com/open-storm/perfect-cell}{\texttt{perfect-cell}}, an open-source operating system for environmental monitoring. Experienced in using EAGLE and Cypress modules for designing customized hardware.
+\item \textbf{Cloud Computing}: Experienced in using cloud computing services (AWS, Google Cloud, and Azure) for creating backend systems.
+\item \textbf{Stormwater Simulation Ecosystem}: Creator of \href{https://klabum.github.io/pystorms/}{\texttt{pystorms}}, an open-source Python library for the design and evaluation of stormwater control algorithms. Maintainer of Open Water Analytics's \href{https://github.com/OpenWaterAnalytics/Stormwater-Management-Model}{SWMM} and \href{https://github.com/OpenWaterAnalytics/pyswmm}{pyswmm}, the industry standard for modeling stormwater systems.
+\item \textbf{Anomaly Detection}: Contributor to \href{https://github.com/kLabUM/rrcf}{\texttt{rrcf}}, an open-source implementation of an unsupervised learning algorithm for anomaly detection in live streaming data.
 \end{itemize}
 
-\section*{References}
-Available on request. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Media Coverage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{itemize}
+	\item 2018 LIFT Challenge: \href{https://cee.engin.umich.edu/stories/joint-u-m-and-glwa-team-wins-inaugural-intelligent-water-challenge/}{Grand Prize Winner}
+	\item NSF Science nation: \href{https://www.youtube.com/watch?v=mStPThxAU08}{Smart stormwater solutions for aging infrastructure}
+\end{itemize}
 
 \end{document}
-
-
-
-

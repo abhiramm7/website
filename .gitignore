@@ -9,3 +9,4 @@ tags
 *.log
 *.synctex.gz
 *.fdb_latexmk
+venv
