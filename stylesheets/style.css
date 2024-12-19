@@ -27,8 +27,45 @@ a:link {
 	box-sizing: border-box;
 }
 
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.card {
+  background-color: #171717;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 300px;
+  margin: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+}
+
+.card .publication-description {
+  padding: 5px;
+  text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .card {
+    width: 100%;
+  }
+}
+
 pre {
-	background: #f4f4f4;
+	background: #171717;
 	border: 1px solid #ddd;
 	/*border-left: 3px solid #f36d33;*/
 	color: #666;
@@ -82,7 +119,7 @@ hr {
 	clear: both;
 	display: block;
 	width: 100%;
-	background-color: black;
+	background-color: #171717;
 	height: 1px;
 }
 
@@ -111,7 +148,7 @@ hr {
 	font-family: 'ZillaSlab';
 	font-size: 11pt;
 	font-weight: bold;
-	width: 300px;
+	width: 150px;
 	color: black;
 	/* border: 1px solid white; */
 	/* For debugging */
@@ -253,7 +290,7 @@ hr {
 		font-family: 'ZillaSlab';
 		font-size: 11pt;
 		font-weight: bold;
-		width: 300px;
+		width: 150px;
 		/* For debugging */
 		display: flex;
 		align-items: flex-end;
@@ -379,7 +416,7 @@ hr {
 		flex-direction: column;
 	}
 
-	.header-container { 
+	.header-container {
 		color: #fff;
 		/* Blue */
 		padding: 10px 20px 10px 20px;
@@ -502,7 +539,7 @@ hr {
 		font-family: 'ZillaSlab';
 		font-size: 11pt;
 		font-weight: bold;
-		width: 300px;
+		width: 150px;
 		/* For debugging */
 		display: flex;
 		align-items: flex-end;
