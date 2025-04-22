@@ -1,0 +1,173 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{fontspec}
+\usepackage{multicol}
+\usepackage{paracol}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fontawesome5}
+\usepackage{enumitem}
+
+% Tufte-inspired color palette
+\definecolor{tuftegray}{RGB}{102, 102, 102}
+\definecolor{tufteaccent}{RGB}{170, 65, 53}
+\definecolor{tuftedark}{RGB}{50, 50, 50}
+
+% Page geometry - generous margins in Tufte style
+\geometry{left=1.5cm, right=1.5cm,top=1.5cm, bottom=1.5cm, nohead,nofoot}
+
+% Typography
+\setmainfont{EB Garamond}[Scale=1.0, BoldFont={* Bold}, ItalicFont={* Italic}]
+\setsansfont{Gill Sans}[Scale=0.9, BoldFont={* Bold}]
+
+% Hyperlink styling
+\hypersetup{colorlinks=true, urlcolor=tufteaccent,linkcolor=tuftedark,citecolor=tuftedark}
+
+\pagestyle{empty}
+
+\titleformat{\section}
+  {\normalfont\large\scshape\color{tuftedark}}
+  {}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{1.5ex plus 1ex minus .2ex}{1ex plus .2ex}
+
+\titleformat{\subsection}
+  {\normalfont\normalsize\itshape\color{tuftegray}}
+  {}{0em}{}
+\titlespacing*{\subsection}{0pt}{1.25ex plus 1ex minus .2ex}{0.5ex plus .2ex}
+
+\newcommand{\degreeyear}[2]{
+  {\textbf{#1}}\\
+  {\small\textcolor{tuftegray}{#2}}
+}
+
+\newcommand{\divider}{\textcolor{tuftegray}{\rule{\linewidth}{0.5pt}}}
+
+\newcommand{\publication}[3]{
+  \textbf{#1} \hfill \textcolor{tuftegray}{#2}\\
+  {\small\textit{#3}}\\[0.5em]
+}
+
+\newcommand{\experience}[4]{
+  \textbf{#1}, \textit{#2} \hfill \textcolor{tuftegray}{#3}\\
+  #4
+}
+
+\setlength{\columnseprule}{0pt}
+\setlength{\columnsep}{1cm}
+\columnratio{0.7}
+\begin{document}
+% remove page numbers
+\setlength{\parindent}{0pt}
+
+% main header with contact information
+\LARGE\textbf{Abhiram Mullapudi}\\
+\vspace{1em}
+\footnotesize\faEnvelope\hspace{0.5em}\href{mailto:abhiramm@umich.edu}{\footnotesize abhiramm@umich.edu}\hspace{0.5em}
+\footnotesize\faGithub\hspace{0.5em}\href{https://github.com/abhiramm7}{\footnotesize abhiramm7}\hspace{0.5em}
+\footnotesize\faGlobe\hspace{0.5em}\href{https://randomstorms.net}{\footnotesize randomstorms.net}
+
+\begin{paracol}{2}
+
+\section{Experience}
+\experience{Senior Data Scientist}{Xylem}{2023--Present}{
+I design and implement end-to-end machine learning-based solutions that inform decision-making in urban water infrastructure systems.
+\begin{itemize}[leftmargin=*,itemsep=1mm]
+  \item Leading the development of statistical and machine learning-based methodologies for time-series filtering and anomaly detection for predictive maintenance and operational decision-making.
+  \item Currently developing a Flyte-based MLOps platform to streamline end-to-end machine learning model development, deployment, and maintenance for Xylem's digital water products.
+\end{itemize}
+}
+\vspace{0.5em}
+
+\experience{Hydraulic Control and Optimization Engineer}{Xylem}{2020--2023}{
+Pioneered advanced machine learning and data engineering solutions for urban water infrastructure, transforming raw sensor data into actionable intelligence that optimizes water network performance.
+\begin{itemize}[leftmargin=*,itemsep=1mm]
+  \item Developed a 1D-CNN model that leverages NOAA rainfall forecasts and near-real-time flow measurements to accurately predict 24-hour inflow to water treatment plants.
+  \item Engineered an advanced 1D-CNN interpolation framework for processing spatially distributed river level data, enabling comprehensive environmental monitoring.
+  \item Designed a high-performance real-time processing system leveraging symbolic programming and advanced statistical techniques to detect network irregularities across 600+ concurrent data streams.
+\end{itemize}
+}
+
+\section{Publications}
+\publication{Identification of stormwater control strategies and their associated uncertainties using Bayesian Optimization}{2023}{arXiv preprint}
+
+\publication{pystorms: a simulation sandbox for the design and evaluation of stormwater control algorithms}{2023}{Environmental Modelling and Software}
+
+\publication{Improvement of phosphorus removal in bioretention cells using real-time control}{2022}{Urban Water Journal}
+
+\publication{StormReactor: An open-source Python package for the integrated modeling of urban water quality and water balance}{2021}{Environmental Modelling \& Software}
+
+\publication{Deep Reinforcement Learning for the Real Time Control of Stormwater Systems}{2020}{Advances in Water Resources}
+
+
+\switchcolumn
+
+% SIDEBAR COLUMN (30%) ===============================
+\begin{flushleft}
+
+\section{Education}
+\vspace{0.5em}
+\degreeyear{Ph.D. in Civil Engineering}{2017--2020}
+University of Michigan\\
+\vspace{0.2em}
+{\small\textit{Statistical Learning Approaches for the Control of Stormwater Systems}}\\
+{\small Advisor: Dr. Branko Kerkez}
+
+\vspace{0.8em}
+\degreeyear{M.Sc.Eng. in Civil Engineering}{2015--2017}
+University of Michigan
+
+\vspace{0.8em}
+\degreeyear{B.Tech. in Civil Engineering}{2011--2015}
+Amrita Vishwa Vidyapeetham
+\vspace{1em}
+\divider
+\vspace{1em}
+
+\section{Skills}
+\vspace{0.5em}
+\textbf{Programming}\\
+{\small Python, MATLAB, C/C++, \LaTeX, SQL, Bash}
+\vspace{0.8em}
+
+\textbf{ML \& Data Science}\\
+{\small PyTorch, TensorFlow, JAX, scikit-learn}
+\vspace{0.8em}
+
+\textbf{Cloud \& MLOps}\\
+{\small MLflow, Flyte, AWS, Google Cloud, Azure}
+\vspace{1em}
+\divider
+\vspace{1em}
+
+\section{Awards}
+\vspace{0.5em}
+\textbf{LIFT Intelligent Water Systems Challenge}\\
+{\small\textcolor{tuftegray}{Grand Prize Winner, 2019}}
+\vspace{0.8em}
+
+\textbf{Academic Excellence}\\
+{\small\textcolor{tuftegray}{Amrita Vishwa Vidhyapeetham, 2013, 2015}}
+\vspace{1em}
+\divider
+\vspace{1em}
+
+\section{Projects \& Software}
+\textbf{pystorms} \hfill \textcolor{tuftegray}{Creator}\\
+{\small An open-source Python library for the design and evaluation of stormwater control algorithms.}
+\vspace{0.8em}
+
+\textbf{pyswmm} \hfill \textcolor{tuftegray}{Maintainer}\\
+{\small The Python interface to Stormwater Management Model (SWMM), the industry standard for modeling stormwater systems.}
+\vspace{0.8em}
+
+\textbf{rrcf} \hfill \textcolor{tuftegray}{Contributor}\\
+{\small An open-source implementation of the Robust Random Cut Forest algorithm for anomaly detection on streams.}
+
+
+
+
+\end{flushleft}
+\end{paracol}
+\end{document}
