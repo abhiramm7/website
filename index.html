@@ -1,123 +1,244 @@
-a
 <!doctype html>
-<!-- Opening Tag -->
 <html lang="en">
-<!-- Opening Tag -->
 
 <head>
-    <!-- Metadata goes here -->
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" href="./stylesheets/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌧️</text></svg>">
     <title>Abhiram Mullapudi</title>
     <meta name="author" content="Abhiram Mullapudi" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Explore Abhiram Mullapudi's work on cyber-physical infrastructure systems, digital water systems, machine learning, and physical modeling." />
+        content="Abhiram Mullapudi — Lead Data Scientist building digital water systems. Interests in ML, signal processing, and cyber-physical infrastructure. Rower, espresso enthusiast, plant keeper." />
     <meta name="keywords"
-        content="Abhiram Mullapudi, cyber-physical systems, digital water systems, machine learning, physical modeling, data scientist, Xylem, wireless sensor networks, time series forecasting, anomaly detection, optimization" />
+        content="Abhiram Mullapudi, cyber-physical systems, digital water systems, machine learning, physical modeling, data scientist, Inframark, wireless sensor networks, time series forecasting, anomaly detection, optimization, rowing, espresso" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://randomstorms.net/" />
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title"
-        content="Abhiram Mullapudi - Cyber-Physical Systems, Machine Learning, Digital Water Systems" />
+    <meta property="og:title" content="Abhiram Mullapudi — Digital Water Systems, ML, and Infrastructure" />
     <meta property="og:description"
-        content="Explore Abhiram Mullapudi's work on cyber-physical infrastructure systems, digital water systems, machine learning, and physical modeling." />
+        content="Lead Data Scientist building digital water systems. Interests in ML, signal processing, and cyber-physical infrastructure." />
     <meta property="og:image" content="https://randomstorms.net/data/images/logo.png" />
     <meta property="og:url" content="https://randomstorms.net" />
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title"
-        content="Abhiram Mullapudi - Cyber-Physical Systems, Machine Learning, Digital Water Systems" />
+    <meta name="twitter:title" content="Abhiram Mullapudi — Digital Water Systems, ML, and Infrastructure" />
     <meta name="twitter:description"
-        content="Explore Abhiram Mullapudi's work on cyber-physical infrastructure systems, digital water systems, machine learning, and physical modeling." />
+        content="Lead Data Scientist building digital water systems. Interests in ML, signal processing, and cyber-physical infrastructure." />
     <meta name="twitter:image" content="https://randomstorms.net/data/images/logo.png" />
 </head>
 
 <body>
-    <div class="master-container">
-        <!-- Content -->
-        <!-- Header -->
-        <header>
-            <div class="header-logo">
-                <div class="logo">
-                    <img src="data/images/logo.png" alt="Random Storms Logo" />
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">RANDOM // STORMS</a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#experience">Work</a>
+                <a href="#projects">Projects</a>
+                <a href="#publications">Publications</a>
+                <a href="#blog">Writing</a>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="page-container">
+
+        <!-- Hero / About -->
+        <section id="about" class="section hero-section">
+            <div class="hero-grid">
+                <div class="hero-image">
+                    <img src="data/images/profile.png" alt="Abhiram Mullapudi" />
+                </div>
+                <div class="hero-content">
+                    <h1 class="hero-telugu" data-tooltip="My name in Telugu, my native language from South India">అభిరామ్ ముళ్లపూడి</h1>
+                    <p class="hero-subtitle">Abhiram Mullapudi</p>
+                    <p class="hero-bio">
+                        I build digital water systems that integrate machine learning, wireless sensor networks, and
+                        physical modeling to improve the resilience of urban water infrastructure. I am currently working at Inframark as a
+                        Lead Data Scientist, where I develop scalable machine learning solutions for small and
+                        medium-sized water utilities. My interests lie in signal processing,
+                        probabilistic methods, and optimization for cyber-physical infrastructure systems. I have a PhD in
+                        Civil Engineering from the University of Michigan, Ann Arbor, specializing in intelligent infrastructure systems. I write
+                        about some of these at <a href="https://randomstorms.substack.com" target="_blank">randomstorms.substack.com</a>.
+                        I am based in Washington, DC 🌸. During my free time, I <a href="#rowing">row</a> with the
+                        amazing crew at Capital Rowing Club and try to get my heart rate into a <a href="#otf">Gaussian distribution</a>.
+                    </p>
+                    <div class="hero-links">
+                        <a href="mailto:abhiramm@umich.edu" class="link-pill">Email</a>
+                        <a href="data/CV/cv.pdf" target="_blank" class="link-pill">CV</a>
+                        <a href="https://github.com/abhiramm7" target="_blank" class="link-pill">GitHub</a>
+                        <a href="https://scholar.google.com/citations?user=W9mUihUAAAAJ&hl=en" target="_blank"
+                            class="link-pill">Scholar</a>
+                        <a href="https://www.linkedin.com/in/mullapudi-abhiram/" target="_blank"
+                            class="link-pill">LinkedIn</a>
+                    </div>
                 </div>
             </div>
-        </header>
-        <hr />
-        <!-- About me -->
-        <main>
-            <div class="content-description-image">
-                <img src="data/images/43606407325_8f6f5d8954_o.jpg" alt="Profile Name" />
+        </section>
+
+        <!-- Work Experience -->
+        <section id="experience" class="section">
+            <h2 class="section-title">Work Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Lead Data Scientist</h3>
+                            <span class="timeline-date">2025 &mdash; Present</span>
+                        </div>
+                        <p class="timeline-company">Inframark</p>
+                        <p class="timeline-desc">
+                            Leading the development of machine learning-based solutions for optimizing the operation
+                            of collection systems and wastewater treatment plants.
+                        </p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Senior Data Scientist</h3>
+                            <span class="timeline-date">2023 &mdash; 2025</span>
+                        </div>
+                        <p class="timeline-company">Xylem</p>
+                        <p class="timeline-desc">
+                            Designed and implemented end-to-end machine learning-based solutions that inform
+                            decision-making in urban water infrastructure systems. Led the development of statistical
+                            and machine learning-based methodologies for time-series filtering and anomaly detection
+                            for predictive maintenance and operational decision-making. Developed a Flyte-based MLOps
+                            platform to streamline end-to-end machine learning model development, deployment, and
+                            maintenance for Xylem's digital water products.
+                        </p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Hydraulic Control and Optimization Engineer</h3>
+                            <span class="timeline-date">2020 &mdash; 2023</span>
+                        </div>
+                        <p class="timeline-company">Xylem</p>
+                        <p class="timeline-desc">
+                            Pioneered advanced machine learning and data engineering solutions for urban water
+                            infrastructure, transforming raw sensor data into actionable intelligence that optimizes
+                            water network performance, predicts critical operational challenges, and enables
+                            data-driven decision-making for utilities and municipalities. Developed a 1D-CNN model
+                            that leverages NOAA rainfall forecasts and near-real-time flow measurements to accurately
+                            predict 24-hour inflow to water treatment plants. Engineered an advanced 1D-CNN
+                            interpolation framework for processing spatially distributed river level data, enabling
+                            comprehensive environmental monitoring and regulatory compliance reporting. Designed a
+                            high-performance real-time processing system leveraging symbolic programming and advanced
+                            statistical techniques to detect network irregularities across 600+ concurrent data
+                            streams. Created machine learning-powered visualization platforms that translate complex
+                            water network dynamics into intuitive, actionable insights, including predictive treatment
+                            plant inflow dashboards and public-facing Combined Sewer Overflow event tracking.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="content-description-content">
-                <p>
-                    Hello! I am Abhiram Mullapudi (అభిరామ్ ముళ్లపూడి).
-                    I build digital water systems that integrate machine learning, wireless sensor networks, and
-                    physical modeling to improve the resilience of urban water infrastructure.
-                    I am currently working at Inframark as a Lead Data Scientist, where I develop scalable machine
-                    learning solutions for small and medium-sized water utilities.
-                    My interests lie in signal processing, probabilistic methods, and optimization for cyber-physical
-                    infrastructure systems.
-                    I write about some of these at <a href="https://randomstorms.substack.com/"
-                        target="_blank">randomstorms.substack.com</a>.
-                    I am based in Washington, DC 🌸. During my free time, I row with the amazing crew at Capital Rowing
-                    Club, work on improving my espresso skills, and try to keep my plants alive."
-                </p>
-            </div>
-        </main>
-        <div class="contact-container">
-            <p>
-                <a href="mailto:abhiramm@umich.edu" target="_blank">Email</a>
-                &nbsp;/&nbsp;
-                <a href="data/CV/cv.pdf" target="_blank">CV</a>
-                &nbsp;/&nbsp;
-                <a href="https://github.com/abhiramm7" target="_blank">GitHub</a>
-                &nbsp;/&nbsp;
-                <a href="https://scholar.google.com/citations?user=W9mUihUAAAAJ&hl=en" target="_blank">Google
-                    Scholar</a>
-                &nbsp;/&nbsp;
-                <a href="https://www.linkedin.com/in/mullapudi-abhiram/" target="_blank">
-                    LinkedIn
+        </section>
+
+        <!-- Projects -->
+        <section id="projects" class="section">
+            <h2 class="section-title">Open Source Projects</h2>
+            <div class="project-grid">
+                <a href="https://github.com/kLabUM/pystorms" target="_blank" class="project-card">
+                    <div class="project-icon">
+                        <img src="data/images/pystorms.png" alt="pystorms" />
+                    </div>
+                    <h3>pystorms</h3>
+                    <p>Simulation sandbox for designing and evaluating stormwater control algorithms. Curated
+                        scenarios for benchmarking.</p>
+                    <span class="project-tag">Python</span>
                 </a>
-            </p>
-        </div>
-        <hr />
-        <section id="research">
-            <h1>Publications</h1>
+                <a href="https://github.com/OpenWaterAnalytics/pyswmm" target="_blank" class="project-card">
+                    <div class="project-icon">
+                        <img src="data/images/pyswmm.png" alt="PySWMM" />
+                    </div>
+                    <h3>PySWMM</h3>
+                    <p>The Python interface to EPA's Stormwater Management Model. Enables real-time interaction with
+                        SWMM simulations.</p>
+                    <span class="project-tag">Python</span>
+                </a>
+                <a href="https://github.com/kLabUM/rrcf" target="_blank" class="project-card">
+                    <div class="project-icon">
+                        <img src="data/images/rrcf1.png" alt="rrcf" />
+                    </div>
+                    <h3>rrcf</h3>
+                    <p>Robust Random Cut Forest for anomaly detection on streaming data. Detects shifts in data
+                        structure in real time.</p>
+                    <span class="project-tag">Python</span>
+                </a>
+                <a href="https://github.com/kLabUM/StormReactor" target="_blank" class="project-card">
+                    <div class="project-icon">
+                        <img src="data/images/stormreactor.png" alt="StormReactor" />
+                    </div>
+                    <h3>StormReactor</h3>
+                    <p>Open-source package for integrated modeling of water quality and water balance in EPA-SWMM
+                        simulations.</p>
+                    <span class="project-tag">Python</span>
+                </a>
+                <a href="https://github.com/abhiramm7/ewri2023_DigitalWater101" target="_blank" class="project-card">
+                    <div class="project-icon">
+                        <span style="font-size:2rem;line-height:56px;">💧</span>
+                    </div>
+                    <h3>Digital Water 101</h3>
+                    <p>Workshop materials for building digital twins of water systems. Covers mechanistic modeling,
+                        sensor data integration, and Python workflows.</p>
+                    <span class="project-tag">Jupyter Notebook</span>
+                </a>
+                <a href="https://github.com/abhiramm7/flow-decomposition" target="_blank" class="project-card">
+                    <div class="project-icon">
+                        <span style="font-size:2rem;line-height:56px;">🌊</span>
+                    </div>
+                    <h3>flow-decomposition</h3>
+                    <p>Implementation of physically-based recursive digital filtering for hydrograph separation into
+                        baseflow and quickflow components.</p>
+                    <span class="project-tag">Jupyter Notebook</span>
+                </a>
+                <a href="https://github.com/abhiramm7/realClippy" target="_blank" class="project-card">
+                    <div class="project-icon">
+                        <span style="font-size:2rem;line-height:56px;">📎</span>
+                    </div>
+                    <h3>realClippy</h3>
+                    <p>Native macOS PDF reader with an integrated local LLM chatbot. Ask questions about your documents
+                        without leaving the app.</p>
+                    <span class="project-tag">Swift</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Publications -->
+        <section id="publications" class="section">
+            <h2 class="section-title">Publications</h2>
             <div class="publication-list">
                 <div class="publication-row">
                     <div class="publication-image">
-                        <img src="data/images/b10.png" alt="Bayes" loading="lazy" />
+                        <img src="data/images/b10.png" alt="Bayesian Optimization" loading="lazy" />
                     </div>
                     <div class="publication-description">
-                        <h3>
-                            Identification of stormwater control strategies
-                            and their associated uncertainties using
-                            Bayesian Optimization
-                        </h3>
-                        <p>
-                            <strong>Abhiram Mullapudi</strong>,
-                            <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
-                        </p>
-                        <p><em>In preparation</em>, 2023</p>
-                        <p>
-                            <a href="data/papers/bayes_poster.pdf">poster</a>
-                            /
-                            <a href="https://arxiv.org/abs/2305.18630">paper</a>
-                        </p>
-                        <p>
-                            Bayesian optimization is an automated
-                            data-driven approach for identifying a control
-                            strategy that achieves the desired response from
-                            the stormwater network.
-                        </p>
+                        <h3>Identification of stormwater control strategies and their associated uncertainties using
+                            Bayesian Optimization</h3>
+                        <p class="pub-authors"><strong>Abhiram Mullapudi</strong>, <a
+                                href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a></p>
+                        <p class="pub-venue"><em>Preprint</em>, 2023</p>
+                        <p class="pub-links"><a href="data/papers/bayes_poster.pdf">poster</a> / <a
+                                href="https://arxiv.org/abs/2305.18630">paper</a></p>
+                        <p class="pub-summary">Bayesian optimization as a data-driven approach for identifying control
+                            strategies that achieve desired stormwater network responses.</p>
                     </div>
                 </div>
 
@@ -126,259 +247,294 @@ a
                         <img src="data/images/pystorms.png" alt="pystorms" loading="lazy" />
                     </div>
                     <div class="publication-description">
-                        <h3>
-                            <em> pystorms </em>: Simulation sandbox for the
-                            evaluation and design of stormwater control
-                            algorithms
-                        </h3>
-                        <p>
-                            <a href="https://www.linkedin.com/in/rimersara">Sara P. Rimer</a>, <strong>Abhiram
-                                Mullapudi</strong>, et al.
+                        <h3><em>pystorms</em>: Simulation sandbox for the evaluation and design of stormwater control
+                            algorithms</h3>
+                        <p class="pub-authors"><a href="https://www.linkedin.com/in/rimersara">Sara P. Rimer</a>,
+                            <strong>Abhiram Mullapudi</strong>, et al.
                         </p>
-                        <p>
-                            <em>Environmental Modelling and Software</em>,
-                            2023
-                        </p>
-                        <p>
-                            <a href="https://github.com/kLabUM/pystorms">code</a>
-                            /
-                            <a href="https://arxiv.org/abs/2110.12289#">paper</a>/
-                            <a href="https://www.pystorms.org/">webpage</a>
-                        </p>
-                        <p>
-                            pystorms provides a curated collection of
-                            stormwater control scenarios to enable the
-                            development and quantitative comparison of
-                            stormwater control algorithms.
-                        </p>
+                        <p class="pub-venue"><em>Environmental Modelling and Software</em>, 2023</p>
+                        <p class="pub-links"><a href="https://github.com/kLabUM/pystorms">code</a> / <a
+                                href="https://arxiv.org/abs/2110.12289#">paper</a> / <a
+                                href="https://www.pystorms.org/">webpage</a></p>
+                        <p class="pub-summary">Curated collection of stormwater control scenarios enabling development
+                            and comparison of control algorithms.</p>
                     </div>
                 </div>
 
                 <div class="publication-row">
                     <div class="publication-image">
-                        <img src="data/images/phosbtc.png" alt="pyswmm" loading="lazy" />
+                        <img src="data/images/phosbtc.png" alt="Phosphorus removal" loading="lazy" />
                     </div>
                     <div class="publication-description">
-                        <h3>
-                            Improvement of phosphorus removal in bio
-                            retention cells using real-time control
-                        </h3>
-                        <p>
-                            <a href="https://www.bemason.org">Brooke E. Mason</a>, <strong>Abhiram Mullapudi</strong>,
-                            <a href="https://scholar.google.com/citations?user=qRgf188AAAAJ&hl=en">Cyndee L. Gruden</a>,
-                            <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
-                        </p>
-                        <p><em>Urban Water Journal</em>, 2022</p>
-                        <p>
-                            <a href="https://github.com/bemason/RTC_GreenInfrastructure">code</a>/
-                            <a href="data/papers/phos_paper.pdf">paper</a>
-                        </p>
-                        <p>
-                            Real-time control improves the nutrient capture
-                            efficiency of bio retention cells, and thus
-                            reducing the size of bio retention cells needed
-                            for nutrient removal.
-                        </p>
+                        <h3>Improvement of phosphorus removal in bioretention cells using real-time control</h3>
+                        <p class="pub-authors"><a href="https://www.bemason.org">Brooke E. Mason</a>, <strong>Abhiram
+                                Mullapudi</strong>, <a
+                                href="https://scholar.google.com/citations?user=qRgf188AAAAJ&hl=en">Cyndee L.
+                                Gruden</a>, <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a></p>
+                        <p class="pub-venue"><em>Urban Water Journal</em>, 2022</p>
+                        <p class="pub-links"><a href="https://github.com/bemason/RTC_GreenInfrastructure">code</a> / <a
+                                href="data/papers/phos_paper.pdf">paper</a></p>
+                        <p class="pub-summary">Real-time control improves nutrient capture efficiency in bioretention
+                            cells, reducing required infrastructure size.</p>
                     </div>
                 </div>
 
                 <div class="publication-row">
                     <div class="publication-image">
-                        <img src="data/images/stormreactor.png" alt="pyswmm" loading="lazy" />
+                        <img src="data/images/stormreactor.png" alt="StormReactor" loading="lazy" />
                     </div>
                     <div class="publication-description">
-                        <h3>
-                            StormReactor: An open-source Python package for
-                            the integrated modeling of water quality and
-                            water balance
-                        </h3>
-                        <p>
-                            <a href="https://www.bemason.org">Brooke E. Mason</a>, <strong>Abhiram Mullapudi</strong>,
-                            <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
+                        <h3>StormReactor: An open-source Python package for the integrated modeling of water quality and
+                            water balance</h3>
+                        <p class="pub-authors"><a href="https://www.bemason.org">Brooke E. Mason</a>, <strong>Abhiram
+                                Mullapudi</strong>, <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
                         </p>
-                        <p>
-                            <em>Environmental Modelling and Software</em>,
-                            2021
-                        </p>
-                        <p>
-                            <a href="https://github.com/kLabUM/StormReactor">code</a>/
-                            <a href="data/papers/stormreactor.pdf">paper</a>
-                        </p>
-                        <p>
-                            StormReactor is a python package for updating
-                            pollutant concentrations in EPA-SWMM durng
-                            simulations.
-                        </p>
-                    </div>
-                </div>
-                <div class="publication-row">
-                    <div class="publication-image">
-                        <img src="data/images/pyswmm.png" alt="pyswmm" loading="lazy" />
-                    </div>
-                    <div class="publication-description">
-                        <h3>
-                            <em> PySWMM </em>: The Python Interface to
-                            Stormwater Management Model (SWMM)
-                        </h3>
-                        <p>
-                            <a href="https://github.com/bemcdonnell">Bryant E. McDonnell</a>,
-                            <a href="https://github.com/katmratliff">Katherine Ratliff</a>,
-                            <a href="https://github.com/michaeltryby">Michael E. Tryby</a>,
-                            <a href="https://jennwuu.com">Jennifer Jia Xin Wu</a>,
-                            <strong>Abhiram Mullapudi</strong>
-                        </p>
-                        <p>
-                            <em>Journal of Open Source Software</em>, 2020
-                        </p>
-                        <p>
-                            <a href="https://github.com/OpenWaterAnalytics/pyswmm">code</a>
-                            /
-                            <a href="https://joss.theoj.org/papers/10.21105/joss.02292">paper</a>
-                        </p>
-                        <p>
-                            pyswmm is a python wrapper for interfacing with
-                            US EPA's Stormwater Management Model.
-                        </p>
+                        <p class="pub-venue"><em>Environmental Modelling and Software</em>, 2021</p>
+                        <p class="pub-links"><a href="https://github.com/kLabUM/StormReactor">code</a> / <a
+                                href="data/papers/stormreactor.pdf">paper</a></p>
+                        <p class="pub-summary">Python package for updating pollutant concentrations in EPA-SWMM during
+                            simulations.</p>
                     </div>
                 </div>
 
                 <div class="publication-row">
                     <div class="publication-image">
-                        <img src="data/images/deeprl.png" alt="deeprl" loading="lazy" />
+                        <img src="data/images/pyswmm.png" alt="PySWMM" loading="lazy" />
                     </div>
                     <div class="publication-description">
-                        <h3>
-                            Deep Reinforcement Learning for the Real Time
-                            Control of Stormwater Systems
-                        </h3>
-                        <p>
-                            <strong>Abhiram Mullapudi</strong>,
-                            <a href="http://lightscalar.com/about/">Matthew J. Lewis</a>,
-                            <a href="https://scholar.google.com/citations?user=qRgf188AAAAJ&hl=en">Cyndee L. Gruden</a>,
-                            <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
+                        <h3><em>PySWMM</em>: The Python Interface to Stormwater Management Model (SWMM)</h3>
+                        <p class="pub-authors"><a href="https://github.com/bemcdonnell">Bryant E. McDonnell</a>, <a
+                                href="https://github.com/katmratliff">Katherine Ratliff</a>, <a
+                                href="https://github.com/michaeltryby">Michael E. Tryby</a>, <a
+                                href="https://jennwuu.com">Jennifer Jia Xin Wu</a>, <strong>Abhiram Mullapudi</strong>
                         </p>
-                        <p><em>Advances in Water Resources</em>, 2020</p>
-                        <p>
-                            <a href="https://github.com/kLabUM/rl-storm-control">code</a>
-                            /
-                            <a href="data/papers/rl.pdf">paper</a>
+                        <p class="pub-venue"><em>Journal of Open Source Software</em>, 2020</p>
+                        <p class="pub-links"><a href="https://github.com/OpenWaterAnalytics/pyswmm">code</a> / <a
+                                href="https://joss.theoj.org/papers/10.21105/joss.02292">paper</a></p>
+                        <p class="pub-summary">Python wrapper for interfacing with EPA's Stormwater Management Model.
                         </p>
-                        <p>
-                            Reinforcement learning can be used for creating
-                            autonomous stormwater systems that can
-                            dynamically change their behavior based on the
-                            state of the watershed for achieving system
-                            scale objectives.
-                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="publication-list publication-hidden" id="publications-extra">
+
+                <div class="publication-row">
+                    <div class="publication-image">
+                        <img src="data/images/deeprl.png" alt="Deep RL" loading="lazy" />
+                    </div>
+                    <div class="publication-description">
+                        <h3>Deep Reinforcement Learning for the Real Time Control of Stormwater Systems</h3>
+                        <p class="pub-authors"><strong>Abhiram Mullapudi</strong>, <a
+                                href="http://lightscalar.com/about/">Matthew J. Lewis</a>, <a
+                                href="https://scholar.google.com/citations?user=qRgf188AAAAJ&hl=en">Cyndee L.
+                                Gruden</a>, <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a></p>
+                        <p class="pub-venue"><em>Advances in Water Resources</em>, 2020</p>
+                        <p class="pub-links"><a href="https://github.com/kLabUM/rl-storm-control">code</a> / <a
+                                href="data/papers/rl.pdf">paper</a></p>
+                        <p class="pub-summary">Using reinforcement learning for autonomous stormwater systems that
+                            dynamically adapt to watershed conditions.</p>
                     </div>
                 </div>
 
                 <div class="publication-row">
                     <div class="publication-image">
-                        <img src="data/images/rrcf1.png" alt="deeprl" loading="lazy" />
+                        <img src="data/images/rrcf1.png" alt="rrcf" loading="lazy" />
                     </div>
                     <div class="publication-description">
-                        <h3>
-                            <em> rrcf </em>: Implementation of the Robust
-                            Random Cut Forest algorithm for anomaly
-                            detection on streams
-                        </h3>
-                        <p>
-                            <a href="https://mattbartos.com">Matt D. Bartos</a>, <strong>Abhiram Mullapudi</strong>,
-                            <a href="https://stroutm.net">Sara C. Troutman</a>
-                        </p>
-                        <p>
-                            <em>Journal of Open Source Software</em>, 2019
-                        </p>
-                        <p>
-                            <a href="https://github.com/kLabUM/rrcf">code</a>
-                            /
-                            <a href="https://joss.theoj.org/papers/10.21105/joss.01336">paper</a>
-                        </p>
-                        <p>
-                            Anomalies in the streaming data can be detected
-                            by estimating the shift in the structure of the
-                            random forest caused by the addition of a new
-                            data point.
-                        </p>
+                        <h3><em>rrcf</em>: Implementation of the Robust Random Cut Forest algorithm for anomaly
+                            detection on streams</h3>
+                        <p class="pub-authors"><a href="https://mattbartos.com">Matt D. Bartos</a>, <strong>Abhiram
+                                Mullapudi</strong>, <a href="https://stroutm.net">Sara C. Troutman</a></p>
+                        <p class="pub-venue"><em>Journal of Open Source Software</em>, 2019</p>
+                        <p class="pub-links"><a href="https://github.com/kLabUM/rrcf">code</a> / <a
+                                href="https://joss.theoj.org/papers/10.21105/joss.01336">paper</a></p>
+                        <p class="pub-summary">Detecting anomalies in streaming data by estimating structural shifts in
+                            random forests.</p>
                     </div>
                 </div>
 
                 <div class="publication-row">
                     <div class="publication-image">
-                        <img src="data/images/shaping1.png" alt="deeprl" loading="lazy" />
+                        <img src="data/images/shaping1.png" alt="Shaping streamflow" loading="lazy" />
                     </div>
                     <div class="publication-description">
-                        <h3>
-                            Shaping streamflow using a real-time stormwater
-                            control network
-                        </h3>
-                        <p>
-                            <strong>Abhiram Mullapudi</strong>,
-                            <a href="https://mattbartos.com">Matt D. Bartos</a>,
-                            <a href="https://www.semanticscholar.org/author/Brandon-P.-Wong/37966114">Brandon P.
-                                Wong</a>,
-                            <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
-                        </p>
-                        <p><em>Sensors</em>, 2018</p>
-                        <p>
-                            <a href="data/papers/shapingwater.pdf">paper</a>
-                        </p>
-                        <p>
-                            Response of a stormwater network can be
-                            precisely shaped with the data from a wireless
-                            sensor network.
-                        </p>
+                        <h3>Shaping streamflow using a real-time stormwater control network</h3>
+                        <p class="pub-authors"><strong>Abhiram Mullapudi</strong>, <a
+                                href="https://mattbartos.com">Matt D. Bartos</a>, <a
+                                href="https://www.semanticscholar.org/author/Brandon-P.-Wong/37966114">Brandon P.
+                                Wong</a>, <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a></p>
+                        <p class="pub-venue"><em>Sensors</em>, 2018</p>
+                        <p class="pub-links"><a href="data/papers/shapingwater.pdf">paper</a></p>
+                        <p class="pub-summary">Precisely shaping stormwater network response using wireless sensor
+                            network data.</p>
                     </div>
                 </div>
 
                 <div class="publication-row">
                     <div class="publication-image">
-                        <img src="data/images/smrt.png" alt="deeprl" loading="lazy" />
+                        <img src="data/images/smrt.png" alt="Smart stormwater" loading="lazy" />
                     </div>
                     <div class="publication-description">
-                        <h3>
-                            Building a theory for smart stormwater systems
-                        </h3>
-                        <p>
-                            <strong>Abhiram Mullapudi</strong>,
-                            <a href="https://www.semanticscholar.org/author/Brandon-P.-Wong/37966114">Brandon P.
-                                Wong</a>,
-                            <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a>
-                        </p>
-                        <p>
-                            <em>Environmental Science: Water Research and
-                                Technology</em>, 2017
-                        </p>
-                        <p>
-                            <a href="https://github.com/kLabUM/control_sim">code</a>
-                            /
-                            <a href="data/papers/stormwatertheory.pdf">paper</a>
-                        </p>
-                        <p>
-                            By re-imagining physical watersheds as a network
-                            of interconnected systems, they can be
-                            dynamically reconfigured in real-time to target
-                            the removal of specific pollutants.
-                        </p>
+                        <h3>Building a theory for smart stormwater systems</h3>
+                        <p class="pub-authors"><strong>Abhiram Mullapudi</strong>, <a
+                                href="https://www.semanticscholar.org/author/Brandon-P.-Wong/37966114">Brandon P.
+                                Wong</a>, <a href="http://www-personal.umich.edu/~bkerkez/">Branko Kerkez</a></p>
+                        <p class="pub-venue"><em>Environmental Science: Water Research and Technology</em>, 2017</p>
+                        <p class="pub-links"><a href="https://github.com/kLabUM/control_sim">code</a> / <a
+                                href="data/papers/stormwatertheory.pdf">paper</a></p>
+                        <p class="pub-summary">Re-imagining physical watersheds as interconnected systems that can be
+                            dynamically reconfigured for targeted pollutant removal.</p>
                     </div>
                 </div>
             </div>
+            <div class="publication-toggle-wrap">
+                <button class="publication-toggle" id="pub-toggle" aria-expanded="false">
+                    Show all publications &darr;
+                </button>
+            </div>
         </section>
-        <hr />
-        <footer>
-            <p>
-                Font design and elements inspired from
-                <a href="https://www.johnsonbanks.co.uk/work/mozilla">
-                    Johnson Banks/<em>mozilla</em></a>
-                <br />
-                Theme inspired from
-                <a href="https://github.com/jonbarron/website">
-                    Jon Barron</a>
+
+
+        <!-- Blog / Writing -->
+        <section id="blog" class="section">
+            <h2 class="section-title">Writing</h2>
+            <div class="writing-list">
+                <a href="https://randomstorms.substack.com/p/the-quest-to-build-clippy" target="_blank" class="writing-item">
+                    <div class="writing-meta">Jan 2026</div>
+                    <div class="writing-body">
+                        <h3>the quest to build clippy</h3>
+                        <p>Reflections on LLM tooling, productivity, and building a PDF reader with a local LLM.</p>
+                    </div>
+                </a>
+                <a href="https://randomstorms.substack.com/p/discovering-governing-equations-from" target="_blank" class="writing-item">
+                    <div class="writing-meta">Jul 2025</div>
+                    <div class="writing-body">
+                        <h3>discovering governing equations from data</h3>
+                        <p>A numpy implementation of SINDy — sparse identification of nonlinear dynamical systems.</p>
+                    </div>
+                </a>
+                <a href="https://randomstorms.substack.com/p/how-to-train-your-model" target="_blank" class="writing-item">
+                    <div class="writing-meta">Apr 2025</div>
+                    <div class="writing-body">
+                        <h3>how to train your model</h3>
+                        <p>On double descent, over-parameterization, and why bigger models can generalize better.</p>
+                    </div>
+                </a>
+                <a href="https://randomstorms.substack.com/p/digital-water-systems-and-how-to" target="_blank" class="writing-item">
+                    <div class="writing-meta">Jan 2025</div>
+                    <div class="writing-body">
+                        <h3>digital water systems and how to build them</h3>
+                        <p>An introduction to building digital water systems with Python and mechanistic modeling.</p>
+                    </div>
+                </a>
+                <a href="https://randomstorms.substack.com/p/a-case-for-open-water-systems" target="_blank" class="writing-item">
+                    <div class="writing-meta">Dec 2024</div>
+                    <div class="writing-body">
+                        <h3>a case for open water systems</h3>
+                        <p>Why open-source tools are key to making digital water technologies accessible and equitable.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="writing-more">
+                <a href="https://randomstorms.substack.com/" target="_blank" class="blog-link">
+                    all posts on substack &rarr;
+                </a>
+            </div>
+        </section>
+
+        <!-- Interests -->
+        <section id="rowing" class="section interest-section">
+            <h2 class="section-title">Rowing</h2>
+            <img src="data/images/rowing.png" alt="Rowing on the Anacostia River" class="interest-img">
+            <p class="interest-text">
+                I row with the amazing crew at <a href="https://www.capitalrowing.org/" target="_blank">Capital Rowing Club</a>
+                on the Anacostia River. Nothing motivates you to reduce <span class="tooltip" data-tooltip="Combined Sewer Overflows — when stormwater and sewage overflow into waterways during heavy rain">CSOs</span> more than rowing past them every other day.
             </p>
+        </section>
+
+        <section id="otf" class="section interest-section">
+            <h2 class="section-title">Orangetheory</h2>
+            <img src="data/images/otf_gasuss.png" alt="OTF heart rate zones with Gaussian distribution" class="interest-img">
+            <p class="interest-text">
+                I love trying to make a Gaussian distribution with my heart rate zones in HIITs :P
+            </p>
+        </section>
+
+        <section id="dogs" class="section interest-section">
+            <h2 class="section-title">Thanks for scrolling down, here are some of my dogs</h2>
+            <div class="dog-gallery">
+                <img src="data/images/dog1.png" alt="Dog" class="interest-img">
+                <img src="data/images/dog2.png" alt="Dog" class="interest-img">
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-inner">
+                <p>Font design inspired by <a href="https://www.johnsonbanks.co.uk/work/mozilla">Johnson
+                        Banks/<em>mozilla</em></a>. Theme inspired by <a href="https://github.com/jonbarron/website">Jon
+                        Barron</a>.</p>
+            </div>
         </footer>
     </div>
+
+    <script>
+        // Mobile nav toggle
+        const toggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        if (toggle) {
+            toggle.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+                toggle.classList.toggle('open');
+                const isOpen = navLinks.classList.contains('open');
+                toggle.setAttribute('aria-expanded', isOpen);
+            });
+            // Close menu on link click
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('open');
+                    toggle.classList.remove('open');
+                });
+            });
+        }
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Publication toggle
+        const pubToggle = document.getElementById('pub-toggle');
+        const pubExtra = document.getElementById('publications-extra');
+        if (pubToggle && pubExtra) {
+            pubToggle.addEventListener('click', () => {
+                const isExpanded = pubExtra.classList.toggle('expanded');
+                pubToggle.setAttribute('aria-expanded', isExpanded);
+                pubToggle.innerHTML = isExpanded ? 'Show fewer publications &uarr;' : 'Show all publications &darr;';
+            });
+        }
+
+        // Subtle fade-in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.add('fade-in');
+            observer.observe(section);
+        });
+    </script>
 </body>
 
 </html>
-<!-- Closing Tag -->
