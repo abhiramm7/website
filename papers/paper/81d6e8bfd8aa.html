@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Transformers are Bayesian Networks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Transformers are Bayesian Networks</h1>
+      <p class="paper-detail-meta">
+        Greg Coppola
+        
+         · 2026
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/2603.17063" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">transformers</span><span class="entry-tag">bayesian-networks</span><span class="entry-tag">belief-propagation</span><span class="entry-tag">formal-verification</span><span class="entry-tag">probabilistic-inference</span><span class="entry-tag">hallucination</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Transformers are Bayesian Networks</h1>
+<p><strong>Authors:</strong> Greg Coppola
+<strong>Year:</strong> 2026
+<strong>Tags:</strong> transformers, belief-propagation, bayesian-networks, formal-verification, mechanistic-interpretability, hallucination</p>
+<h2>TL;DR</h2>
+<p>Every sigmoid transformer with any weights implements one round of weighted loopy belief propagation (BP) per layer on an implicit factor graph defined by those weights; with explicitly constructed weights it implements exact BP, and on tree-structured grounded knowledge bases this yields provably correct Bayesian posteriors. All five main claims are formally verified in Lean 4, and each is corroborated by a supporting experiment.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Theory paper with constructive proofs (formally machine-checked in Lean 4) plus small-scale experimental confirmation.</p>
+<p><strong>Context.</strong> Probabilistic graphical models / transformer mechanistic interpretability. Builds directly on: Pearl's sum-product algorithm [12] for exact BP on trees; Coppola's own QBBN bipartite factor-graph language [2, 3] for grounded probabilistic logic; Elhage et al. [4] routing/residual-stream view of attention; Joshi [8] framing of full self-attention as a GNN on a complete graph; Turing-Good log-odds weight-of-evidence algebra (credited to wartime Bletchley Park work).</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) sigmoid (not ReLU/GELU) activation is required for the exact internal equivalence — the ReLU empirical experiment is treated as compatible but not identical; (2) tree structure of the factor graph is required for the no-hallucination corollary; (3) independence of incoming messages is exact on trees but violated on loopy graphs; (4) the implicit factor graph G(W) is constructed to match the transformer's computation by definition, making Theorem 6.1 partly tautological — the authors acknowledge this in §6.3 but the rebuttal is not fully convincing. Assumptions (1)–(3) are stated clearly; (4) is understated.</p>
+<p><strong>Contributions.</strong>
+- Formal proof (Lean 4) that any sigmoid transformer with arbitrary weights implements weighted loopy BP on a well-defined implicit factor graph G(W).
+- Constructive explicit weight matrices for exact BP on any pairwise factor graph, with a binarization argument showing two attention heads per layer always suffices.
+- Uniqueness theorem: a sigmoid transformer that produces exact Bayesian posteriors for all inputs is forced to have BP weights (w₀ = w₁ = 1, b = 0 in FFN; projectDim/crossProject in attention).
+- Finite concept space theorem linking verifiability to a finite grounded symbol set, framing hallucination as a structural consequence of absent grounding rather than a fixable scaling failure.</p>
+<p><strong>Clarity.</strong> Mathematically organized and largely readable; the author acknowledges that prose was generated in collaboration with Claude (Anthropic), which introduces occasional puffery (e.g., the Leibniz section); the loopy-BP experimental section is cut off mid-sentence in the manuscript, suggesting an incomplete draft.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> The sigmoid FFN computes exactly the Turing-Good log-odds update (σ(logit(m₀) + logit(m₁))), and attention computes exactly the BP gather step, so every sigmoid transformer forward pass <em>is</em> one round of weighted loopy BP; with explicit BP weights and a tree-structured knowledge base, this yields exact Bayesian marginals and provably zero hallucination.</p>
+<p><strong>Supporting evidence:</strong>
+- Bayes-learner experiment: 2-layer, 2-head transformer encoder (~5,000 params), trained on 18,000 randomly generated two-variable factor graphs (factor entries ∈ [0.05, 1.0] uniform), validated on 2,000 held-out graphs; val MAE = 0.000752; posteriors matched to three decimal places; reported as 99.3% improvement over baseline (baseline not defined).
+- Table 1 shows max per-graph errors of 0.0003–0.0023 on four held-out examples.
+- Turing machine simulation: 5 structurally distinct machines (binary incrementer, decrementer, bitwise complement, left shift, right shift) all reached 100% validation accuracy in 4 epochs with identical hyperparameters, 2-layer 2-head encoder, dmodel = 32, ~4K params.
+- Scaling theorem: any k-ary factor graph binarizes exactly via AND associativity and log-odds additivity, requiring only d·⌈log₂ k⌉ layers (depth scales with reasoning complexity; head count fixed at 2).
+- Finite concept space theorem: a factor graph with n nodes induces exactly 2n² distinct routing keys; formally verified in Lean 4.</p>
+<p><strong>Figures &amp; tables:</strong> Table 1 (transformer vs. BP posteriors, 4 examples) — no error bars, no confidence intervals, no distributional summary beyond val MAE. Table 2 (8-dim token encoding) and Table 3 (three softmaxes) are expository. No figures are described in the provided text. Statistical significance is never reported. The loopy-BP experimental results table/figure is missing (text cuts off).</p>
+<p><strong>Follow-up references:</strong>
+- Pearl [12] — classical exactness of BP on trees, the cornerstone of the no-hallucination corollary.
+- Coppola [2, 3] — the QBBN grounding language and AND/OR bipartite factor-graph structure this paper formally implements.
+- Elhage et al. [4] — routing/residual-stream view of attention that the BP construction makes formally precise.
+- Yedidia, Freeman &amp; Weiss [21] (cited as Bethe free energy reference) — loopy BP fixed points, relevant for the practical convergence claims.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- The G(W) construction (§6.2) is defined to match the transformer's computation, making Theorem 6.1 largely definitional — the real content is that sigmoid FFN = Ψ_or exactly and attention = BP gather exactly, which is the actual mathematical substance but is not cleanly separated from the definitional scaffolding.
+- The uniqueness theorem (§6.5) requires that the transformer produces exact posteriors "for all inputs" — a condition no trained model satisfies; its applicability to real trained transformers is asserted but not demonstrated.
+- The no-hallucination result requires full grounding of the knowledge base in advance, a preprocessing step that is not automatic and whose difficulty is not discussed.
+- The independence assumption embedded in updateBelief is exact only when messages arrive from disjoint subtrees; the paper relies on this for the tree result and notes only briefly that it is violated on loopy graphs.
+- All analysis targets encoder-style transformers (Vaswani et al.); causal masking, autoregressive generation, and decoder-only architectures (GPT-family) are not addressed despite being the dominant production form.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with prior BP-attention correspondence literature beyond brief mentions of Joshi [8] and one unnamed reference in §11.3; claims of novelty relative to this body of work are not substantiated.
+- The "99.3% improvement over baseline" is stated without defining the baseline.
+- No comparison to neural theorem provers, probabilistic logic networks, or neurosymbolic systems that also aim at grounded probabilistic inference.
+- The Bethe free energy convergence conditions for loopy BP ([10, 15] cited but not given full citations in available text) are invoked to justify practical convergence without quantifying when the claimed "sparse, long loops" condition holds in realistic knowledge bases.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The main experiment uses only the minimal two-variable factor graph (v₀—f₁—v₂), where exact BP converges in one round matching a single forward pass; no multi-hop reasoning chains are tested, leaving the depth-equals-hops claim unconfirmed experimentally.
+- No ablation comparing sigmoid vs. ReLU transformers on identical tasks to quantify the gap between "exact" and "compatible" internal representations claimed in §10.4.
+- Turing machine experiments test only single-step prediction; multi-step sequential reasoning is not evaluated.
+- Table 1 shows four cherry-picked examples; distributional statistics (error histogram, worst-case error, etc.) are absent.
+- The loopy-BP empirical section (§10.5) is textually incomplete in the manuscript — results for five graph structures cannot be evaluated.
+- The prose was generated via iterative collaboration with Claude (acknowledged); informal arguments in philosophical sections (§9.5) may carry more confidence than the mathematics warrants.
+- No reproducibility artifacts (code, model checkpoints) are described in the available text beyond repository names.</p>
+<p><strong>Ideas for future work:</strong>
+- Apply the BP weight construction to decoder-only, causally masked transformers and determine whether an analogous equivalence holds or what breaks.
+- Test the depth-equals-reasoning-hops prediction on multi-hop QA benchmarks (e.g., HotpotQA, ProntoQA) by varying transformer depth against inference chain length.
+- Train sigmoid and ReLU transformers side by side on identical BP tasks and probe internal representations (e.g., logit-space activations) to empirically test whether ReLU models discover BP-equivalent internals or merely BP-compatible outputs.
+- Characterize conditions under which the implicit factor graph G(W) of a large pretrained LLM is approximately tree-structured, as this would determine the empirical reach of the no-hallucination corollary.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>sigmoid transformer</li><li>loopy belief propagation</li><li>factor graphs</li><li>log-odds algebra</li><li>Lean 4 formal verification</li><li>constructive weight proof</li><li>sum-product algorithm</li><li>attention mechanism</li><li>feed-forward networks</li></ul>
+        <h4>Datasets</h4><ul><li>synthetic pairwise factor graphs (20,000 randomly generated)</li><li>five Turing machine benchmarks</li></ul>
+        <h4>Claims</h4><ul><li>Every sigmoid transformer with any weights implements weighted loopy belief propagation on its implicit factor graph, with one layer equaling one round of BP.</li><li>A transformer with explicitly constructed weights can implement exact belief propagation on any declared factor graph, yielding provably correct posteriors on tree-structured knowledge bases.</li><li>A sigmoid transformer that produces exact Bayesian posteriors necessarily has BP weights; there is no other path through the sigmoid architecture to exact posteriors.</li><li>Attention computes AND (conjunction of required inputs) and the FFN computes OR (probabilistic disjunction), making the alternating transformer layer exactly Pearl&#39;s gather/update algorithm.</li><li>Hallucination is not a bug fixable by scaling but the structural consequence of operating without a grounded finite concept space, as any finite verification procedure can distinguish at most finitely many concepts.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

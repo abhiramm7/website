@@ -30,55 +30,55 @@
     <div class="summary-md"><h1>Inference Engineering</h1>
 <p><strong>Authors:</strong> Philip Kiely
 <strong>Year:</strong> 2026
-<strong>Tags:</strong> llm-inference, gpu-hardware, inference-optimization, generative-ai, production-ml, transformer-architecture</p>
+<strong>Tags:</strong> llm-inference, model-serving, gpu-optimization, production-ml, generative-ai, inference-engineering</p>
 <h2>TL;DR</h2>
-<p>A practitioner's guide to the full inference engineering stack—from GPU architecture and CUDA kernels through quantization, speculative decoding, and KV caching to multi-cloud production operations—aimed at engineers moving AI products off shared APIs onto dedicated open-model deployments. The book's central argument is that the December 2024 convergence of open and closed model quality (DeepSeek V3/R1) makes inference engineering a mandatory capability for any company building differentiated AI products. Knowledge cutoff is January 2026.</p>
+<p>A practitioner's book covering the full stack of deploying generative AI models in production, from CUDA kernels and GPU memory hierarchies through multi-cloud autoscaling. Targets engineers transitioning from closed-model APIs to self-hosted open models who must optimize for latency, cost, and reliability without sacrificing quality.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Practitioner textbook / industry guide. Not a research paper; no novel empirical results or proofs.</p>
-<p><strong>Context.</strong> Generative AI serving and MLSys subfields. Builds on: Vaswani et al. "Attention Is All You Need" (2017) as the architectural foundation; vLLM / SGLang / TensorRT-LLM as the inference engine layer; FlashAttention as a reference kernel optimization; NVIDIA CUDA/Hopper/Blackwell hardware generations.</p>
-<p><strong>Correctness.</strong> Load-bearing assumptions: (1) open models have closed the quality gap with closed models as of late 2024—stated but not benchmarked in the book; (2) dedicated deployments are ≥80% cheaper than per-token APIs at scale—asserted without methodology or citation; (3) closed-model APIs are capped at "two nines" of uptime—asserted without source. These claims drive the entire business case for the book's subject matter.</p>
+<p><strong>Category.</strong> Practitioner guide / survey synthesis — not a research paper. Presents no novel experimental results; instead consolidates existing techniques and engineering practice.</p>
+<p><strong>Context.</strong> AI inference serving sub-field. Builds on: Vaswani et al. "Attention Is All You Need" (transformer architecture foundation); vLLM and SGLang (inference engine design); FlashAttention (attention kernel optimization); DeepSeek R1/V3 (open-model quality parity milestone). Situates itself against the backdrop of the post-ChatGPT open-model explosion and the Hugging Face ecosystem.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) open models are now quality-competitive with closed models — supported anecdotally by DeepSeek V3/R1 (Dec 2024 / Jan 2025) but asserted as settled; (2) dedicated inference is economically superior at scale — plausible but the crossover threshold is not quantified; (3) the runtime/infrastructure/tooling tripartite decomposition cleanly covers the problem space — reasonable framing but not derived from first principles.</p>
 <p><strong>Contributions.</strong>
-- Synthesizes the complete inference stack (CUDA → frameworks → engines → production infra) into a single structured reference that did not previously exist as a book-length treatment.
-- Provides a taxonomy of AI-native application categories (agents, chat, voice, media, search, RecSys, completion, moderation) with inference-specific tradeoff guidance for each.
-- Extends inference engineering treatment beyond LLMs to embedding, ASR, TTS, image generation, and video generation modalities in a single volume.
-- Defines and distinguishes practitioner metrics (TTFT, perceived TPS, total TPS, ITL, latency percentiles P50–P99) with operational guidance on when each matters.</p>
-<p><strong>Clarity.</strong> Generally clear and well-paced with useful analogies (NFL athletes, sports coaches); stumbles in the preface with promotional framing for Baseten that recurs through Chapter 7.</p>
+- Unified conceptual framework decomposing inference into three layers: runtime (per-instance optimization), infrastructure (multi-cluster scaling), and tooling (developer abstraction).
+- Practical decision trees for model selection, online-vs.-offline workloads, and consumer-vs.-B2B latency/cost tradeoffs.
+- Breadth-first survey of optimization techniques (quantization, speculative decoding, KV cache reuse, tensor parallelism, disaggregation) applied across multiple modalities beyond LLMs.
+- Production operations chapter covering autoscaling, cold starts, multi-cloud capacity management, zero-downtime deployment, and cost estimation.</p>
+<p><strong>Clarity.</strong> Prose is consistently accessible and well-organized, with functional analogies (NFL athletes, sports coaches); occasionally slides into promotional language about Baseten and its customers.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Inference engineering spans three interdependent layers—runtime optimization (single-instance model performance), infrastructure (autoscaling, multi-cloud, reliability), and tooling (developer abstraction)—and mastering all three is required to serve generative AI models at production quality; no single layer compensates for weakness in another.</p>
+<p><strong>Main thrust:</strong> Serving open generative AI models in production at scale requires co-optimizing three interdependent layers — runtime performance (kernels, inference engines, quantization), infrastructure (autoscaling, multi-cloud routing), and developer tooling — and the best entry point is choosing the smallest model that passes task-specific evals before applying any other optimization.</p>
 <p><strong>Supporting evidence:</strong>
-- Open models on Hugging Face: &gt;2 million at publication, 25× growth over five years (Figure P.1).
-- Claimed cost advantage of dedicated open-model inference vs. closed APIs: ≥80% reduction at scale (no methodology provided).
-- Closed-model API uptime ceiling stated as "two nines"; dedicated deployments claimed achievable at "four nines or better" (no source cited).
-- DeepSeek-R1 released January 2025 at 671B parameters; distilled versions released on Llama 3 and Qwen 2.5 architectures.
-- ITL of 10 ms equates to 100 tokens per second per user (definitional, not empirical).
-- Text-to-SQL fine-tuning example: general-purpose coding models run at hundreds of billions of parameters; a fine-tuned domain-specific model can reach equivalent SQL task performance at "just a few billion parameters" (no specific model names or eval scores cited).</p>
-<p><strong>Figures &amp; tables:</strong> Figures are conceptual diagrams (neural network layers, tokenization, logit generation, speculation flow, multi-cloud topology). No axes with numerical values, no error bars, no confidence intervals, no statistical significance—appropriate for a textbook but means no empirical claims are visually supported. Tables (e.g., shared vs. dedicated inference pros/cons, application category tradeoffs) are qualitative. Figure P.1 and P.2 show trend lines but no axis scales or data sources are given.</p>
+- Open models claimed to be "at least 80% less expensive" than closed APIs at scale; no methodology or conditions specified.
+- Dedicated deployments asserted to achieve "four nines or better" uptime vs. "two nines" for closed-model APIs; no source cited.
+- DeepSeek R1 (671B parameters, Jan 2025) released with distilled variants on Llama 3 and Qwen 2.5 architectures; presented as the moment open-model quality parity was achieved.
+- Hugging Face hosts over 2 million open models as of writing, 25× more than five years prior (Figure P.1).
+- Text-to-SQL fine-tuning example: task-specific fine-tuning reduces required model size from hundreds of billions to a few billion parameters for equivalent task performance.
+- LLM latency metrics defined: TTFT (prefill-bound), perceived TPS / inter-token latency (decode-bound, bandwidth-bound); P50/P90/P95/P99 percentile framing advocated over mean latency.</p>
+<p><strong>Figures &amp; tables:</strong> Figures P.1–P.3 (model growth curves, capability curves, customization value prop), Figures 0.1–0.3 (inference stack, speculation diagram, multi-cloud capacity diagram), Figures 1.1–1.5 (latency distribution, TTFT/TPS illustration), Figures 2.1–2.6 (matmul, activation functions, tokenization, decode logit selection). No axes labels, error bars, confidence intervals, or statistical significance reported — consistent with a practitioner book but means no claim is empirically validated. The latency distribution figure (1.5) illustrating right-skew is conceptual, not data-derived.</p>
 <p><strong>Follow-up references:</strong>
-- Vaswani et al., "Attention Is All You Need" (2017) — foundational transformer architecture underlying every model discussed.
-- vLLM project (mentioned prominently, §4.3.1) — primary open-source LLM inference engine; understanding its continuous batching and PagedAttention is prerequisite to Chapters 4–5.
-- DeepSeek-R1 technical report (January 2025) — motivating case study for distillation and open-vs-closed model convergence argument.
-- FlashAttention (referenced as a high-impact CUDA kernel, §2.5 / §4.1) — key inference optimization whose mechanics underpin attention optimization throughout the book.</p>
+- Vaswani et al., "Attention Is All You Need" — foundational transformer architecture underlying all techniques discussed.
+- vLLM project documentation/paper — most heavily referenced inference engine; disaggregation and PagedAttention details.
+- DeepSeek R1 technical report — primary case study for open-model quality parity and distillation at scale.
+- Appendix B (Recommended Reading) within the book itself — curated list across architecture, GPU infrastructure, inference optimization research, and evals tooling (not fully reproduced in the excerpt provided).</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- The "open models closed the gap" thesis rests entirely on DeepSeek V3/R1 as a single data point; if this is a temporary anomaly rather than a structural shift, the book's core business case weakens.
-- The ≥80% cost savings figure assumes a specific (unstated) traffic volume and model size; at low scale, dedicated deployments cost more, not less.
-- "Four nines" uptime for dedicated deployments assumes mature multi-cloud infrastructure that most teams do not have; the book presents this as achievable without quantifying the engineering cost.
-- The book assumes NVIDIA GPUs as the default accelerator; AMD, Google TPU, and custom silicon are treated as brief footnotes, which may not reflect workloads outside the Baseten customer base.</p>
+- NVIDIA GPU ecosystem dominance is treated as given; AMD, Intel Gaudi, and custom ASICs receive only a brief survey section — results may not generalize to non-NVIDIA stacks.
+- Open-weight licensing stability is assumed; the book notes license heterogeneity but does not analyze IP or legal risk, which can break deployment decisions.
+- The "80% cost reduction" and uptime figures are stated as facts; if workload, model size, or traffic pattern assumptions underlying these numbers differ from a reader's context, the economics case for dedicated inference may not hold.
+- Quality parity between open and closed models is asserted as durable based on a single data point (DeepSeek, late 2024); this assumption would break if frontier closed models re-open the gap.</p>
 <p><strong>Missing context or citations:</strong>
-- No engagement with academic MLSys literature (e.g., Orca continuous batching paper, PagedAttention paper, FlashAttention papers) despite describing these systems in detail—the absence of citations makes claims unverifiable.
-- No comparison of inference engine benchmarks (vLLM vs. SGLang vs. TensorRT-LLM on standardized workloads); readers are given qualitative descriptions only.
-- The "Goodhart's Law applies to benchmarks" point is made without citing any empirical work on benchmark gaming or saturation.
-- No treatment of inference cost modeling with actual pricing data from cloud providers, despite a section on cost estimation.</p>
+- No engagement with academic inference literature: Orca (continuous batching), Sarathi (chunked prefill), SpotServe (spot-instance inference), or DejaVu (sparse attention at inference time) are absent despite being directly relevant.
+- No independent comparison of inference providers; Baseten is the author's employer and is positioned favorably throughout without competitive benchmarking.
+- Security and adversarial robustness of open-weight deployments (model extraction, prompt injection at scale) are mentioned only briefly under compliance, without substantive treatment.
+- The "Goodhart's Law applies to benchmarks" point is made without citing the growing literature on benchmark contamination and evaluation methodology.</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- All quantitative claims (80% cost savings, two-nines vs. four-nines uptime) are asserted without methodology, data, or citations; they cannot be verified or falsified from the book alone.
-- Chapter 7.6 ("Production Inference with Baseten") creates an unresolved conflict of interest: the author is a Baseten employee, the book is published by Baseten Books, and the final section markets Baseten's product—this context is disclosed but not separated from technical content.
-- The provided excerpt ends partway through Chapter 2; Chapters 3–7 and both appendices are listed in the TOC but not included in the text provided for this summary, so second- and third-pass analysis of those chapters is not possible.
-- Knowledge cutoff of January 2026 means rapidly evolving areas (Blackwell/Rubin GPU specs, Kimi K2, NVIDIA Dynamo) may already be outdated.</p>
+- Every quantitative claim (80% cost, two vs. four nines, 25× model growth) appears without methodology, sample, or source — readers should not treat these as validated benchmarks.
+- The text-to-SQL fine-tuning example is illustrative but presented as representative of what fine-tuning can achieve; no data on how often such dramatic size reductions are possible in other domains.
+- Authored by a Baseten employee and published by Baseten Books; tooling recommendations (vLLM, SGLang, TensorRT-LLM, NVIDIA Dynamo, Baseten) and customer examples are not independently verified, creating selection and framing bias.
+- Knowledge cutoff of January 2026 is acknowledged, but the field moves fast enough that specific engine comparisons and hardware specs (Blackwell, Rubin) may already be outdated for readers in 2026 or later.</p>
 <p><strong>Ideas for future work:</strong>
-- Add reproducible benchmarks comparing vLLM, SGLang, and TensorRT-LLM on identical hardware and workloads (TTFT, TPS, cost per million tokens) to replace qualitative comparisons.
-- Provide a rigorous cost model with cloud pricing data and traffic volume breakeven analysis for the shared-vs-dedicated inference decision.
-- Extend the modality chapter with empirical latency and throughput numbers for ASR, TTS, and image generation under the described optimizations, using publicly available model checkpoints.
-- Revisit the open-vs-closed model convergence claim with a rolling benchmark methodology that tracks the gap over time, rather than treating a single model release as a structural inflection point.</p></div>
+- Reproducible head-to-head benchmark of vLLM vs. SGLang vs. TensorRT-LLM on identical model/workload combinations with disclosed hardware, ISL/OSL distributions, and concurrency levels.
+- Quantitative analysis of the shared→dedicated inference economic crossover as a function of model size, tokens-per-request distribution, and traffic volume — to replace the unsourced 80% claim with a decision framework.
+- Extension to non-transformer architectures (Mamba/SSM, RWKV) whose inference profiles differ fundamentally from attention-based models and are absent from the book.
+- Adversarial threat model for open-weight production deployments: model extraction via API, membership inference, and jailbreak surface area introduced by self-hosting vs. managed APIs.</p></div>
 
     
       <div class="figures-block">

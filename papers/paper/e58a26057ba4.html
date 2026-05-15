@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Automatic Control of Large-Scale Combined Sewer Systems</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Automatic Control of Large-Scale Combined Sewer Systems</h1>
+      <p class="paper-detail-meta">
+        John W. Labadie, Neil S. Grigg, Bruce H. Bradford
+         · <em>Journal of the Environmental Engineering Division, ASCE</em>
+         · 1975
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">combined-sewer-overflow</span><span class="entry-tag">optimal-control</span><span class="entry-tag">hierarchical-control</span><span class="entry-tag">urban-stormwater</span><span class="entry-tag">wastewater-management</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Automatic Control of Large-Scale Combined Sewer Systems</h1>
+<p><strong>Authors:</strong> John W. Labadie, Neil S. Grigg, Bruce H. Bradford
+<strong>Year:</strong> 1975
+<strong>Tags:</strong> combined-sewer-overflow, real-time-control, hierarchical-optimization, urban-stormwater, linear-programming, wastewater-management</p>
+<h2>TL;DR</h2>
+<p>The paper proposes hierarchical decomposition and aggregation strategies to make real-time optimal control of large combined sewer systems computationally tractable, reducing an LP with 108M variables and 78M constraints to ~10 subproblems each requiring ~1/30th the memory. The framework is illustrated on the proposed San Francisco Master Plan with 58 detention reservoirs, with the goal of minimizing weighted combined sewer overflows to receiving waters.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / position paper — a framework description with illustrative application; no controlled experiment and no measured overflow reduction reported.</p>
+<p><strong>Context.</strong> Urban drainage engineering and large-scale systems control. Builds on: McPherson's MWIS concept (Metropolitan Water Intelligence System, 1971); Lasdon's optimization theory for large systems (1970); Mesarovic, Macko &amp; Takahara's hierarchical multilevel systems theory (1970); Wismer's large-scale optimization methods (1971); and the authors' own Colorado State MWIS project Phase II–III reports (1973–1974).</p>
+<p><strong>Correctness.</strong> Central assumptions: sewer transport can be approximated as linear (enabling LP); subbasins receive spatially lumped rainfall; interceptor routing lag and attenuation are negligible for illustration; subbasins are otherwise independent except through the treatment plant capacity constraint. The linearity assumption is acknowledged as site-specific: San Francisco's steep gradients support it, but the authors warn it may fail elsewhere.</p>
+<p><strong>Contributions.</strong>
+- Formal stochastic optimal control problem statement (minimize expected weighted overflows over N bypass points and M time steps) with explicit weighting for spatial/temporal pollution intensity.
+- Two complementary hierarchical strategies — Lagrangian decomposition (iterative master/subproblem) and progressive aggregation (top-down disaggregation of storage) — applied to a real city-scale system.
+- Reduction of a 108M-variable, 78M-constraint LP to ~10 subproblems, each ~1/30th original memory, demonstrated on a 58-reservoir, M = 9 instance (64,000 octal words, ~90-sec execution).
+- Explicit framework for incorporating future water quality models via bypass-point weighting factors.</p>
+<p><strong>Clarity.</strong> Readable and well-structured for a 1975 systems paper; figures are schematic rather than quantitative, and the illustrative restriction to 4 subbasins and M = 9 limits the reader's ability to assess scalability independently.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> A monolithic LP for real-time combined sewer overflow control is computationally infeasible at city scale; decomposing it into a hierarchy of coupled subbasin problems (via either Lagrangian relaxation or storage aggregation) makes it tractable while preserving near-optimal system coordination.</p>
+<p><strong>Supporting evidence:</strong>
+- Full San Francisco system LP: 108M variables, 78M constraints — stated infeasible for real-time use.
+- Aggregation highest-level LP for 4 subbasins: 22M variables, 13M constraints (after slack augmentation).
+- Aggregation applied to 58 reservoirs, M = 9: memory 64,000 (octal) words, execution ~90 sec — no baseline comparison execution time given.
+- Northampton, England study: cumulative BOD from combined sewer overflows ≈ BOD from the local secondary treatment plant.
+- EPA-calculated estimate: a 2-hr average storm over a metropolitan area generates BOD 1.5× raw dry weather sewage and 8× secondary effluent BOD in the same period.</p>
+<p><strong>Figures &amp; tables:</strong> Seven conceptual figures (system schematic, San Francisco plan map, control problem block diagram, subbasin map, interaction schematic, two hierarchical control flowcharts). No quantitative axes, no error bars, no confidence intervals, no tables. Figures are illustrative only; none conveys performance data. No statistical significance reported anywhere in the paper.</p>
+<p><strong>Follow-up references:</strong>
+- Grigg et al. Phase III CSU report (1974, Ref. 9) — detailed subbasin optimization methods and stochastic formulations referenced throughout but not reproduced here.
+- Lasdon (1970, Ref. 13) — foundational text on large-system optimization underlying the decomposition approach.
+- Mesarovic, Macko &amp; Takahara (1970, Ref. 15) — theoretical basis for hierarchical multilevel control.
+- Haimes (1973, Ref. 10) — hierarchical decomposition applied to water resource systems specifically.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Interceptor routing lag and attenuation are zero — explicitly flagged as illustrative but never relaxed in any presented result; violation would break the independence of subbasin subproblems.
+- LP linearity of sewer transport is load-bearing for the aggregation approach; non-linear flow in flat-gradient cities would require nonlinear programming with unknown convergence properties.
+- Storm prediction is feasible in real time — acknowledged as an open problem, but the entire on-line optimization path depends on it.
+- Subbasin boundaries are stable across storms — no sensitivity analysis on boundary placement is provided.
+- Treatment plant capacity is the sole coupling constraint between subbasins; interceptor capacity constraints are noted as "less of a factor" for San Francisco but may dominate other systems.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with simple rule-based or threshold control strategies as baselines; the paper asserts optimality advantages without comparing to any heuristic.
+- Water quality routing models (component 3) are entirely excluded from all results, though they motivate the weighting framework.
+- Short-term storm prediction literature is acknowledged as absent but no path forward is cited.
+- No citation of hydraulic transient or surcharge modeling literature, relevant when pipes are near capacity.
+- Cities with flat topography (non-San Francisco conditions) are mentioned but no example or citation is provided.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- No overflow reduction result is reported — the paper presents a framework and a memory/time count for one instance, not a performance outcome. The claim that the approach "minimizes pollution-causing overflows" is unvalidated.
+- The 90-sec execution time for M = 9 intervals is reported without stating the required real-time control cycle length; feasibility for on-line use cannot be assessed.
+- Convergence of the decomposition (Lagrangian relaxation) approach is explicitly stated as not guaranteed a priori; no conditions under which it fails are identified.
+- Aggregation feasibility across levels is described as requiring "some degree of arbitrariness," but no bound on suboptimality introduced by this arbitrariness is given.
+- Memory reported in octal words (64,000₈) is hardware-specific and non-portable; no FLOP-equivalent or algorithmic complexity analysis is offered.
+- M = 9 time intervals is very coarse for real storm dynamics; sensitivity of solution quality to M is not discussed.</p>
+<p><strong>Ideas for future work:</strong>
+- Validate overflow reduction against historical San Francisco storm records or simulation, comparing hierarchical LP to both a centralized LP (on a small instance) and a simple rule-based policy.
+- Derive an explicit suboptimality bound for the aggregation approach as a function of aggregation error in storage and transport linearity.
+- Incorporate short-term probabilistic rainfall forecasts into the stochastic formulation and quantify how forecast skill degrades control performance.
+- Test the decomposition framework on a flat-gradient city (e.g., Minneapolis–St. Paul, already instrumented) where transport nonlinearity is more pronounced to assess transferability.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>linear programming</li><li>hierarchical decomposition</li><li>aggregation</li><li>stochastic optimal control</li><li>rainfall-runoff modeling</li><li>flow routing</li><li>mass-balance equations</li></ul>
+        <h4>Datasets</h4><ul><li>San Francisco Master Plan for Wastewater Management (58 detention reservoirs)</li></ul>
+        <h4>Claims</h4><ul><li>Hierarchical decomposition of the large-scale combined sewer control problem into subbasin-level optimizations reduces computational infeasibility for real-time control.</li><li>An aggregation approach, representing groups of reservoirs as single aggregated storage units at higher levels, provides a tractable multilevel control structure.</li><li>The original linear programming formulation with 108M variables and 78M constraints can be replaced by approximately 10 smaller problems each requiring about one-thirtieth of the original computer memory.</li><li>Weighting factors on overflows by location and storm timing can incorporate water quality considerations into the minimization objective.</li><li>Hierarchical control strategies are compatible with distributed minicomputer hardware architectures, offering advantages in reliability and software development.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

@@ -28,57 +28,56 @@
     </header>
 
     <div class="summary-md"><h1>Probabilistic Machine Learning: An Introduction</h1>
-<p><strong>Authors:</strong> Kevin P. Murphy
-<strong>Year:</strong> 2022
-<strong>Tags:</strong> probabilistic-ml, bayesian-inference, deep-learning, textbook, supervised-learning, unsupervised-learning</p>
+<p><strong>Authors:</strong> Kevin P. Murphy (with chapter contributions from Zico Kolter, Frederik Kunstner, Si Yi Meng, Aaron Mishkin, Sharan Vaswani, Mark Schmidt, Mathieu Blondel, Krzysztof Choromanski, Colin Raffel, Bryan Perozzi, Sami Abu-El-Haija, Ines Chami)
+<strong>Year:</strong> 2022 (first printing March 2022; online version updated April 2025)
+<strong>Tags:</strong> probabilistic-machine-learning, bayesian-inference, deep-learning, supervised-learning, unsupervised-learning, textbook</p>
 <h2>TL;DR</h2>
-<p>A graduate-level textbook unifying classical statistics, Bayesian inference, and modern deep learning under a single probabilistic modeling lens, spanning foundations through transformers and graph neural networks. Intended as a self-contained replacement for Murphy's 2012 <em>Machine Learning: A Probabilistic Perspective</em>, updated for the deep learning era with Python/JAX/PyTorch code and Colab notebooks.</p>
+<p>A graduate-level textbook unifying classical probabilistic/Bayesian ML with modern deep learning under a single lens of probabilistic modeling and Bayesian decision theory, spanning 23 chapters from probability and optimization foundations through transformers, VAEs, and graph embeddings. It is the introductory volume of a two-volume series that supersedes Murphy's 2012 <em>Machine Learning: A Probabilistic Perspective</em>, incorporating the deep learning advances made since 2012. All code is in Python with Jupyter notebooks runnable in Google Colab.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Textbook / pedagogical survey of an established field (~800 pages, 23 chapters).</p>
-<p><strong>Context.</strong> Subfield: machine learning broadly. Builds directly on Murphy's own 2012 MLAPP; situates itself alongside Bishop's PRML, Koller &amp; Friedman's <em>Probabilistic Graphical Models</em>, Rasmussen &amp; Williams' <em>Gaussian Processes for ML</em>, and Schölkopf &amp; Smola's <em>Learning with Kernels</em>. The Bayesian decision-theoretic framing follows Jaynes-style probabilism as a foundation for reasoning under uncertainty.</p>
-<p><strong>Correctness.</strong> Load-bearing assumption: probabilistic modeling is a sufficient unifying lens for nearly all of ML. This is a methodological commitment, not empirically validated in the book itself; optimization-centric and PAC-learning perspectives are acknowledged but secondary. A second assumption is that epistemic and aleatoric uncertainty distinctions motivate the Bayesian treatment — valid conceptually but the book does not critically engage with cases where calibrated frequentist methods suffice.</p>
+<p><strong>Category.</strong> Graduate textbook / comprehensive survey of the ML field as of ~2021.</p>
+<p><strong>Context.</strong> Direct successor to Murphy (2012) <em>Machine Learning: A Probabilistic Perspective</em> (DeGroot Prize 2013). Situated within the MIT Press <em>Adaptive Computation and Machine Learning</em> series alongside Koller &amp; Friedman <em>Probabilistic Graphical Models</em>, Rasmussen &amp; Williams <em>Gaussian Processes for Machine Learning</em>, and Schölkopf &amp; Smola <em>Learning with Kernels</em>. Pairs with a sequel volume [Mur23] covering variational inference, generative models, and reinforcement learning. Cites the 2012 ImageNet result [KSH12] (Krizhevsky, Sutskever, Hinton) as the triggering event motivating the revision.</p>
+<p><strong>Correctness.</strong> Load-bearing assumption: probabilistic modeling is a sufficient unifying lens for nearly all of ML (attributed to Shakir Mohamed). This is a pedagogical choice, not a theorem—frequentist and algorithmic perspectives receive secondary treatment. Additional assumption: readers have implicit calculus and linear algebra background; formal prerequisites are not stated in the provided text. Both assumptions are broadly defensible for the intended audience but limit the book's universality.</p>
 <p><strong>Contributions.</strong>
-- Single-volume integration of Bayesian foundations, linear models, deep neural networks (CNNs, RNNs, Transformers), and nonparametric methods absent from the 2012 book in this form.
-- Replaced Matlab codebase entirely with Python (NumPy, Scikit-learn, JAX, PyTorch, TensorFlow, PyMC), with figure-generating Jupyter notebooks runnable on free Colab GPUs.
-- Added self-contained background chapters on linear algebra (Ch. 7) and optimization (Ch. 8) omitted from the 2012 book.
-- Coverage of post-2012 topics: transformers and efficient attention (Ch. 15), self-supervised / contrastive learning (Ch. 19), VAEs (Ch. 20), graph neural networks (Ch. 23), and large language models (Ch. 15.7).</p>
-<p><strong>Clarity.</strong> Writing is consistently clear with uniform notation (summarized in Appendix A); advanced sections marked * allow selective reading, though the sheer breadth means some later chapters (e.g., Ch. 23 on graph embeddings) are notably thinner than earlier ones.</p>
+- Unified probabilistic/Bayesian treatment spanning foundations through modern deep learning (transformers, self-supervised learning, VAEs) in a single coherent framework.
+- Integration of background material (linear algebra Ch. 7, optimization Ch. 8) omitted from the 2012 book, making the volume more self-contained.
+- Full migration of code from MATLAB to Python (NumPy, Scikit-learn, JAX, PyTorch, TensorFlow, PyMC) with reproducible Jupyter notebooks linked from figure captions.
+- Advanced sections marked with * throughout, enabling instructors to scope an introductory course without restructuring.</p>
+<p><strong>Clarity.</strong> Writing is clear and pedagogically careful throughout Chapter 1, with running examples (Iris, polynomial regression) that reappear across topics; multi-author sections (e.g., optimization, graph embeddings) may vary in style, but this cannot be assessed from the provided excerpt alone.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Treats all ML quantities as random variables endowed with probability distributions, using Bayesian decision theory as the normative framework for both model fitting and prediction, then applies this lens uniformly from logistic regression through deep transformers and clustering.</p>
+<p><strong>Main thrust:</strong> Treat all unknown quantities as random variables with probability distributions; use Bayesian decision theory to unify model fitting, regularization, uncertainty quantification, and evaluation across classification, regression, unsupervised learning, and beyond. The 23-chapter arc moves from mathematical foundations → linear models → deep networks → nonparametric models → semi-supervised/unsupervised methods.</p>
 <p><strong>Supporting evidence:</strong>
-- Pedagogical examples rather than novel benchmarks: Iris dataset (N=150, D=4, 3 classes) used throughout Part I to ground classification, decision theory, and generalization concepts.
-- Overfitting illustrated concretely: degree-20 polynomial fit to N=21 points achieves 0 training MSE but visually fails to generalize (Figure 1.7).
-- MLE shown equivalent to MSE minimization for Gaussian regression (NLL ∝ MSE, Section 1.2.2), and to cross-entropy minimization for classification.
-- EM algorithm derived as bound optimization (Section 8.7), connecting to GMM fitting (Section 8.7.3) and FA/PPCA (Section 20.2.3).
-- Transformer self-attention, multi-head attention, and positional encoding derived from first principles and compared empirically (qualitatively) to CNNs and RNNs in Section 15.5.5.</p>
-<p><strong>Figures &amp; tables:</strong> Figures are numerous and pedagogically motivated; captions name the generating notebook (e.g., <code>iris_plot.ipynb</code>), enabling reproduction. Axes are labeled in visible figures. No error bars or confidence intervals appear in illustrative figures — appropriate for a textbook but means readers cannot assess statistical precision of any claimed numerical results. No original empirical benchmark tables exist; the book cites external results rather than reporting its own.</p>
+- Iris dataset (N=150, D=4 features, C=3 classes, 50 examples per class) used as the primary running classification example; depth-2 decision tree on petal length/width shown to separate classes.
+- Polynomial regression demonstration: degree-2 fit visually adequate, degree-14 overfits, degree-20 achieves 0 training MSE on N=21 points; MSE-vs-degree curve shows train/test divergence (Figure 1.7d).
+- NLL ∝ MSE derivation for Gaussian regression: NLL(θ) = (1/2σ²)·MSE(θ) + const, establishing MLE ≡ least-squares under Gaussian noise assumption.
+- Softmax formulation p(y=c|x;θ) = softmax_c(f(x;θ)) given explicitly, connecting logits to probability distributions for multi-class classification.
+- Asymmetric loss matrix example (Virginica poisonous: misclassification cost 10 vs. 1) motivates empirical risk minimization beyond zero-one loss.</p>
+<p><strong>Figures &amp; tables:</strong> Chapter 1 figures include: pairwise scatter plot of Iris data color-coded by class (Fig. 1.3, axes labeled with feature names and units in cm); decision tree + 2D decision surface (Fig. 1.4, node counts shown); linear regression with residuals (Fig. 1.5, axes unlabeled for units); 2D temperature surface fits (Fig. 1.6, vertical axis is temperature, horizontal axes are room coordinates in unspecified units); polynomial-degree vs. MSE (Fig. 1.7d, train and test curves shown, no error bars or confidence intervals). No statistical significance reporting is present in Chapter 1; this is expected for illustrative textbook figures but means readers cannot assess sampling variability of the demonstrations. Figures link to named Jupyter notebooks (.ipynb) for reproduction.</p>
 <p><strong>Follow-up references:</strong>
-- Murphy 2023 <em>Probabilistic Machine Learning: Advanced Topics</em> [Mur23] — companion volume covering variational inference, diffusion models, RL, and causal ML.
-- Koller &amp; Friedman <em>Probabilistic Graphical Models</em> — deeper formal treatment of PGMs introduced briefly in Ch. 3.6.
-- Rasmussen &amp; Williams <em>Gaussian Processes for Machine Learning</em> — authoritative reference for GP material in Ch. 17.2.
-- Goodfellow, Bengio &amp; Courville <em>Deep Learning</em> — alternative deep-learning-centric treatment for comparison with Ch. 13–15.</p>
+- Murphy [Mur23] <em>Probabilistic Machine Learning: Advanced Topics</em> — the sequel covering variational inference, generative models, RL.
+- Krizhevsky, Sutskever, Hinton [KSH12] — the ImageNet result cited as the empirical starting point of the deep learning era.
+- Géron [Gér19] — cited as source for decision tree figure adaptation; practical complement to this book.
+- Koller &amp; Friedman <em>Probabilistic Graphical Models</em> — listed in the same MIT Press series; deeper treatment of PGMs covered lightly in Ch. 3.</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- Probabilistic framing adds value uniformly across problem types — not always true; for large-scale discriminative tasks, calibrated softmax outputs may be sufficient and Bayesian overhead unjustified.
-- Python + Colab access is a given for readers — excludes practitioners in compute-constrained environments.
-- Mathematical maturity (calculus, linear algebra) is assumed despite background chapters; the optimization chapter (Ch. 8) is dense enough that true beginners will struggle.
-- The "no free lunch theorem" (Section 1.2.4) is invoked to motivate probabilistic inductive biases but this implication is not formally established in the text.</p>
+- The probabilistic lens is claimed to be (nearly) universal; this marginalizes PAC-learning / computational learning theory perspectives that do not reduce neatly to probabilistic models—if a reader's domain relies on worst-case guarantees, this framing breaks.
+- No formal prerequisite list is stated in the provided text; the book implicitly assumes multivariable calculus, introductory linear algebra, and programming fluency. Readers lacking these will be lost before Chapter 7 (Linear Algebra) despite its inclusion.
+- Python library ecosystem (JAX, PyTorch, TensorFlow, PyMC) is assumed stable; rapid API churn in these libraries is a real reproducibility risk for the code-linked figures.
+- The "deep learning revolution started in 2012" framing (based on ImageNet [KSH12]) is a simplification that omits parallel advances in speech (cited as [Cir+10; Cir+11; Hin+12]) and may misattribute the tipping point.</p>
 <p><strong>Missing context or citations:</strong>
-- Causal inference (Pearl's do-calculus, structural causal models) is almost entirely absent — a significant gap given its overlap with probabilistic ML.
-- Reinforcement learning appears only in the one-page Section 1.4 introduction with no dedicated chapter, despite being a core ML paradigm.
-- PAC-learning / statistical learning theory gets only a brief subsection (5.4.4) with no proofs; readers seeking theoretical guarantees are not well served.
-- Diffusion models / score-based generative models — state-of-the-art by 2021 — are deferred entirely to the Advanced Topics volume without acknowledgment of their growing importance at the time of writing.
-- Comparison to Bishop's PRML (the most direct competitor) is not discussed explicitly.</p>
+- Causal inference receives only a dismissive note ("correlation does not imply causation," §3.1.4) with no substantive treatment, despite being closely related to the probabilistic framework; Pearl's do-calculus or Spirtes et al. (listed in the series) are not engaged with in the provided content.
+- Reinforcement learning is introduced in §1.4 but has no dedicated chapter in this volume (deferred to the advanced volume); readers expecting RL coverage based on the introduction will be disappointed.
+- Fairness, accountability, and societal impact of ML are mentioned only under "Caveats" (§1.6.3), which is not provided in the excerpt; given the book's 2022 publication date, this coverage appears minimal based on the TOC.
+- No chapter on causal generative models or structural causal models, despite the probabilistic graphical models chapter (§3.6).</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- No original experiments: all numerical illustrations use toy datasets or cite external results, so there is nothing to reproduce or falsify in a research sense.
-- Coverage of LLMs (Section 15.7) is thin given the field's trajectory; GPT-3 is mentioned but the treatment predates instruction tuning, RLHF, and chain-of-thought prompting — likely to mislead readers about the state of the art.
-- The book's treatment of Bayesian neural networks (Section 13.5.5) is brief and does not engage seriously with scalability concerns or the empirical evidence against common BNN approximations.
-- Graph embeddings chapter (Ch. 23) was contributed by external authors and has noticeably shallower integration with the probabilistic theme of the rest of the book.</p>
+- As a textbook, there are no novel experimental results to critique; illustrative figures use small toy datasets (N=21 for polynomial regression, N=150 for Iris) whose conclusions are pedagogically appropriate but cannot be generalized.
+- The MSE-vs-degree plot (Fig. 1.7d) shows no confidence intervals or multiple random seeds; it is a single illustrative run, which is standard for textbooks but could mislead readers about the reliability of the bias-variance tradeoff visualization.
+- Multi-author sections (optimization, graph embeddings, transformers) are acknowledged in the preface but no mechanism is described for ensuring notational or conceptual consistency across contributors; inconsistencies may exist but cannot be verified from the provided excerpt.
+- The online version (April 2025) post-dates the first printing (March 2022) by three years; the changelog is not included in the excerpt, so it is unknown which sections have been substantively revised versus merely corrected for typos.</p>
 <p><strong>Ideas for future work:</strong>
-- Integrate a dedicated chapter on causal ML (do-calculus, counterfactuals, identifiability) to close the largest conceptual gap.
-- Expand the RL chapter with the same depth as supervised/unsupervised sections, given the book's Bayesian decision-theoretic foundation naturally extends to MDPs.
-- Add a chapter on diffusion models and score matching, connecting to the variational autoencoder material already present in Ch. 20.
-- Provide systematic empirical comparisons (benchmark tables with confidence intervals) for competing methods within each chapter, moving beyond purely illustrative figures to help readers calibrate method selection.</p></div>
+- Add a dedicated chapter on causal inference (do-calculus, counterfactuals) to make the probabilistic framework applicable to intervention and not just prediction.
+- Include a formal prerequisites section and a self-assessment diagnostic so readers can gauge readiness before Chapter 1.
+- Given the April 2025 online update, a systematic comparison of the LLM coverage in §15.7 against post-GPT-4 developments (instruction tuning, RLHF, chain-of-thought) would update the most rapidly changing section of the book.
+- A companion chapter on ML fairness and uncertainty quantification for high-stakes decisions would address the gap hinted at in §1.6.3 ("Caveats") without requiring restructuring of the existing content.</p></div>
 
     
 

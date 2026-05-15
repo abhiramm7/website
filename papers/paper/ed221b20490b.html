@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Real-time control of combined sewer systems: Risks associated with uncertainties</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Real-time control of combined sewer systems: Risks associated with uncertainties</h1>
+      <p class="paper-detail-meta">
+        J.A. van der Werf, Z. Kapelan, J. Langeveld
+         · <em>Journal of Hydrology</em>
+         · 2023
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.1016/j.jhydrol.2022.128900" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">model-predictive-control</span><span class="entry-tag">combined-sewer-overflow</span><span class="entry-tag">urban-drainage</span><span class="entry-tag">uncertainty-analysis</span><span class="entry-tag">real-time-control</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Real-time control of combined sewer systems: Risks associated with uncertainties</h1>
+<p><strong>Authors:</strong> J.A. van der Werf, Z. Kapelan, J. Langeveld
+<strong>Year:</strong> 2023
+<strong>Tags:</strong> model-predictive-control, combined-sewer-overflow, uncertainty-analysis, urban-drainage, real-time-control, risk-assessment</p>
+<h2>TL;DR</h2>
+<p>A deterministic scenario-based methodology is developed to quantify how three uncertainty sources — internal MPC model simplification, real precipitation radar forecasts, and dynamic pumping-station capacity fluctuations — degrade MPC performance for combined sewer overflow (CSO) reduction in Eindhoven, Netherlands. Model and capacity uncertainties cause 35–47% relative performance loss and can induce operative deterioration (worse outcomes than static control), while precipitation forecast uncertainty causes only ~14% loss and no operative deterioration.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / methodology paper with single-catchment case study application.</p>
+<p><strong>Context.</strong> Urban drainage real-time control; builds directly on Lund et al. 2018 (comprehensive MPC-for-CSS review), van der Werf et al. 2021 (introduces the aRPI performance metric used here), Fiorelli et al. 2013 (MPC with uncertainty, claims re-updating negates forecast uncertainty), and Sadler et al. 2019 (open-source EPA-SWMM5 MPC implementation).</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) two events are sufficient to characterise Scenario 1 (perfect-information baseline); (2) deterministic "perfect vs. real" case pairs adequately represent the full uncertainty space without stochastic sampling; (3) pumping-capacity variation is aleatoric and unmodelable; (4) a simplified model with NSE 0.57–0.78 is an adequate internal MPC model. Assumptions (1) and (2) are the most fragile.</p>
+<p><strong>Contributions.</strong>
+- Introduces two distinct operational risk types — relative system performance loss and operative deterioration — providing finer diagnostic resolution than aggregate performance bars.
+- Proposes a reusable deterministic scenario methodology for assessing uncertainty impacts on MPC, structured around real operational and forecast data rather than synthetic noise.
+- Demonstrates empirically (17 real 2015 events) that dynamic pumping-capacity uncertainty dominates precipitation forecast uncertainty as a risk source for volume-based CSS MPC.
+- Reports the first characterisation of operative deterioration (MPC performing worse than static control) linked specifically to capacity uncertainty and smaller rainfall events.</p>
+<p><strong>Clarity.</strong> Well-structured and readable; scenario logic is clearly tabulated, though the jump from 2-event Scenario 1 to 17-event Scenarios 2–5 is under-explained and the severity of that mismatch is understated.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> In an Eindhoven CSS MPC case study using real radar forecasts and pumping-station records, simplified internal model structure and unmodelled pumping capacity reductions reduce CSO-reduction performance by 35–47% relative to perfect-information benchmarks, whereas real precipitation forecast uncertainty causes only a 14.4% relative loss and no operative deterioration, with no synergistic interaction between uncertainty sources.</p>
+<p><strong>Supporting evidence:</strong>
+- Scenario 1 (all-perfect): aRPI = 0.79, 68.7% CSO reduction vs. static optimum; Scenario 2 (simplified model only): aRPI = 0.50, 44.4% reduction — yielding a 35% relative performance loss attributable to model simplification alone (n = 2 events).
+- Scenario 4 (simplified model + real radar forecast): aRPI = 0.46, 20.3% CSO reduction, 14.4% relative loss vs. Scenario 2 (n = 17 events, 12 with CSO under static optimum).
+- Scenarios 3 and 5 (adding dynamic capacity uncertainty): aRPI = 0.29 and 0.28, CSO reductions 13.1% and 12.6%, relative losses 45.2% and 47.3% respectively.
+- Operative deterioration (more CSO than static optimum): 3 events in Scenario 3, 2 events in Scenario 5; none in Scenarios 2 or 4.
+- KS-test (p &lt; 0.05): only Scenarios 2 vs. 3 and 2 vs. 4 are statistically significantly different; combined uncertainty (Scenarios 3 vs. 5) shows mean and median performance difference of 0.5% and 0%, respectively.
+- Internal MPC model calibration quality: mean NSE 0.57–0.78 across sections.</p>
+<p><strong>Figures &amp; tables:</strong> Fig. 5 (boxplots of RPI by scenario, whiskers = 5–95% CI, n = 12) carries the central performance comparison; axes are labeled, but no confidence intervals on aggregate aRPI values, making inter-scenario comparisons imprecise. Fig. 6 (scatter plots with KS significance flags) is the primary statistical display — useful but low-power given n ≈ 12–17. Fig. 8 (performance loss vs. rainfall depth, intensity, and median capacity) shows no discernible relations; axes labeled, no regression lines or correlation statistics reported. Fig. 9 (operative deterioration vs. rainfall depth and median pumping capacity) is illustrative but n is too small for pattern claims. Tables 4 and 5 clearly tabulate aRPI, CSO reduction %, and relative loss per scenario.</p>
+<p><strong>Follow-up references:</strong>
+- Lund et al. 2018 — the foundational MPC-for-CSS review; essential background.
+- van der Werf, Kapelan &amp; Langeveld 2021 — defines the aRPI metric used throughout; needed to interpret all results.
+- Fiorelli et al. 2013 — the "re-updating negates forecast uncertainty" claim this paper partially tests (and partially contradicts).
+- Jafari, Mousavi &amp; Kim 2020 — reports 37% performance loss with real radar forecasts in a different CSS context; the closest direct comparator.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Two events are treated as adequate to establish Scenario 1's aRPI = 0.79; this single number anchors the entire 35% model-uncertainty loss claim — if those two events are unrepresentative, the finding does not hold.
+- The deterministic "perfect/real" binary implicitly assumes the chosen real data (2015 radar forecasts, PS Aalst records) are representative of long-run uncertainty distributions; no validation of this representativeness is offered.
+- Pumping-capacity variability is declared aleatoric and therefore not modelable, foreclosing a potentially important mitigation (capacity forecasting or conservative constraints); this is asserted, not demonstrated.
+- The genetic algorithm settings (population 20, mutation 0.1, crossover 0.5) are described as "iteratively chosen" without convergence or sensitivity analysis — optimizer quality is a hidden uncertainty source.
+- Generalizability: results implicitly assumed transferable to other CSS without evidence; a single catchment with a single transport-sewer topology is the sole empirical base.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with robust MPC or chance-constrained MPC literature, which explicitly handles capacity and forecast uncertainty within the optimization formulation rather than as a post-hoc risk.
+- Heuristic RTC under the same uncertainty scenarios is not tested, so whether MPC's sensitivity to uncertainty exceeds simpler rule-based control is unknown.
+- Deep Reinforcement Learning approaches are mentioned in Table 1 but not compared as an alternative for uncertainty robustness.
+- Actuator functioning uncertainty and initial-condition uncertainty are listed in Table 2 but excluded from analysis due to data availability; their potential magnitude relative to the studied sources is not bounded even qualitatively.
+- No citation of stochastic ensemble-based MPC studies (e.g., Courdent et al. 2015, cited but not critically compared) that directly address the gap this paper claims to fill.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The central finding of 35% relative loss from model uncertainty rests on exactly 2 events in Scenario 1 — this is statistically untenable; the computational cost (&gt;20 days CPU per 6-hour event) explains but does not excuse the limitation.
+- n = 12–17 events for Scenarios 2–5 is acknowledged as insufficient for multi-year statistical assessment; KS-tests on samples this small have very low power, making "not statistically significant" findings (Scenarios 3 vs. 5) nearly uninformative.
+- No confidence intervals on aggregate aRPI values (only on per-event boxplots); comparing point estimates as though they are reliable is misleading.
+- Five events with no CSO under static optimum are excluded from the boxplot analysis without fully accounting for their effect on aggregate aRPI; their contribution to operative deterioration risk (Section 4.2) deserves explicit treatment.
+- Scenario 1 and Scenarios 2–5 use different event sets (2 vs. 17 events) with no overlap confirmed, preventing direct statistical comparison.
+- No ablation isolating the initial-condition component of the simplified-model uncertainty from parameter/structure error; the 35% figure is a compound of multiple sub-uncertainties.
+- Data availability is on-request only, limiting reproducibility.</p>
+<p><strong>Ideas for future work:</strong>
+- Run Scenario 1 on the full 17-event set using high-performance computing or surrogate acceleration to give the model-uncertainty loss estimate statistical credibility.
+- Formulate a robust or chance-constrained MPC that penalises scenarios where pumping capacity falls below the assumed value, and compare operative deterioration frequency to the standard formulation.
+- Extend operative deterioration analysis to impact-based objectives (dissolved oxygen, ammonium peaks) to translate CSO volume risk into ecologically meaningful thresholds for the Dommel River context.
+- Replicate the methodology across at least two additional CSS catchments with different topology and capacity-variability profiles to determine whether the dominance of capacity uncertainty over forecast uncertainty is general or site-specific.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Model Predictive Control (MPC)</li><li>Genetic Algorithm optimisation</li><li>EPA SWMM5 hydrodynamic modelling</li><li>PySWMM Python interface</li><li>Kolmogorov-Smirnov test</li><li>absolute Realised Potential Indicator (aRPI)</li><li>scenario-based deterministic uncertainty assessment</li></ul>
+        <h4>Datasets</h4><ul><li>KNMI radar precipitation forecast data (2014-2015)</li><li>rain-gauge adjusted radar dataset</li><li>pumping station operational data for PS Aalst (Eindhoven)</li></ul>
+        <h4>Claims</h4><ul><li>Precipitation forecast uncertainty causes only minor relative performance loss in MPC due to frequent re-updating of initial conditions.</li><li>Internal MPC model simplification and unanticipated dynamic system capacity fluctuations cause the largest performance losses, with relative losses of 35% and 45-47% respectively.</li><li>Unanticipated fluctuations in dynamic system capacity can lead to operative deterioration, causing additional CSOs compared to a statically optimised control, particularly for smaller precipitation events.</li><li>The assessed sources of uncertainty do not synergistically reduce MPC potential or increase the risk of operative deterioration.</li><li>Trade-offs between MPC benefits and practical uncertainty risks should be explicitly evaluated before implementation.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

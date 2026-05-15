@@ -27,67 +27,59 @@
       </p>
     </header>
 
-    <div class="summary-md"><h1>The Potential of Knowing More – A Review of Data-Driven Urban Water Management</h1>
+    <div class="summary-md"><h1>The potential of knowing more – a review of data-driven urban water management</h1>
 <p><strong>Authors:</strong> Sven Eggimann, Lena Mutzner, Omar Wani, Mariane Yvonne Schneider, Dorothee Spuhler, Matthew Moy de Vitry, Philipp Beutler, Max Maurer
-<strong>Year:</strong> 2017
-<strong>Tags:</strong> urban-water-management, data-driven, smart-infrastructure, wastewater-epidemiology, real-time-control, review</p>
-<hr />
+<strong>Year:</strong> Not stated.
+<strong>Tags:</strong> urban-water-management, data-driven-sensing, smart-metering, flood-risk-forecasting, wastewater-epidemiology, on-site-treatment</p>
 <h2>TL;DR</h2>
-<p>A narrative review of data-driven approaches across the urban water management (UWM) lifecycle — rainfall sensing, flood modelling, network operation, water productivity, wastewater-based epidemiology, and on-site treatment. It argues that increased data availability is a necessary (though not sufficient) precondition for shifting UWM from passive conveyance infrastructure toward adaptive, smarter services, and identifies three UWM-specific barriers: data ownership, engineering culture change, and difficulty quantifying cost-benefit trade-offs.</p>
-<hr />
+<p>A narrative review of seven data-driven approaches in urban water management (UWM)—rainfall sensing, pluvial flood risk, network operation, water productivity, integrated design, wastewater-based epidemiology, and on-site treatment—arguing that increased data availability is a necessary (though not sufficient) precondition for UWM transformation. Three UWM-specific barriers are identified: data ownership/privacy, engineering culture change, and inability to quantify cost-benefit trade-offs.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Narrative review / position paper.</p>
-<p><strong>Context.</strong> Urban water management and smart infrastructure subfields. Builds on Bach et al. (integrated UWM modelling taxonomy, basis for Figure 2), Panasiuk et al. (review of human-waste monitoring methods in sewers), broader "internet of things" and smart-city literature (Kerkez et al. and others on RTC of stormwater), and wastewater-based epidemiology literature (multiple groups on illicit drug monitoring).</p>
-<p><strong>Correctness.</strong> Central load-bearing assumption: data scarcity and sensing limitations are a primary bottleneck for UWM improvement. This is plausible for technical optimization tasks but questionable for system-level change, where the paper itself acknowledges institutional barriers dominate. A secondary assumption — that field performance will follow laboratory or simulation demonstrations — is largely unvalidated in the cited literature.</p>
+<p><strong>Category.</strong> Survey/narrative review of research prototypes and emerging field applications; no original data collected.</p>
+<p><strong>Context.</strong> Urban water/environmental engineering. Builds on: Bach et al. (integrated UWM modelling taxonomy); Panasiuk et al. (comprehensive review of human waste monitoring methods); Quigley and Braun (dynamically controlled retention structures demonstration projects); and a broad real-time control (RTC) and model predictive control (MPC) literature in drainage engineering.</p>
+<p><strong>Correctness.</strong> The central load-bearing assumption—that data availability is the primary enabling precondition for UWM transformation—is stated explicitly but not empirically tested. A second implicit assumption is that technology barriers dominate over institutional and political ones; the paper acknowledges institutional barriers but then underweights them analytically. Both assumptions are contestable.</p>
 <p><strong>Contributions.</strong>
-- Synthesizes data-driven opportunities across the full UWM lifecycle into a single framework (seven sub-domains), including the under-reviewed domain of decentralised/on-site systems.
-- Distinguishes three UWM-specific challenges (data ownership/privacy, engineering practice inertia, cost-benefit opacity) from generic "big data" challenges.
-- Proposes a schematic relating data availability to UWM utility as a conceptual tool for practitioners.
-- Extends the data-driven argument explicitly to low-income and decentralised contexts (hand-pump sensors, biosensors for settings without laboratories).</p>
-<p><strong>Clarity.</strong> Well-organised by sub-domain with consistent structure; breadth forces each section to be shallow, and transitions between sub-domains lack integrating synthesis until the discussion section.</p>
-<hr />
+- Synthesises data-driven opportunities across seven UWM sub-domains under a single conceptual frame, linking sensing revolutions to service-model change.
+- Identifies three UWM-specific challenges (data ownership, practice change, cost-benefit quantification) distinct from generic "smart system" barriers.
+- Argues on-site/decentralised treatment can escape niche status via improved sensing and automation, reframing it as a data-enabled complement to centralised infrastructure.
+- Provides a non-exhaustive but structured catalogue (Table 1) of wastewater-borne indicator substances for epidemiology, spanning epidemic, health/lifestyle, and drug categories.</p>
+<p><strong>Clarity.</strong> Well-organised and readable; breadth is achieved at the cost of depth in individual sections, and the consistently optimistic framing makes critical assessment of individual claims difficult.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Data and sensing advances external to the water sector (cheaper sensors, IoT transmission, cloud computing) create an opportunity to transform UWM from passive, capacity-based infrastructure toward actively managed, data-optimised systems — but realising that potential requires resolving privacy, institutional, and cost-justification challenges specific to water utilities.</p>
+<p><strong>Main thrust:</strong> Advances in sensors, IoT transmission, and analytics can both optimise existing centralised UWM infrastructure and enable fundamentally different decentralised service models, but realising this potential requires overcoming privacy, cultural, and economic barriers specific to the water sector.</p>
 <p><strong>Supporting evidence:</strong>
-- Model results suggest dynamically controlled cisterns using MPC could reduce combined sewer releases by up to 92% compared to static systems.
-- Case studies report residential water use reductions of ≥10% and monthly peak demand reductions of 10% from smart metering; corresponding infrastructure downsizing could yield capital cost savings estimated at 11–51%.
-- Hydrological flood modelling requires terrain raster resolution of ~2.5 m for realistic surface flow between buildings; higher-resolution data improve flow-path delineation but are computationally prohibitive at catchment scale.
-- Currently only 1.7% of urban water use is reused globally; real-time monitoring is identified as a prerequisite for safe scale-up.
-- Spatially explicit Australian modelling found that 10% park area allocation could produce 62% nitrogen reduction from stormwater; experimental studies show vegetated roofs reduce rainwater runoff volume by 52–95%; integrated models show urban cooling of up to 2°C when green roofs are combined with street-level vegetation.
-- Small-scale WWTPs in Germany are monitored only 2–3 times annually, illustrating the monitoring gap for on-site systems.</p>
-<p><strong>Figures &amp; tables:</strong>
-- <em>Figure 1</em> (scope of UWM variables): qualitative schematic; no axes, no quantification — illustrative only.
-- <em>Figure 2</em> (integrated model data hierarchy, adapted from Bach et al.): shows layered data demand from basic to advanced decision-support; no axes or quantitative content; no error bars; useful conceptually but not analytically.
-- <em>Table 1</em> (wastewater epidemiology indicators): non-exhaustive catalogue of substance categories with example compounds and references; no quantitative detection limits or field performance data — functions as a literature map, not a comparative analysis.
-- No figures carry statistical evidence; no error bars or confidence intervals appear anywhere in the reviewed text.</p>
+- Smart metering: case studies report potential residential water use reductions ≥10% and monthly peak demand reductions of 10%; capital cost savings from downsized supply infrastructure estimated at 11%–51% (single cited study, ref 98).
+- Dynamically controlled cisterns via MPC: model results suggest up to 92% reduction of combined sewer releases theoretically achievable (ref 87; single modelling study).
+- Green infrastructure (Australian spatially explicit model): 10% park area allocation associated with 62% nitrogen reduction from stormwater runoff; vegetated roofs reported to reduce rainwater volume by 52%–95% in experimental studies.
+- Integrated models: green roof + street-level vegetation estimated to cool urban temperatures up to 2°C.
+- On-site WWTPs in Germany: monitored only 2–3 times annually, offered as evidence of monitoring deficit.
+- Urban flood modelling: ~2.5 m raster cell size identified as required resolution for realistic surface flow delineation between buildings.</p>
+<p><strong>Figures &amp; tables:</strong> Figure 1 (scope of UWM variables affected by sensing revolution) and Figure 2 (integrated model data-demand layers, adapted from Bach et al.) are referenced but not reproduced in the extracted text; no axes, error bars, or confidence intervals are assessable. Table 1 (wastewater indicator substances) is the most concrete artefact: clearly categorised with reference anchors, but explicitly labelled non-exhaustive and carries no quantitative detection limits or method performance data. No statistical significance is reported anywhere (expected for a narrative review, but limits claim strength).</p>
 <p><strong>Follow-up references:</strong>
-- Bach et al. (integrated UWM modelling framework) — foundational taxonomy underpinning Figure 2 and the integrated design section.
-- Panasiuk et al. (comprehensive review of human-waste monitoring methods) — most rigorous methodological review cited for wastewater epidemiology and contamination detection.
-- Quigley &amp; Braun [cited as ref 87] — demonstration projects on forecast-controlled retention structures; directly supports the MPC/cistern 92% figure.
-- Kerkez et al. [cited as ref 23 in smart stormwater context] — empirical RTC field work underlying Section 3.3 claims.</p>
-<hr />
+- Bach et al. (ref 62) — foundational integrated UWM modelling taxonomy; essential for the design section.
+- Panasiuk et al. (ref 118) — comprehensive review of human waste monitoring methods; most directly relevant prior synthesis.
+- Quigley and Braun (ref 87) — demonstration projects for forecast-controlled retention structures; primary empirical anchor for MPC claims.
+- Relevant smart metering references (refs 94–98) — basis for the 10% demand reduction and 11%–51% cost-saving figures; worth reading to assess generalisability.</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- Data scarcity is the <em>primary</em> bottleneck; if institutional, financial, or political constraints dominate (which the paper's own Section 4.1 suggests), data investment yields much smaller returns than claimed.
-- Laboratory or simulation performance of sensing technologies (biosensors, MPC algorithms, molecular pathogen detection) will translate to field conditions — the paper repeatedly notes this is unproven.
-- The energy-sector smart-grid analogy is informative; UWM is structurally different (monopoly provision, public health obligations, longer asset lives), making the analogy weaker than implied.
-- Aggregated wastewater signals are sufficient for epidemiological inference without resolving spatial attribution uncertainty — open methodological question acknowledged but not resolved.</p>
+- Data scarcity is the binding constraint on UWM improvement; if institutional, financial, or political constraints dominate instead, the review's prescriptions do not follow.
+- Findings from industrialised-country pilot studies transfer to low-income and rapidly urbanising contexts; the paper flags this briefly (smart metering in developing countries) but does not engage it systematically.
+- The seven selected domains are representative of "decisive trends"; no justification for exclusions is given, making coverage completeness unverifiable.
+- Data-driven approaches produce net benefits; cost-benefit evidence is conspicuously absent, and the authors themselves admit this is unresolved.</p>
 <p><strong>Missing context or citations:</strong>
-- No systematic literature search protocol is described (no PRISMA, no search terms, no inclusion/exclusion criteria); the review is explicitly selective ("additional examples could potentially be identified"), undermining reproducibility of coverage claims.
-- Equity and environmental-justice dimensions of data-driven UWM (who benefits from smart metering pricing schemes; differential impacts on low-income users of "drought pricing") are absent despite being relevant to the cost-benefit discussion.
-- Cybersecurity risk is flagged in one paragraph but not analysed; the growing literature on SCADA vulnerabilities in water infrastructure is not engaged.
-- Comparative performance data between data-driven and conventional approaches (e.g., RTC vs. static retention tanks in matched systems) are not synthesised; the review describes promises, not head-to-head evidence.</p>
+- No systematic search protocol is described; inclusion/exclusion criteria are absent, making the review susceptible to confirmation and availability bias.
+- Cross-sector comparison with smart electricity grids or transport is explicitly scoped out, despite being acknowledged as potentially valuable—this forfeits the most direct benchmark for feasibility and pitfalls.
+- Cybersecurity and adversarial risk literature for critical infrastructure is barely engaged beyond a passing mention.
+- Economic modelling of data-driven UWM transitions (whole-life costs, stranded asset risk) is not reviewed despite being identified as a key challenge.</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- The 92% CSO reduction figure originates from a single modelling study, not a field trial; presented without uncertainty bounds and without noting that it is a theoretical maximum under idealised control.
-- The 11–51% capital cost savings range is extremely wide and aggregated from heterogeneous contexts; no meta-analysis or weighting is applied, making the figure of limited practical use.
-- Most quantitative claims derive from single studies in specific geographies (Czech Republic, Netherlands, Switzerland, Australia); generalisability to other urban morphologies, climates, or regulatory contexts is asserted but undemonstrated.
-- Smart metering demand-reduction evidence is acknowledged to lack long-term behavioural data — the 10% figures are short-term case study results.
-- The paper conflates research prototypes, pilot demonstrations, and deployed systems without a consistent technology-readiness framing, making it hard to assess what is actionable now versus aspirational.</p>
+- Quantitative claims (92% CSO reduction; 11–51% capital savings) derive from single modelling or case studies with unstated scope and assumptions; no attempt is made to bound their generalisability or report uncertainty ranges.
+- The consistently positive "potential" framing renders almost no claim falsifiable; negative results or failed pilots are absent from the evidence base.
+- No meta-analytic or systematic synthesis is attempted even where sufficient primary literature exists (e.g., smart metering demand response), so effect-size estimates remain anecdotal.
+- Long-term behavioural effects of smart metering are explicitly flagged by the authors as unknown, yet the section's conclusion remains optimistic without qualification.
+- Wastewater epidemiology section conflates field-applicable methods (chemical markers) with still-developmental ones (microbial markers) without a clear readiness-level taxonomy.</p>
 <p><strong>Ideas for future work:</strong>
-- Systematic meta-analysis of smart metering demand reduction studies stratified by context (climate, tariff structure, housing type, income level) to replace the single-study point estimates used here.
-- Controlled field trials comparing MPC-equipped drainage infrastructure against matched static retention systems across multiple cities to validate the modelled 92% CSO reduction claim.
-- Development and empirical testing of a cost-benefit framework that explicitly monetises the option value and flexibility of data-driven infrastructure, addressing the acknowledged gap in Section 4.1(iii).
-- Longitudinal institutional studies of water utilities that have adopted RTC or smart metering to identify which organisational and regulatory factors actually enable or block the engineering practice change discussed in Section 4.1(ii).</p></div>
+- Systematic meta-analysis of realized (not modelled) cost and performance outcomes from deployed data-driven UWM systems to replace the current "potential" narrative with effect-size estimates and confidence intervals.
+- Development and application of a standardised cost-benefit or multi-criteria assessment framework comparing data-driven vs. conventional infrastructure investment paths across different urban contexts.
+- Longitudinal field studies on smart metering to resolve the acknowledged gap in long-term consumption behaviour change evidence.
+- Structured readiness-level assessment (analogous to TRL scales) for each wastewater-epidemiology indicator category, separating lab-proven from field-deployable methods to guide practitioner adoption priorities.</p></div>
 
     
 

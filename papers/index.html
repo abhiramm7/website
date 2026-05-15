@@ -12,7 +12,7 @@
 <div class="academic">
   <header class="academic-head">
     <h1>Papers</h1>
-    <p class="academic-sub">25 papers indexed. Click any entry to read the summary.</p>
+    <p class="academic-sub">30 papers indexed. Click any entry to read the summary.</p>
   </header>
 
   
@@ -20,6 +20,94 @@
   
     <section class="year-block">
       <h2 class="year-heading">2026</h2>
+      
+        <article class="paper-entry" id="p-81d6e8bfd8aa">
+          <div class="paper-entry-head" data-toggle="p-81d6e8bfd8aa">
+            <div class="paper-thumb" data-hash="81d6e8bfd8aa"></div>
+            <div class="paper-entry-text">
+              <div class="paper-entry-title">Transformers are Bayesian Networks</div>
+              <div class="paper-entry-meta">
+                Greg Coppola
+                
+                <span class="year">· 2026</span>
+              </div>
+              <p class="paper-entry-tldr">Every sigmoid transformer with any weights implements one round of weighted loopy belief propagation (BP) per layer on an implicit factor graph defined by those weights; with explicitly constructed weights it implements exact BP, and on tree-structured grounded knowledge bases this yields provably correct Bayesian posteriors. All five main claims are formally verified in Lean 4, and each is corroborated by a supporting experiment.</p>
+              <div class="paper-entry-links">
+                
+                <a href="https://arxiv.org/abs/2603.17063" target="_blank">[arxiv]</a>
+                <a href="./paper/81d6e8bfd8aa.html">[detail]</a>
+                
+                
+                <span class="entry-tag">transformers</span><span class="entry-tag">bayesian-networks</span><span class="entry-tag">belief-propagation</span><span class="entry-tag">formal-verification</span><span class="entry-tag">probabilistic-inference</span>
+              </div>
+            </div>
+          </div>
+          <div class="paper-entry-body">
+            <div class="summary-md"><h1>Transformers are Bayesian Networks</h1>
+<p><strong>Authors:</strong> Greg Coppola
+<strong>Year:</strong> 2026
+<strong>Tags:</strong> transformers, belief-propagation, bayesian-networks, formal-verification, mechanistic-interpretability, hallucination</p>
+<h2>TL;DR</h2>
+<p>Every sigmoid transformer with any weights implements one round of weighted loopy belief propagation (BP) per layer on an implicit factor graph defined by those weights; with explicitly constructed weights it implements exact BP, and on tree-structured grounded knowledge bases this yields provably correct Bayesian posteriors. All five main claims are formally verified in Lean 4, and each is corroborated by a supporting experiment.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Theory paper with constructive proofs (formally machine-checked in Lean 4) plus small-scale experimental confirmation.</p>
+<p><strong>Context.</strong> Probabilistic graphical models / transformer mechanistic interpretability. Builds directly on: Pearl's sum-product algorithm [12] for exact BP on trees; Coppola's own QBBN bipartite factor-graph language [2, 3] for grounded probabilistic logic; Elhage et al. [4] routing/residual-stream view of attention; Joshi [8] framing of full self-attention as a GNN on a complete graph; Turing-Good log-odds weight-of-evidence algebra (credited to wartime Bletchley Park work).</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) sigmoid (not ReLU/GELU) activation is required for the exact internal equivalence — the ReLU empirical experiment is treated as compatible but not identical; (2) tree structure of the factor graph is required for the no-hallucination corollary; (3) independence of incoming messages is exact on trees but violated on loopy graphs; (4) the implicit factor graph G(W) is constructed to match the transformer's computation by definition, making Theorem 6.1 partly tautological — the authors acknowledge this in §6.3 but the rebuttal is not fully convincing. Assumptions (1)–(3) are stated clearly; (4) is understated.</p>
+<p><strong>Contributions.</strong>
+- Formal proof (Lean 4) that any sigmoid transformer with arbitrary weights implements weighted loopy BP on a well-defined implicit factor graph G(W).
+- Constructive explicit weight matrices for exact BP on any pairwise factor graph, with a binarization argument showing two attention heads per layer always suffices.
+- Uniqueness theorem: a sigmoid transformer that produces exact Bayesian posteriors for all inputs is forced to have BP weights (w₀ = w₁ = 1, b = 0 in FFN; projectDim/crossProject in attention).
+- Finite concept space theorem linking verifiability to a finite grounded symbol set, framing hallucination as a structural consequence of absent grounding rather than a fixable scaling failure.</p>
+<p><strong>Clarity.</strong> Mathematically organized and largely readable; the author acknowledges that prose was generated in collaboration with Claude (Anthropic), which introduces occasional puffery (e.g., the Leibniz section); the loopy-BP experimental section is cut off mid-sentence in the manuscript, suggesting an incomplete draft.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> The sigmoid FFN computes exactly the Turing-Good log-odds update (σ(logit(m₀) + logit(m₁))), and attention computes exactly the BP gather step, so every sigmoid transformer forward pass <em>is</em> one round of weighted loopy BP; with explicit BP weights and a tree-structured knowledge base, this yields exact Bayesian marginals and provably zero hallucination.</p>
+<p><strong>Supporting evidence:</strong>
+- Bayes-learner experiment: 2-layer, 2-head transformer encoder (~5,000 params), trained on 18,000 randomly generated two-variable factor graphs (factor entries ∈ [0.05, 1.0] uniform), validated on 2,000 held-out graphs; val MAE = 0.000752; posteriors matched to three decimal places; reported as 99.3% improvement over baseline (baseline not defined).
+- Table 1 shows max per-graph errors of 0.0003–0.0023 on four held-out examples.
+- Turing machine simulation: 5 structurally distinct machines (binary incrementer, decrementer, bitwise complement, left shift, right shift) all reached 100% validation accuracy in 4 epochs with identical hyperparameters, 2-layer 2-head encoder, dmodel = 32, ~4K params.
+- Scaling theorem: any k-ary factor graph binarizes exactly via AND associativity and log-odds additivity, requiring only d·⌈log₂ k⌉ layers (depth scales with reasoning complexity; head count fixed at 2).
+- Finite concept space theorem: a factor graph with n nodes induces exactly 2n² distinct routing keys; formally verified in Lean 4.</p>
+<p><strong>Figures &amp; tables:</strong> Table 1 (transformer vs. BP posteriors, 4 examples) — no error bars, no confidence intervals, no distributional summary beyond val MAE. Table 2 (8-dim token encoding) and Table 3 (three softmaxes) are expository. No figures are described in the provided text. Statistical significance is never reported. The loopy-BP experimental results table/figure is missing (text cuts off).</p>
+<p><strong>Follow-up references:</strong>
+- Pearl [12] — classical exactness of BP on trees, the cornerstone of the no-hallucination corollary.
+- Coppola [2, 3] — the QBBN grounding language and AND/OR bipartite factor-graph structure this paper formally implements.
+- Elhage et al. [4] — routing/residual-stream view of attention that the BP construction makes formally precise.
+- Yedidia, Freeman &amp; Weiss [21] (cited as Bethe free energy reference) — loopy BP fixed points, relevant for the practical convergence claims.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- The G(W) construction (§6.2) is defined to match the transformer's computation, making Theorem 6.1 largely definitional — the real content is that sigmoid FFN = Ψ_or exactly and attention = BP gather exactly, which is the actual mathematical substance but is not cleanly separated from the definitional scaffolding.
+- The uniqueness theorem (§6.5) requires that the transformer produces exact posteriors "for all inputs" — a condition no trained model satisfies; its applicability to real trained transformers is asserted but not demonstrated.
+- The no-hallucination result requires full grounding of the knowledge base in advance, a preprocessing step that is not automatic and whose difficulty is not discussed.
+- The independence assumption embedded in updateBelief is exact only when messages arrive from disjoint subtrees; the paper relies on this for the tree result and notes only briefly that it is violated on loopy graphs.
+- All analysis targets encoder-style transformers (Vaswani et al.); causal masking, autoregressive generation, and decoder-only architectures (GPT-family) are not addressed despite being the dominant production form.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with prior BP-attention correspondence literature beyond brief mentions of Joshi [8] and one unnamed reference in §11.3; claims of novelty relative to this body of work are not substantiated.
+- The "99.3% improvement over baseline" is stated without defining the baseline.
+- No comparison to neural theorem provers, probabilistic logic networks, or neurosymbolic systems that also aim at grounded probabilistic inference.
+- The Bethe free energy convergence conditions for loopy BP ([10, 15] cited but not given full citations in available text) are invoked to justify practical convergence without quantifying when the claimed "sparse, long loops" condition holds in realistic knowledge bases.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The main experiment uses only the minimal two-variable factor graph (v₀—f₁—v₂), where exact BP converges in one round matching a single forward pass; no multi-hop reasoning chains are tested, leaving the depth-equals-hops claim unconfirmed experimentally.
+- No ablation comparing sigmoid vs. ReLU transformers on identical tasks to quantify the gap between "exact" and "compatible" internal representations claimed in §10.4.
+- Turing machine experiments test only single-step prediction; multi-step sequential reasoning is not evaluated.
+- Table 1 shows four cherry-picked examples; distributional statistics (error histogram, worst-case error, etc.) are absent.
+- The loopy-BP empirical section (§10.5) is textually incomplete in the manuscript — results for five graph structures cannot be evaluated.
+- The prose was generated via iterative collaboration with Claude (acknowledged); informal arguments in philosophical sections (§9.5) may carry more confidence than the mathematics warrants.
+- No reproducibility artifacts (code, model checkpoints) are described in the available text beyond repository names.</p>
+<p><strong>Ideas for future work:</strong>
+- Apply the BP weight construction to decoder-only, causally masked transformers and determine whether an analogous equivalence holds or what breaks.
+- Test the depth-equals-reasoning-hops prediction on multi-hop QA benchmarks (e.g., HotpotQA, ProntoQA) by varying transformer depth against inference chain length.
+- Train sigmoid and ReLU transformers side by side on identical BP tasks and probe internal representations (e.g., logit-space activations) to empirically test whether ReLU models discover BP-equivalent internals or merely BP-compatible outputs.
+- Characterize conditions under which the implicit factor graph G(W) of a large pretrained LLM is approximately tree-structured, as this would determine the empirical reach of the no-hallucination corollary.</p></div>
+            
+            
+              <div class="academic-auto">
+                <h4>Methods</h4><ul><li>sigmoid transformer</li><li>loopy belief propagation</li><li>factor graphs</li><li>log-odds algebra</li><li>Lean 4 formal verification</li><li>constructive weight proof</li><li>sum-product algorithm</li><li>attention mechanism</li><li>feed-forward networks</li></ul>
+                <h4>Datasets</h4><ul><li>synthetic pairwise factor graphs (20,000 randomly generated)</li><li>five Turing machine benchmarks</li></ul>
+                <h4>Claims</h4><ul><li>Every sigmoid transformer with any weights implements weighted loopy belief propagation on its implicit factor graph, with one layer equaling one round of BP.</li><li>A transformer with explicitly constructed weights can implement exact belief propagation on any declared factor graph, yielding provably correct posteriors on tree-structured knowledge bases.</li><li>A sigmoid transformer that produces exact Bayesian posteriors necessarily has BP weights; there is no other path through the sigmoid architecture to exact posteriors.</li><li>Attention computes AND (conjunction of required inputs) and the FFN computes OR (probabilistic disjunction), making the alternating transformer layer exactly Pearl&#39;s gather/update algorithm.</li><li>Hallucination is not a bug fixable by scaling but the structural consequence of operating without a grounded finite concept space, as any finite verification procedure can distinguish at most finitely many concepts.</li></ul>
+              </div>
+            
+          </div>
+        </article>
       
         <article class="paper-entry" id="p-b297183c38ff">
           <div class="paper-entry-head" data-toggle="p-b297183c38ff">
@@ -31,7 +119,7 @@
                 <span class="venue">· <em>Baseten Books</em></span>
                 <span class="year">· 2026</span>
               </div>
-              <p class="paper-entry-tldr">A practitioner&#39;s guide to the full inference engineering stack—from GPU architecture and CUDA kernels through quantization, speculative decoding, and KV caching to multi-cloud production operations—aimed at engineers moving AI products off shared APIs onto dedicated open-model deployments. The book&#39;s central argument is that the December 2024 convergence of open and closed model quality (DeepSeek V3/R1) makes inference engineering a mandatory capability for any company building differentiated AI products. Knowledge cutoff is January 2026.</p>
+              <p class="paper-entry-tldr">A practitioner&#39;s book covering the full stack of deploying generative AI models in production, from CUDA kernels and GPU memory hierarchies through multi-cloud autoscaling. Targets engineers transitioning from closed-model APIs to self-hosted open models who must optimize for latency, cost, and reliability without sacrificing quality.</p>
               <div class="paper-entry-links">
                 
                 
@@ -46,55 +134,55 @@
             <div class="summary-md"><h1>Inference Engineering</h1>
 <p><strong>Authors:</strong> Philip Kiely
 <strong>Year:</strong> 2026
-<strong>Tags:</strong> llm-inference, gpu-hardware, inference-optimization, generative-ai, production-ml, transformer-architecture</p>
+<strong>Tags:</strong> llm-inference, model-serving, gpu-optimization, production-ml, generative-ai, inference-engineering</p>
 <h2>TL;DR</h2>
-<p>A practitioner's guide to the full inference engineering stack—from GPU architecture and CUDA kernels through quantization, speculative decoding, and KV caching to multi-cloud production operations—aimed at engineers moving AI products off shared APIs onto dedicated open-model deployments. The book's central argument is that the December 2024 convergence of open and closed model quality (DeepSeek V3/R1) makes inference engineering a mandatory capability for any company building differentiated AI products. Knowledge cutoff is January 2026.</p>
+<p>A practitioner's book covering the full stack of deploying generative AI models in production, from CUDA kernels and GPU memory hierarchies through multi-cloud autoscaling. Targets engineers transitioning from closed-model APIs to self-hosted open models who must optimize for latency, cost, and reliability without sacrificing quality.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Practitioner textbook / industry guide. Not a research paper; no novel empirical results or proofs.</p>
-<p><strong>Context.</strong> Generative AI serving and MLSys subfields. Builds on: Vaswani et al. "Attention Is All You Need" (2017) as the architectural foundation; vLLM / SGLang / TensorRT-LLM as the inference engine layer; FlashAttention as a reference kernel optimization; NVIDIA CUDA/Hopper/Blackwell hardware generations.</p>
-<p><strong>Correctness.</strong> Load-bearing assumptions: (1) open models have closed the quality gap with closed models as of late 2024—stated but not benchmarked in the book; (2) dedicated deployments are ≥80% cheaper than per-token APIs at scale—asserted without methodology or citation; (3) closed-model APIs are capped at "two nines" of uptime—asserted without source. These claims drive the entire business case for the book's subject matter.</p>
+<p><strong>Category.</strong> Practitioner guide / survey synthesis — not a research paper. Presents no novel experimental results; instead consolidates existing techniques and engineering practice.</p>
+<p><strong>Context.</strong> AI inference serving sub-field. Builds on: Vaswani et al. "Attention Is All You Need" (transformer architecture foundation); vLLM and SGLang (inference engine design); FlashAttention (attention kernel optimization); DeepSeek R1/V3 (open-model quality parity milestone). Situates itself against the backdrop of the post-ChatGPT open-model explosion and the Hugging Face ecosystem.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) open models are now quality-competitive with closed models — supported anecdotally by DeepSeek V3/R1 (Dec 2024 / Jan 2025) but asserted as settled; (2) dedicated inference is economically superior at scale — plausible but the crossover threshold is not quantified; (3) the runtime/infrastructure/tooling tripartite decomposition cleanly covers the problem space — reasonable framing but not derived from first principles.</p>
 <p><strong>Contributions.</strong>
-- Synthesizes the complete inference stack (CUDA → frameworks → engines → production infra) into a single structured reference that did not previously exist as a book-length treatment.
-- Provides a taxonomy of AI-native application categories (agents, chat, voice, media, search, RecSys, completion, moderation) with inference-specific tradeoff guidance for each.
-- Extends inference engineering treatment beyond LLMs to embedding, ASR, TTS, image generation, and video generation modalities in a single volume.
-- Defines and distinguishes practitioner metrics (TTFT, perceived TPS, total TPS, ITL, latency percentiles P50–P99) with operational guidance on when each matters.</p>
-<p><strong>Clarity.</strong> Generally clear and well-paced with useful analogies (NFL athletes, sports coaches); stumbles in the preface with promotional framing for Baseten that recurs through Chapter 7.</p>
+- Unified conceptual framework decomposing inference into three layers: runtime (per-instance optimization), infrastructure (multi-cluster scaling), and tooling (developer abstraction).
+- Practical decision trees for model selection, online-vs.-offline workloads, and consumer-vs.-B2B latency/cost tradeoffs.
+- Breadth-first survey of optimization techniques (quantization, speculative decoding, KV cache reuse, tensor parallelism, disaggregation) applied across multiple modalities beyond LLMs.
+- Production operations chapter covering autoscaling, cold starts, multi-cloud capacity management, zero-downtime deployment, and cost estimation.</p>
+<p><strong>Clarity.</strong> Prose is consistently accessible and well-organized, with functional analogies (NFL athletes, sports coaches); occasionally slides into promotional language about Baseten and its customers.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Inference engineering spans three interdependent layers—runtime optimization (single-instance model performance), infrastructure (autoscaling, multi-cloud, reliability), and tooling (developer abstraction)—and mastering all three is required to serve generative AI models at production quality; no single layer compensates for weakness in another.</p>
+<p><strong>Main thrust:</strong> Serving open generative AI models in production at scale requires co-optimizing three interdependent layers — runtime performance (kernels, inference engines, quantization), infrastructure (autoscaling, multi-cloud routing), and developer tooling — and the best entry point is choosing the smallest model that passes task-specific evals before applying any other optimization.</p>
 <p><strong>Supporting evidence:</strong>
-- Open models on Hugging Face: &gt;2 million at publication, 25× growth over five years (Figure P.1).
-- Claimed cost advantage of dedicated open-model inference vs. closed APIs: ≥80% reduction at scale (no methodology provided).
-- Closed-model API uptime ceiling stated as "two nines"; dedicated deployments claimed achievable at "four nines or better" (no source cited).
-- DeepSeek-R1 released January 2025 at 671B parameters; distilled versions released on Llama 3 and Qwen 2.5 architectures.
-- ITL of 10 ms equates to 100 tokens per second per user (definitional, not empirical).
-- Text-to-SQL fine-tuning example: general-purpose coding models run at hundreds of billions of parameters; a fine-tuned domain-specific model can reach equivalent SQL task performance at "just a few billion parameters" (no specific model names or eval scores cited).</p>
-<p><strong>Figures &amp; tables:</strong> Figures are conceptual diagrams (neural network layers, tokenization, logit generation, speculation flow, multi-cloud topology). No axes with numerical values, no error bars, no confidence intervals, no statistical significance—appropriate for a textbook but means no empirical claims are visually supported. Tables (e.g., shared vs. dedicated inference pros/cons, application category tradeoffs) are qualitative. Figure P.1 and P.2 show trend lines but no axis scales or data sources are given.</p>
+- Open models claimed to be "at least 80% less expensive" than closed APIs at scale; no methodology or conditions specified.
+- Dedicated deployments asserted to achieve "four nines or better" uptime vs. "two nines" for closed-model APIs; no source cited.
+- DeepSeek R1 (671B parameters, Jan 2025) released with distilled variants on Llama 3 and Qwen 2.5 architectures; presented as the moment open-model quality parity was achieved.
+- Hugging Face hosts over 2 million open models as of writing, 25× more than five years prior (Figure P.1).
+- Text-to-SQL fine-tuning example: task-specific fine-tuning reduces required model size from hundreds of billions to a few billion parameters for equivalent task performance.
+- LLM latency metrics defined: TTFT (prefill-bound), perceived TPS / inter-token latency (decode-bound, bandwidth-bound); P50/P90/P95/P99 percentile framing advocated over mean latency.</p>
+<p><strong>Figures &amp; tables:</strong> Figures P.1–P.3 (model growth curves, capability curves, customization value prop), Figures 0.1–0.3 (inference stack, speculation diagram, multi-cloud capacity diagram), Figures 1.1–1.5 (latency distribution, TTFT/TPS illustration), Figures 2.1–2.6 (matmul, activation functions, tokenization, decode logit selection). No axes labels, error bars, confidence intervals, or statistical significance reported — consistent with a practitioner book but means no claim is empirically validated. The latency distribution figure (1.5) illustrating right-skew is conceptual, not data-derived.</p>
 <p><strong>Follow-up references:</strong>
-- Vaswani et al., "Attention Is All You Need" (2017) — foundational transformer architecture underlying every model discussed.
-- vLLM project (mentioned prominently, §4.3.1) — primary open-source LLM inference engine; understanding its continuous batching and PagedAttention is prerequisite to Chapters 4–5.
-- DeepSeek-R1 technical report (January 2025) — motivating case study for distillation and open-vs-closed model convergence argument.
-- FlashAttention (referenced as a high-impact CUDA kernel, §2.5 / §4.1) — key inference optimization whose mechanics underpin attention optimization throughout the book.</p>
+- Vaswani et al., "Attention Is All You Need" — foundational transformer architecture underlying all techniques discussed.
+- vLLM project documentation/paper — most heavily referenced inference engine; disaggregation and PagedAttention details.
+- DeepSeek R1 technical report — primary case study for open-model quality parity and distillation at scale.
+- Appendix B (Recommended Reading) within the book itself — curated list across architecture, GPU infrastructure, inference optimization research, and evals tooling (not fully reproduced in the excerpt provided).</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- The "open models closed the gap" thesis rests entirely on DeepSeek V3/R1 as a single data point; if this is a temporary anomaly rather than a structural shift, the book's core business case weakens.
-- The ≥80% cost savings figure assumes a specific (unstated) traffic volume and model size; at low scale, dedicated deployments cost more, not less.
-- "Four nines" uptime for dedicated deployments assumes mature multi-cloud infrastructure that most teams do not have; the book presents this as achievable without quantifying the engineering cost.
-- The book assumes NVIDIA GPUs as the default accelerator; AMD, Google TPU, and custom silicon are treated as brief footnotes, which may not reflect workloads outside the Baseten customer base.</p>
+- NVIDIA GPU ecosystem dominance is treated as given; AMD, Intel Gaudi, and custom ASICs receive only a brief survey section — results may not generalize to non-NVIDIA stacks.
+- Open-weight licensing stability is assumed; the book notes license heterogeneity but does not analyze IP or legal risk, which can break deployment decisions.
+- The "80% cost reduction" and uptime figures are stated as facts; if workload, model size, or traffic pattern assumptions underlying these numbers differ from a reader's context, the economics case for dedicated inference may not hold.
+- Quality parity between open and closed models is asserted as durable based on a single data point (DeepSeek, late 2024); this assumption would break if frontier closed models re-open the gap.</p>
 <p><strong>Missing context or citations:</strong>
-- No engagement with academic MLSys literature (e.g., Orca continuous batching paper, PagedAttention paper, FlashAttention papers) despite describing these systems in detail—the absence of citations makes claims unverifiable.
-- No comparison of inference engine benchmarks (vLLM vs. SGLang vs. TensorRT-LLM on standardized workloads); readers are given qualitative descriptions only.
-- The "Goodhart's Law applies to benchmarks" point is made without citing any empirical work on benchmark gaming or saturation.
-- No treatment of inference cost modeling with actual pricing data from cloud providers, despite a section on cost estimation.</p>
+- No engagement with academic inference literature: Orca (continuous batching), Sarathi (chunked prefill), SpotServe (spot-instance inference), or DejaVu (sparse attention at inference time) are absent despite being directly relevant.
+- No independent comparison of inference providers; Baseten is the author's employer and is positioned favorably throughout without competitive benchmarking.
+- Security and adversarial robustness of open-weight deployments (model extraction, prompt injection at scale) are mentioned only briefly under compliance, without substantive treatment.
+- The "Goodhart's Law applies to benchmarks" point is made without citing the growing literature on benchmark contamination and evaluation methodology.</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- All quantitative claims (80% cost savings, two-nines vs. four-nines uptime) are asserted without methodology, data, or citations; they cannot be verified or falsified from the book alone.
-- Chapter 7.6 ("Production Inference with Baseten") creates an unresolved conflict of interest: the author is a Baseten employee, the book is published by Baseten Books, and the final section markets Baseten's product—this context is disclosed but not separated from technical content.
-- The provided excerpt ends partway through Chapter 2; Chapters 3–7 and both appendices are listed in the TOC but not included in the text provided for this summary, so second- and third-pass analysis of those chapters is not possible.
-- Knowledge cutoff of January 2026 means rapidly evolving areas (Blackwell/Rubin GPU specs, Kimi K2, NVIDIA Dynamo) may already be outdated.</p>
+- Every quantitative claim (80% cost, two vs. four nines, 25× model growth) appears without methodology, sample, or source — readers should not treat these as validated benchmarks.
+- The text-to-SQL fine-tuning example is illustrative but presented as representative of what fine-tuning can achieve; no data on how often such dramatic size reductions are possible in other domains.
+- Authored by a Baseten employee and published by Baseten Books; tooling recommendations (vLLM, SGLang, TensorRT-LLM, NVIDIA Dynamo, Baseten) and customer examples are not independently verified, creating selection and framing bias.
+- Knowledge cutoff of January 2026 is acknowledged, but the field moves fast enough that specific engine comparisons and hardware specs (Blackwell, Rubin) may already be outdated for readers in 2026 or later.</p>
 <p><strong>Ideas for future work:</strong>
-- Add reproducible benchmarks comparing vLLM, SGLang, and TensorRT-LLM on identical hardware and workloads (TTFT, TPS, cost per million tokens) to replace qualitative comparisons.
-- Provide a rigorous cost model with cloud pricing data and traffic volume breakeven analysis for the shared-vs-dedicated inference decision.
-- Extend the modality chapter with empirical latency and throughput numbers for ASR, TTS, and image generation under the described optimizations, using publicly available model checkpoints.
-- Revisit the open-vs-closed model convergence claim with a rolling benchmark methodology that tracks the gap over time, rather than treating a single model release as a structural inflection point.</p></div>
+- Reproducible head-to-head benchmark of vLLM vs. SGLang vs. TensorRT-LLM on identical model/workload combinations with disclosed hardware, ISL/OSL distributions, and concurrency levels.
+- Quantitative analysis of the shared→dedicated inference economic crossover as a function of model size, tokens-per-request distribution, and traffic volume — to replace the unsourced 80% claim with a decision framework.
+- Extension to non-transformer architectures (Mamba/SSM, RWKV) whose inference profiles differ fundamentally from attention-based models and are absent from the book.
+- Adversarial threat model for open-weight production deployments: model extraction via API, membership inference, and jailbreak surface area introduced by self-hosting vs. managed APIs.</p></div>
             
               <div class="figures-block">
                 <h4 class="figures-head">Figures from the paper</h4>
@@ -701,7 +789,7 @@
                 <span class="venue">· <em>MIT Press</em></span>
                 <span class="year">· 2024</span>
               </div>
-              <p class="paper-entry-tldr">Graduate-level textbook deriving rigorous guarantees for widely-used supervised learning algorithms (linear, kernel, sparse, neural, ensemble) from first principles, organized around a three-way estimation/approximation/optimization error decomposition. Fills the gap between introductory ML texts and advanced research monographs by prioritizing simplicity of proof over tightness of constants, while covering modern topics including overparameterized models and structured prediction.</p>
+              <p class="paper-entry-tldr">A graduate-level textbook deriving mathematical guarantees for standard supervised learning algorithms (linear models, kernels, neural networks, ensembles) from first principles, organized around the approximation/estimation/optimization error trichotomy. It deliberately avoids VC dimension in favor of Rademacher complexities and prioritizes the simplest correct proofs over the tightest known results.</p>
               <div class="paper-entry-links">
                 
                 
@@ -715,55 +803,55 @@
           <div class="paper-entry-body">
             <div class="summary-md"><h1>Learning Theory from First Principles</h1>
 <p><strong>Authors:</strong> Francis Bach
-<strong>Year:</strong> 2025 (draft dated May 26, 2025; MIT Press final version announced for 2024)
-<strong>Tags:</strong> statistical-learning-theory, generalization-bounds, empirical-risk-minimization, optimization, concentration-inequalities, supervised-learning</p>
+<strong>Year:</strong> 2024
+<strong>Tags:</strong> statistical-learning-theory, generalization-bounds, empirical-risk-minimization, kernel-methods, neural-networks, optimization</p>
 <h2>TL;DR</h2>
-<p>Graduate-level textbook deriving rigorous guarantees for widely-used supervised learning algorithms (linear, kernel, sparse, neural, ensemble) from first principles, organized around a three-way estimation/approximation/optimization error decomposition. Fills the gap between introductory ML texts and advanced research monographs by prioritizing simplicity of proof over tightness of constants, while covering modern topics including overparameterized models and structured prediction.</p>
+<p>A graduate-level textbook deriving mathematical guarantees for standard supervised learning algorithms (linear models, kernels, neural networks, ensembles) from first principles, organized around the approximation/estimation/optimization error trichotomy. It deliberately avoids VC dimension in favor of Rademacher complexities and prioritizes the simplest correct proofs over the tightest known results.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Pedagogical textbook / survey of existing theory; no new results claimed.</p>
-<p><strong>Context.</strong> Statistical learning theory subfield. Explicitly positions against Mohri et al. (2018) <em>Foundations of Machine Learning</em>, Shalev-Shwartz and Ben-David (2014) <em>Understanding Machine Learning</em>, Koltchinskii (2011) empirical processes, and Christmann and Steinwart (2008) SVMs as deeper or wider alternatives. Deliberately replaces VC-dimension-based bounds (Vapnik and Chervonenkis 2015) with Rademacher complexity throughout.</p>
-<p><strong>Correctness.</strong> Load-bearing assumptions: (1) i.i.d. data—explicitly stated and never relaxed (except the online learning chapter); (2) real-valued prediction functions as universal interface, even for discrete outputs; (3) measurability issues are glossed over (author acknowledges this, citing Devroye et al. 1996 for rigorous treatment). All three appear valid for the stated scope.</p>
+<p><strong>Category.</strong> Textbook / pedagogical reference. Not a research paper; no novel theorems are claimed.</p>
+<p><strong>Context.</strong> Statistical learning theory. Explicitly positions against and defers to: Mohri, Rostamizadeh, and Talwalkar (2018) for broader coverage; Shalev-Shwartz and Ben-David (2014) as an alternative text; Koltchinskii (2011) and Christmann and Steinwart (2008) for depth; Boucheron, Lugosi, and Massart (2013) for concentration inequalities. Rakhlin and Sridharan lecture notes cited as complementary.</p>
+<p><strong>Correctness.</strong> The central load-bearing assumption is i.i.d. data throughout; the preface states this explicitly and does not claim the theory extends beyond it. The choice to gloss over measurability issues is acknowledged. The pedagogical claim — that simplest proofs capture essential concepts — is a framing choice, not a falsifiable assumption.</p>
 <p><strong>Contributions.</strong>
-- Unified first-principles derivation of estimation, approximation, and optimization error bounds for every major algorithm family in a single notation system.
-- Rademacher-complexity-first treatment that entirely bypasses VC dimension, making least-squares regression the theoretical spine.
-- Chapter 12 integrates double descent, implicit bias of gradient descent, neural tangent kernels, and mean-field limits into a single modern overparameterization chapter.
-- Chapter 13 on structured prediction and Chapter 14 on PAC-Bayes are included alongside classical material with unified notation.</p>
-<p><strong>Clarity.</strong> Well-organized with difficulty diamonds (♦/♦♦/♦♦♦), chapter summaries, and embedded exercises; the mathematical prerequisites (linear algebra, probability, calculus) are substantial, and the preface is honest that this is not an introductory ML text.</p>
+- Unified first-principles treatment of learning theory structured around the approximation/estimation/optimization error decomposition, applied consistently across linear models, kernels, neural networks, and ensembles.
+- Rademacher complexity as the sole generic complexity measure, replacing VC dimension throughout, motivated by the focus on real-valued predictors.
+- Coverage of modern topics — overparameterized models, double descent, implicit bias of gradient descent, neural tangent kernels, structured prediction — within the same notational framework.
+- Public MATLAB and Python code for all synthetic experiments at https://www.di.ens.fr/~fbach/ltfp/.</p>
+<p><strong>Clarity.</strong> The preface is unusually transparent about scope and omissions; Chapter 1 proofs are self-contained and complete (Hoeffding, McDiarmid proofs written out in full). Diamond notation (♦, ♦♦) for advanced sections is a useful pedagogical device.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Builds from concentration inequalities (Hoeffding, McDiarmid, Bernstein) through ERM generalization bounds to algorithm-specific guarantees for linear models, kernels, sparsity, and neural networks, then extends to online learning, ensembles, overparameterized models, and structured prediction—always decomposing excess risk into estimation + approximation + optimization components.</p>
+<p><strong>Main thrust:</strong> Every learning algorithm analyzed in the book is decomposed into approximation error (model expressiveness), estimation error (finite-sample deviation, bounded via Rademacher complexity), and optimization error (convergence of gradient-based solvers); the book derives non-asymptotic bounds on each component for each major algorithm class.</p>
 <p><strong>Supporting evidence:</strong>
-- Hoeffding's inequality (Prop 1.2): for n i.i.d. variables in [0,1], P(empirical mean − true mean ≥ t) ≤ exp(−2nt²); inverted: deviation &lt; |a−b|√(log(2/δ)/(2n)) with probability 1−δ.
-- McDiarmid's inequality (Prop 1.3): function with bounded variation c concentrates as P(|f − E[f]| ≥ t) ≤ 2exp(−2t²/(nc²)); used in Section 4.4.1 to bound ERM estimation error.
-- Sub-Gaussian tail (eq. 1.9–1.10): P(|Z − E[Z]| ≥ t) ≤ 2exp(−t²/(2τ²)); Gaussian variables with variance σ² are sub-Gaussian with parameter σ².
-- Ridge regression lower bound (Section 3.7) and Rademacher complexity for ball-constrained linear predictors (Section 4.5.3) are presented as matched upper/lower rate pairs.
-- Double descent (Section 12.2) includes analytic treatment for linear regression with Gaussian inputs and Gaussian projections.</p>
-<p><strong>Figures &amp; tables:</strong> No figures or tables appear in the provided excerpt (Chapter 1). The TOC indicates illustrative simulation experiments in Sections 3.5.2, 7.7, 8.4, 9.6, 10.3.7, and 13.7, with code at https://www.di.ens.fr/~fbach/ltfp/. Axis labeling, error bars, and statistical significance of those figures cannot be assessed from the provided text.</p>
+- Hoeffding's inequality (Prop. 1.2): for Zᵢ ∈ [0,1] i.i.d., P(|empirical mean − true mean| ≥ t) ≤ 2exp(−2nt²); proof given in full via cumulant generating function bound ϕ(s) ≤ s²/8.
+- McDiarmid's inequality (Prop. 1.3): for functions of bounded variation c, P(|f − E[f]| ≥ t) ≤ 2exp(−2t²/(nc²)); proof given in full via martingale difference decomposition.
+- Sub-Gaussian characterization: [a,b]-bounded variables are sub-Gaussian with constant τ² = (b−a)²/4; Gaussian variables with variance σ² are sub-Gaussian with constant σ².
+- Bernstein's inequality (§1.2.3), matrix concentration (§1.2.6), and expectation-of-maximum bounds (§1.2.4) are stated for use in later chapters.
+- From the table of contents (not provided in body text): double descent analyzed for linear regression with Gaussian inputs (§12.2.3–12.2.4); minimax lower bounds derived via hypothesis-testing reduction and information theory (§15.1); kernel ridge regression bias-variance balance (§7.6.6).</p>
+<p><strong>Figures &amp; tables:</strong> The provided text (preface + Chapter 1) contains no figures or tables. The preface states synthetic experiment figures exist in online code repositories and within chapter experiment sections (§3.5.2, §7.7, §8.4, §9.6, §10.3.7, §13.7). Axis labeling, error bars, and statistical significance reporting in those figures cannot be assessed from the provided text.</p>
 <p><strong>Follow-up references:</strong>
-- Mohri, Rostamizadeh, Talwalkar (2018) — broader and deeper on many topics the book abbreviates.
-- Boucheron, Lugosi, Massart (2013) — advanced concentration inequalities beyond what Chapter 1 covers.
-- Koltchinskii (2011) — rigorous empirical process theory underlying the Rademacher bounds.
-- Devroye, Györfi, Lugosi (1996) — measure-theoretic foundations deliberately omitted here.</p>
+- Mohri, Rostamizadeh, and Talwalkar (2018) — broader and deeper competing textbook recommended by the author for topics not covered here.
+- Boucheron, Lugosi, and Massart (2013) — deeper treatment of concentration inequalities used throughout Chapter 1.
+- Christmann and Steinwart (2008) — rigorous measurability treatment and kernel methods depth.
+- Vershynin (2018) — high-dimensional probability, covering random matrix concentration (§1.2.6 topic).</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- i.i.d. assumption is never relaxed in the core 9 chapters; results do not transfer to distribution shift, covariate shift, or dependent data without additional argument.
-- Restricting to real-valued predictors and Rademacher complexity hides combinatorial structure exploited by VC theory; the choice aids pedagogy but obscures tightness in classification problems with discrete geometry.
-- "First principles" requires linear algebra, probability, and calculus at a graduate level—the prerequisite bar is higher than the framing implies.
-- Proofs are explicitly chosen for simplicity over constant-optimality; stated constants in bounds may be off by logarithmic or polynomial factors relative to the literature.</p>
+- I.i.d. data is universal and never relaxed; results do not cover time series, Markov chains, or distribution shift — these would break nearly all bounds.
+- "First principles" presupposes linear algebra, probability, and differential calculus; the bar is not low for undergraduates without prior exposure.
+- Focus on real-valued predictors is a design choice that sidelines discrete combinatorial output spaces and compresses structured prediction into one chapter.
+- Simplest-proof preference means stated constants are often suboptimal; the book does not systematically quantify how loose the bounds are relative to state of the art.</p>
 <p><strong>Missing context or citations:</strong>
-- No treatment of distribution shift, domain adaptation, or out-of-distribution generalization—increasingly central to applied ML.
-- Transformer architectures, attention mechanisms, and self-supervised/contrastive learning are absent despite the book's 2024–2025 publication date.
-- The online learning chapter covers regret minimization but does not engage with the now-large literature on online-to-batch conversions or adaptive data analysis.
-- Causal inference connections (potential outcomes, structural equations) are not mentioned despite overlap with the "beyond supervised learning" framing in Section 2.7.</p>
+- VC dimension is deliberately omitted with no quantitative comparison of when VC bounds are tighter than Rademacher bounds (a non-trivial question).
+- Information-theoretic generalization bounds (mutual-information-based, e.g., Russo–Zou 2016) are not mentioned in the preface, though PAC-Bayes appears in Chapter 14.
+- No coverage of distribution shift, domain adaptation, or robustness — gaps not acknowledged in the preface.
+- Online learning and bandits are explicitly described as one-chapter introductions, but no pointer is given to the canonical bandit textbook literature (e.g., Lattimore and Szepesvári).</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- All numerical experiments are author-described as "synthetic" and "illustrative"; no real-data benchmarks are used to validate the rate predictions against practice—this is a principled choice but limits the connection between theory and empirical behavior.
-- The double descent analysis (Section 12.2) is restricted to Gaussian inputs; generalization to structured or real data distributions is noted as open without quantitative bound.
-- Exercises are embedded without solutions; this is noted by the author as intentional but limits self-study verification.
-- The provided text ends mid-proof of Bernstein's inequality (Section 1.2.3 is cut off), so completeness of later chapters cannot be verified from the supplied material.</p>
+- All experiments are stated to be synthetic; no real-world benchmarks appear, so the gap between theoretical rates and practical performance is never demonstrated.
+- Exercises are embedded without solutions, making self-study verification difficult.
+- Measurability issues are explicitly glossed over; in kernel Hilbert space arguments and infinite-dimensional settings this is non-trivial and could hide subtle errors.
+- The double descent and overparameterized-model analysis (Chapter 12) is presented from the ToC as covering Gaussian input models and mean-field limits — both are idealized settings whose applicability to realistic deep learning is not established within the book's framework.</p>
 <p><strong>Ideas for future work:</strong>
-- Add a chapter or substantial section on distribution shift / robustness, connecting the estimation-approximation-optimization decomposition to transfer learning guarantees.
-- Provide tight (matching) minimax rates for neural networks beyond the variation-norm results in Chapter 9, particularly for deep architectures with depth-dependent bounds.
-- Extend the overparameterization chapter (12) to include non-Gaussian, non-isotropic data regimes where the double descent curve changes qualitatively.
-- Include numerical experiments on real datasets to test whether the theoretical rates predict observed sample-complexity behavior, even approximately.</p></div>
+- Extend the approximation/estimation/optimization decomposition to non-i.i.d. settings (mixing processes, federated data) to test whether the trichotomy remains informative.
+- Add a systematic table comparing tightness of the book's simplified bounds against minimax-optimal rates for each algorithm class, so readers can calibrate how much is lost by choosing simple proofs.
+- Incorporate information-theoretic generalization bounds (mutual information, CMI) as a fourth framework alongside Rademacher, PAC-Bayes, and algorithmic stability to unify the modern landscape.
+- Provide exercise solutions (even partial) or autograded problem sets to support the stated goal of self-study use.</p></div>
             
               <div class="figures-block">
                 <h4 class="figures-head">Figures from the paper</h4>
@@ -794,6 +882,96 @@
     <section class="year-block">
       <h2 class="year-heading">2023</h2>
       
+        <article class="paper-entry" id="p-ed221b20490b">
+          <div class="paper-entry-head" data-toggle="p-ed221b20490b">
+            <div class="paper-thumb" data-hash="ed221b20490b"></div>
+            <div class="paper-entry-text">
+              <div class="paper-entry-title">Real-time control of combined sewer systems: Risks associated with uncertainties</div>
+              <div class="paper-entry-meta">
+                J.A. van der Werf, Z. Kapelan, J. Langeveld
+                <span class="venue">· <em>Journal of Hydrology</em></span>
+                <span class="year">· 2023</span>
+              </div>
+              <p class="paper-entry-tldr">A deterministic scenario-based methodology is developed to quantify how three uncertainty sources — internal MPC model simplification, real precipitation radar forecasts, and dynamic pumping-station capacity fluctuations — degrade MPC performance for combined sewer overflow (CSO) reduction in Eindhoven, Netherlands. Model and capacity uncertainties cause 35–47% relative performance loss and can induce operative deterioration (worse outcomes than static control), while precipitation forecast uncertainty causes only ~14% loss and no operative deterioration.</p>
+              <div class="paper-entry-links">
+                <a href="https://doi.org/10.1016/j.jhydrol.2022.128900" target="_blank">[doi]</a>
+                
+                <a href="./paper/ed221b20490b.html">[detail]</a>
+                
+                
+                <span class="entry-tag">model-predictive-control</span><span class="entry-tag">combined-sewer-overflow</span><span class="entry-tag">urban-drainage</span><span class="entry-tag">uncertainty-analysis</span><span class="entry-tag">real-time-control</span>
+              </div>
+            </div>
+          </div>
+          <div class="paper-entry-body">
+            <div class="summary-md"><h1>Real-time control of combined sewer systems: Risks associated with uncertainties</h1>
+<p><strong>Authors:</strong> J.A. van der Werf, Z. Kapelan, J. Langeveld
+<strong>Year:</strong> 2023
+<strong>Tags:</strong> model-predictive-control, combined-sewer-overflow, uncertainty-analysis, urban-drainage, real-time-control, risk-assessment</p>
+<h2>TL;DR</h2>
+<p>A deterministic scenario-based methodology is developed to quantify how three uncertainty sources — internal MPC model simplification, real precipitation radar forecasts, and dynamic pumping-station capacity fluctuations — degrade MPC performance for combined sewer overflow (CSO) reduction in Eindhoven, Netherlands. Model and capacity uncertainties cause 35–47% relative performance loss and can induce operative deterioration (worse outcomes than static control), while precipitation forecast uncertainty causes only ~14% loss and no operative deterioration.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / methodology paper with single-catchment case study application.</p>
+<p><strong>Context.</strong> Urban drainage real-time control; builds directly on Lund et al. 2018 (comprehensive MPC-for-CSS review), van der Werf et al. 2021 (introduces the aRPI performance metric used here), Fiorelli et al. 2013 (MPC with uncertainty, claims re-updating negates forecast uncertainty), and Sadler et al. 2019 (open-source EPA-SWMM5 MPC implementation).</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) two events are sufficient to characterise Scenario 1 (perfect-information baseline); (2) deterministic "perfect vs. real" case pairs adequately represent the full uncertainty space without stochastic sampling; (3) pumping-capacity variation is aleatoric and unmodelable; (4) a simplified model with NSE 0.57–0.78 is an adequate internal MPC model. Assumptions (1) and (2) are the most fragile.</p>
+<p><strong>Contributions.</strong>
+- Introduces two distinct operational risk types — relative system performance loss and operative deterioration — providing finer diagnostic resolution than aggregate performance bars.
+- Proposes a reusable deterministic scenario methodology for assessing uncertainty impacts on MPC, structured around real operational and forecast data rather than synthetic noise.
+- Demonstrates empirically (17 real 2015 events) that dynamic pumping-capacity uncertainty dominates precipitation forecast uncertainty as a risk source for volume-based CSS MPC.
+- Reports the first characterisation of operative deterioration (MPC performing worse than static control) linked specifically to capacity uncertainty and smaller rainfall events.</p>
+<p><strong>Clarity.</strong> Well-structured and readable; scenario logic is clearly tabulated, though the jump from 2-event Scenario 1 to 17-event Scenarios 2–5 is under-explained and the severity of that mismatch is understated.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> In an Eindhoven CSS MPC case study using real radar forecasts and pumping-station records, simplified internal model structure and unmodelled pumping capacity reductions reduce CSO-reduction performance by 35–47% relative to perfect-information benchmarks, whereas real precipitation forecast uncertainty causes only a 14.4% relative loss and no operative deterioration, with no synergistic interaction between uncertainty sources.</p>
+<p><strong>Supporting evidence:</strong>
+- Scenario 1 (all-perfect): aRPI = 0.79, 68.7% CSO reduction vs. static optimum; Scenario 2 (simplified model only): aRPI = 0.50, 44.4% reduction — yielding a 35% relative performance loss attributable to model simplification alone (n = 2 events).
+- Scenario 4 (simplified model + real radar forecast): aRPI = 0.46, 20.3% CSO reduction, 14.4% relative loss vs. Scenario 2 (n = 17 events, 12 with CSO under static optimum).
+- Scenarios 3 and 5 (adding dynamic capacity uncertainty): aRPI = 0.29 and 0.28, CSO reductions 13.1% and 12.6%, relative losses 45.2% and 47.3% respectively.
+- Operative deterioration (more CSO than static optimum): 3 events in Scenario 3, 2 events in Scenario 5; none in Scenarios 2 or 4.
+- KS-test (p &lt; 0.05): only Scenarios 2 vs. 3 and 2 vs. 4 are statistically significantly different; combined uncertainty (Scenarios 3 vs. 5) shows mean and median performance difference of 0.5% and 0%, respectively.
+- Internal MPC model calibration quality: mean NSE 0.57–0.78 across sections.</p>
+<p><strong>Figures &amp; tables:</strong> Fig. 5 (boxplots of RPI by scenario, whiskers = 5–95% CI, n = 12) carries the central performance comparison; axes are labeled, but no confidence intervals on aggregate aRPI values, making inter-scenario comparisons imprecise. Fig. 6 (scatter plots with KS significance flags) is the primary statistical display — useful but low-power given n ≈ 12–17. Fig. 8 (performance loss vs. rainfall depth, intensity, and median capacity) shows no discernible relations; axes labeled, no regression lines or correlation statistics reported. Fig. 9 (operative deterioration vs. rainfall depth and median pumping capacity) is illustrative but n is too small for pattern claims. Tables 4 and 5 clearly tabulate aRPI, CSO reduction %, and relative loss per scenario.</p>
+<p><strong>Follow-up references:</strong>
+- Lund et al. 2018 — the foundational MPC-for-CSS review; essential background.
+- van der Werf, Kapelan &amp; Langeveld 2021 — defines the aRPI metric used throughout; needed to interpret all results.
+- Fiorelli et al. 2013 — the "re-updating negates forecast uncertainty" claim this paper partially tests (and partially contradicts).
+- Jafari, Mousavi &amp; Kim 2020 — reports 37% performance loss with real radar forecasts in a different CSS context; the closest direct comparator.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Two events are treated as adequate to establish Scenario 1's aRPI = 0.79; this single number anchors the entire 35% model-uncertainty loss claim — if those two events are unrepresentative, the finding does not hold.
+- The deterministic "perfect/real" binary implicitly assumes the chosen real data (2015 radar forecasts, PS Aalst records) are representative of long-run uncertainty distributions; no validation of this representativeness is offered.
+- Pumping-capacity variability is declared aleatoric and therefore not modelable, foreclosing a potentially important mitigation (capacity forecasting or conservative constraints); this is asserted, not demonstrated.
+- The genetic algorithm settings (population 20, mutation 0.1, crossover 0.5) are described as "iteratively chosen" without convergence or sensitivity analysis — optimizer quality is a hidden uncertainty source.
+- Generalizability: results implicitly assumed transferable to other CSS without evidence; a single catchment with a single transport-sewer topology is the sole empirical base.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with robust MPC or chance-constrained MPC literature, which explicitly handles capacity and forecast uncertainty within the optimization formulation rather than as a post-hoc risk.
+- Heuristic RTC under the same uncertainty scenarios is not tested, so whether MPC's sensitivity to uncertainty exceeds simpler rule-based control is unknown.
+- Deep Reinforcement Learning approaches are mentioned in Table 1 but not compared as an alternative for uncertainty robustness.
+- Actuator functioning uncertainty and initial-condition uncertainty are listed in Table 2 but excluded from analysis due to data availability; their potential magnitude relative to the studied sources is not bounded even qualitatively.
+- No citation of stochastic ensemble-based MPC studies (e.g., Courdent et al. 2015, cited but not critically compared) that directly address the gap this paper claims to fill.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The central finding of 35% relative loss from model uncertainty rests on exactly 2 events in Scenario 1 — this is statistically untenable; the computational cost (&gt;20 days CPU per 6-hour event) explains but does not excuse the limitation.
+- n = 12–17 events for Scenarios 2–5 is acknowledged as insufficient for multi-year statistical assessment; KS-tests on samples this small have very low power, making "not statistically significant" findings (Scenarios 3 vs. 5) nearly uninformative.
+- No confidence intervals on aggregate aRPI values (only on per-event boxplots); comparing point estimates as though they are reliable is misleading.
+- Five events with no CSO under static optimum are excluded from the boxplot analysis without fully accounting for their effect on aggregate aRPI; their contribution to operative deterioration risk (Section 4.2) deserves explicit treatment.
+- Scenario 1 and Scenarios 2–5 use different event sets (2 vs. 17 events) with no overlap confirmed, preventing direct statistical comparison.
+- No ablation isolating the initial-condition component of the simplified-model uncertainty from parameter/structure error; the 35% figure is a compound of multiple sub-uncertainties.
+- Data availability is on-request only, limiting reproducibility.</p>
+<p><strong>Ideas for future work:</strong>
+- Run Scenario 1 on the full 17-event set using high-performance computing or surrogate acceleration to give the model-uncertainty loss estimate statistical credibility.
+- Formulate a robust or chance-constrained MPC that penalises scenarios where pumping capacity falls below the assumed value, and compare operative deterioration frequency to the standard formulation.
+- Extend operative deterioration analysis to impact-based objectives (dissolved oxygen, ammonium peaks) to translate CSO volume risk into ecologically meaningful thresholds for the Dommel River context.
+- Replicate the methodology across at least two additional CSS catchments with different topology and capacity-variability profiles to determine whether the dominance of capacity uncertainty over forecast uncertainty is general or site-specific.</p></div>
+            
+            
+              <div class="academic-auto">
+                <h4>Methods</h4><ul><li>Model Predictive Control (MPC)</li><li>Genetic Algorithm optimisation</li><li>EPA SWMM5 hydrodynamic modelling</li><li>PySWMM Python interface</li><li>Kolmogorov-Smirnov test</li><li>absolute Realised Potential Indicator (aRPI)</li><li>scenario-based deterministic uncertainty assessment</li></ul>
+                <h4>Datasets</h4><ul><li>KNMI radar precipitation forecast data (2014-2015)</li><li>rain-gauge adjusted radar dataset</li><li>pumping station operational data for PS Aalst (Eindhoven)</li></ul>
+                <h4>Claims</h4><ul><li>Precipitation forecast uncertainty causes only minor relative performance loss in MPC due to frequent re-updating of initial conditions.</li><li>Internal MPC model simplification and unanticipated dynamic system capacity fluctuations cause the largest performance losses, with relative losses of 35% and 45-47% respectively.</li><li>Unanticipated fluctuations in dynamic system capacity can lead to operative deterioration, causing additional CSOs compared to a statically optimised control, particularly for smaller precipitation events.</li><li>The assessed sources of uncertainty do not synergistically reduce MPC potential or increase the risk of operative deterioration.</li><li>Trade-offs between MPC benefits and practical uncertainty risks should be explicitly evaluated before implementation.</li></ul>
+              </div>
+            
+          </div>
+        </article>
+      
         <article class="paper-entry" id="p-278d3bdd49a8">
           <div class="paper-entry-head" data-toggle="p-278d3bdd49a8">
             <div class="paper-thumb" data-hash="278d3bdd49a8"></div>
@@ -804,7 +982,7 @@
                 <span class="venue">· <em>Springer Texts in Statistics</em></span>
                 <span class="year">· 2023</span>
               </div>
-              <p class="paper-entry-tldr">A Python-language textbook covering the major supervised and unsupervised statistical learning methods — regression, classification, resampling, regularization, trees, SVMs, deep learning, survival analysis, clustering, and multiple testing — at a conceptual rather than mathematically rigorous level. It is a direct port of the R-based ISLR (2nd ed. 2021) to Python, adding a new co-author (Taylor) and the companion ISLP Python package. Targets advanced undergraduates, master&#39;s students, and practitioners who need applied fluency without graduate-level mathematics.</p>
+              <p class="paper-entry-tldr">ISLP is a Python-lab edition of the well-established ISLR textbook, covering supervised and unsupervised statistical learning from linear regression through deep learning, survival analysis, and multiple testing. It targets advanced undergraduates and master&#39;s students who need practical fluency in modern methods without graduate-level mathematical training, and introduces the companion `ISLP` Python package to support all labs.</p>
               <div class="paper-entry-links">
                 <a href="https://doi.org/10.1007/978-3-031-38747-0" target="_blank">[doi]</a>
                 
@@ -819,49 +997,44 @@
             <div class="summary-md"><h1>An Introduction to Statistical Learning with Applications in Python (ISLP)</h1>
 <p><strong>Authors:</strong> Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani, Jonathan Taylor
 <strong>Year:</strong> 2023
-<strong>Tags:</strong> statistical-learning, machine-learning, textbook, python, supervised-learning, unsupervised-learning</p>
+<strong>Tags:</strong> statistical-learning, machine-learning, python, textbook, supervised-learning, unsupervised-learning</p>
 <h2>TL;DR</h2>
-<p>A Python-language textbook covering the major supervised and unsupervised statistical learning methods — regression, classification, resampling, regularization, trees, SVMs, deep learning, survival analysis, clustering, and multiple testing — at a conceptual rather than mathematically rigorous level. It is a direct port of the R-based ISLR (2nd ed. 2021) to Python, adding a new co-author (Taylor) and the companion ISLP Python package. Targets advanced undergraduates, master's students, and practitioners who need applied fluency without graduate-level mathematics.</p>
+<p>ISLP is a Python-lab edition of the well-established ISLR textbook, covering supervised and unsupervised statistical learning from linear regression through deep learning, survival analysis, and multiple testing. It targets advanced undergraduates and master's students who need practical fluency in modern methods without graduate-level mathematical training, and introduces the companion <code>ISLP</code> Python package to support all labs.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Textbook (applied survey with worked Python labs; not a research paper).</p>
-<p><strong>Context.</strong> Applied statistical learning / machine learning education. Explicitly positions itself relative to two prior works: Hastie, Tibshirani &amp; Friedman's <em>Elements of Statistical Learning</em> (ESL, 2001/2009) — the rigorous graduate companion — and its own predecessor <em>ISLR</em> (James, Witten, Hastie, Tibshirani, R edition, 2013/2021). No other works are cited in the provided text.</p>
-<p><strong>Correctness.</strong> Load-bearing pedagogical assumption: practitioners can become "informed users" of statistical learning methods without understanding optimization algorithms or theoretical properties — only conceptual intuition and applied implementation are required. This is an explicit design choice, not an empirically validated claim.</p>
+<p><strong>Category.</strong> Textbook (pedagogical survey of applied statistical and machine learning methods with embedded Python practicals).</p>
+<p><strong>Context.</strong> Positioned as an accessible successor to Hastie, Tibshirani &amp; Friedman's <em>Elements of Statistical Learning</em> (ESL, 2001/2009), which the authors describe as requiring advanced mathematical training. Directly derived from <em>An Introduction to Statistical Learning with Applications in R</em> (ISLR, James et al., 2013; 2nd ed. 2021), replacing R labs with Python. No other external prior works are cited in the provided text beyond ESL and ISLR.</p>
+<p><strong>Correctness.</strong> Central pedagogical assumption: the intuition and practical utility of statistical learning methods can be conveyed without matrix algebra or derivations of optimization algorithms, using real datasets and hands-on labs. A secondary assumption is that Python has become sufficiently dominant in data science to warrant a full edition switch from R. Both are stated explicitly rather than argued empirically.</p>
 <p><strong>Contributions.</strong>
-- Python lab implementations throughout, replacing R labs from ISLR, using the new ISLP package.
-- The ISLP Python package, developed to standardize access to the book's datasets and helper functions.
-- Chapter 13 on multiple testing (Benjamini–Hochberg, FWER, resampling-based FDR) — not present in the original 2013 ISLR edition.
-- Coverage of BART (Bayesian Additive Regression Trees) and double descent / interpolation in the context of deep learning.</p>
-<p><strong>Clarity.</strong> Deliberately accessible: matrix algebra is nearly absent by design, and the prose is consistently clear; the preface is transparent about scope limitations relative to ESL.</p>
+- Python lab implementations (replacing R) for every chapter, covering 13 topic areas from linear regression to multiple testing.
+- The <code>ISLP</code> Python package, written by the authors to provide data sets and utilities not natively available in standard Python scientific libraries.
+- Addition of Chapter 13 (Multiple Testing) and Chapter 11 (Survival Analysis) as topics beyond a standard introductory ML textbook.
+- Jonathan Taylor added as co-author to lead Python translation.</p>
+<p><strong>Clarity.</strong> Preface and introduction are clearly written with explicit pedagogical philosophy; the OCR-garbled author-name rendering on the cover is a document artifact, not a book defect.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Thirteen chapters walk from fundamental supervised/unsupervised concepts (bias-variance tradeoff, cross-validation) through classical methods (OLS, logistic regression, LDA) to modern methods (random forests, SVMs, deep learning, survival analysis), each paired with a Python lab using real datasets.</p>
+<p><strong>Main thrust:</strong> A 13-chapter applied textbook walking from foundational concepts (bias-variance tradeoff, cross-validation) through classical methods (regression, classification, regularization) to modern techniques (ensembles, SVMs, deep learning, survival analysis, clustering, multiple testing), each chapter closing with a Python lab on real datasets.</p>
 <p><strong>Supporting evidence:</strong>
-- Wage data: n = 3,000 men, p = 11 variables; average wage rises approximately $10,000 between 2003 and 2009; wage peaks around age 60.
-- Smarket data: S&amp;P 500 daily returns 2001–2005 (648 up days, 602 down days); QDA trained on 2001–2004 achieves ~60% correct direction prediction on 2005 test data.
-- NCI60 data: 6,830 gene expression measurements across 64 cancer cell lines, 14 cancer types; first two PCs used for clustering visualization.
-- 21 datasets bundled in the ISLP package covering domains from finance to genomics to public health (Table 1.1).
-- Approximately one-third of classroom time is allocated to labs per the authors' own teaching practice.</p>
-<p><strong>Figures &amp; tables:</strong> Figure 1.1 (wage vs. age/year/education) and Figure 1.2 (S&amp;P boxplots) have labeled axes; no error bars or significance annotations are present on introductory figures, appropriate for motivational plots. Figure 1.3 shows QDA predicted probabilities as boxplots but gives no confidence interval on the 60% accuracy figure. Figure 1.4 (NCI60 PCA scatter) labels axes Z1/Z2 without variance-explained annotations in the figure itself. Table 1.1 is a clean dataset inventory. No statistical significance is reported for any introductory-chapter number — all figures are illustrative.</p>
+- Wage dataset (n = 3,000 men, p = 11 variables): wages rise ~$10,000 linearly from 2003 to 2009; wages peak around age 60 then decline — used to motivate regression.
+- Smarket dataset (S&amp;P 500, 2001–2005): a QDA model fit on 2001–2004 data correctly predicts market direction ~60% of the time on 2005 holdout — used to motivate classification.
+- NCI60 dataset: 6,830 gene expression measurements across 64 cancer cell lines representing 14 cancer types — used to motivate unsupervised clustering and PCA.
+- Table 1.1 enumerates 21 datasets bundled in <code>ISLP</code>, spanning finance, biology, marketing, and public policy.
+- Approximately one-third of classroom time is recommended for lab sessions, per the authors' own course experience.</p>
+<p><strong>Figures &amp; tables:</strong> Figures 1.1–1.4 illustrate the three motivating datasets with scatterplots, boxplots, and PCA biplots; axes are described as labeled in captions. Table 1.1 (dataset inventory) is the only table in the provided text. No error bars, confidence intervals, or significance tests appear in the introductory material — figures are purely illustrative. No visualization weaknesses beyond the illustrative purpose.</p>
 <p><strong>Follow-up references:</strong>
-- Hastie, Tibshirani &amp; Friedman, <em>Elements of Statistical Learning</em> — the rigorous mathematical companion for graduate-level depth on every topic covered here.
-- James, Witten, Hastie &amp; Tibshirani, <em>ISLR</em> (R edition, 2021) — directly comparable R-language version, useful if R is the working environment.</p>
-<p>(Only these two works are named in the provided text; additional references are not stated.)</p>
+- <em>Elements of Statistical Learning</em> (Hastie, Tibshirani, Friedman) — the mathematically rigorous companion for readers wanting derivations and theory.
+- ISLR 2nd edition (James et al., 2021) — the R-language predecessor for readers preferring R or comparing lab implementations.</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- Deep understanding of optimization and theory is unnecessary for effective method use — if violated (e.g., in high-stakes or novel deployment contexts), uninformed application of black-box methods could cause harm.
-- Python is now the dominant practical language for statistical learning — not argued, merely asserted as motivation.
-- All 21 bundled datasets are representative of real-world complexity — several (e.g., Advertising, simulated Income) are low-dimensional, clean, and pedagogically curated, not typical of messy production data.
-- The ISLP package will remain maintained and compatible with future Python/library versions — the text itself acknowledges lab outputs may drift as packages update.</p>
-<p><strong>Missing context or citations:</strong> No engagement with causal inference literature; no treatment of large language models, foundation models, or self-supervised learning; Bayesian methods appear only via BART. No comparison to competing contemporary textbooks (e.g., Bishop's <em>PRML</em>, Murphy's <em>Probabilistic Machine Learning</em>, Goodfellow et al.'s <em>Deep Learning</em>). The rationale for method selection ("most widely applicable") is asserted without citation or empirical justification.</p>
-<p><strong>Possible experimental / analytical issues:</strong>
-- The 60% market-direction prediction figure (QDA, 2001–2004 train / 2005 test) is presented without a confidence interval, p-value, or comparison to a naive baseline; the test set is a single year (~252 trading days), making the estimate unreliable.
-- Chapter 10 (deep learning) covers backpropagation and dropout at a conceptual level but omits attention mechanisms and transformers entirely, leaving a significant gap for a 2023 publication.
-- Lab reproducibility depends on external package versions; the book acknowledges results may not replicate as libraries update, but provides no pinned environment file or containerized setup in the provided text.
-- The claim that ~⅓ of classroom time on labs is "extremely useful" is anecdotal from the authors' own courses, not independently evaluated.</p>
+- Readers have completed at least one elementary statistics course — if violated, foundational concepts (p-values, distributions) will be opaque despite the accessible prose.
+- Avoiding matrix algebra throughout does not sacrifice understanding of model behavior — this is contested in the statistics education literature but not defended here.
+- Python package ecosystems (scikit-learn, PyTorch, lifelines, etc.) are stable enough that lab results will remain reproducible; the authors acknowledge this may fail as packages update but offer only a promise of web-posted errata.
+- The <code>ISLP</code> package will remain maintained — no sustainability plan is stated.</p>
+<p><strong>Missing context or citations:</strong> No competing Python ML textbooks are acknowledged (e.g., VanderPlas's <em>Python Data Science Handbook</em>, Murphy's <em>Probabilistic Machine Learning</em>, Géron's <em>Hands-On Machine Learning</em>). No discussion of how the Python labs differ algorithmically or numerically from the R labs. The 60% Smarket prediction result is presented without confidence intervals or comparison to a random baseline's variance — readers may overinterpret it.</p>
+<p><strong>Possible experimental / analytical issues:</strong> As a textbook, empirical claims are illustrative rather than rigorous: the QDA 60%-accuracy result on Smarket uses an undisclosed train/test split and is not cross-validated; the wage trend figures show no uncertainty bands on the fitted curves in the described caption. No systematic method-comparison benchmarks are presented in the available text. Reproducibility depends on <code>ISLP</code> package versioning, which is acknowledged but unresolved.</p>
 <p><strong>Ideas for future work:</strong>
-- Add a chapter on causal inference (instrumental variables, difference-in-differences, propensity scoring) to bridge the gap between prediction and causal questions that applied practitioners routinely face.
-- Include transformer/attention-based architectures in Chapter 10, with a lab using a pre-trained language model, to reflect the state of deep learning as of publication.
-- Provide a pinned <code>requirements.txt</code> or <code>conda</code> environment file alongside the ISLP package to ensure long-term lab reproducibility.
-- Formally evaluate learning outcomes across the book's pedagogical premise (conceptual-only vs. theory-inclusive instruction) via a controlled study, rather than relying on author anecdote.</p></div>
+- Add a chapter on causal inference (instrumental variables, difference-in-differences), which is absent despite its importance in economics, public health, and policy applications that the book explicitly targets.
+- Extend the deep learning chapter to cover transformer architectures and attention mechanisms, which postdate ISLR and are now central to NLP and tabular-data tasks.
+- Include formal method-comparison experiments across the included datasets to give readers quantitative intuition about when one method outperforms another, rather than qualitative rules of thumb.
+- Provide a containerized or <code>conda</code>-lock-file environment so lab reproducibility does not degrade with package updates — the current approach of posting web errata is fragile.</p></div>
             
             
               <div class="academic-auto">
@@ -878,6 +1051,89 @@
     <section class="year-block">
       <h2 class="year-heading">2022</h2>
       
+        <article class="paper-entry" id="p-8bd82771c9aa">
+          <div class="paper-entry-head" data-toggle="p-8bd82771c9aa">
+            <div class="paper-thumb" data-hash="8bd82771c9aa"></div>
+            <div class="paper-entry-text">
+              <div class="paper-entry-title">Hydrograph separation: How physically based is recursive digital filtering?</div>
+              <div class="paper-entry-meta">
+                Klaus Eckhardt
+                <span class="venue">· <em>Hydrology and Earth System Sciences (preprint)</em></span>
+                <span class="year">· 2022</span>
+              </div>
+              <p class="paper-entry-tldr">A purely algebraic derivation shows that the Eckhardt (2005) recursive digital baseflow filter—widely labeled &#34;empirical&#34;—is a special case of the explicitly physically derived Furey &amp; Gupta (2001) filter, differing only in the assumed time delay between precipitation and baseflow response. This equivalence yields a physical interpretation of the BFImax parameter as groundwater recharge divided by streamflow, enabling objective parameter estimation.</p>
+              <div class="paper-entry-links">
+                <a href="https://doi.org/10.5194/hess-2022-186" target="_blank">[doi]</a>
+                
+                <a href="./paper/8bd82771c9aa.html">[detail]</a>
+                
+                
+                <span class="entry-tag">hydrograph-separation</span><span class="entry-tag">baseflow-estimation</span><span class="entry-tag">digital-filtering</span><span class="entry-tag">groundwater-hydrology</span><span class="entry-tag">streamflow-analysis</span>
+              </div>
+            </div>
+          </div>
+          <div class="paper-entry-body">
+            <div class="summary-md"><h1>Technical Note: Hydrograph Separation: How Physically Based Is Recursive Digital Filtering?</h1>
+<p><strong>Authors:</strong> Klaus Eckhardt
+<strong>Year:</strong> 2022 (preprint, discussion opened 15 June 2022)
+<strong>Tags:</strong> hydrograph-separation, baseflow-estimation, recursive-digital-filter, groundwater-recharge, linear-reservoir, catchment-hydrology</p>
+<h2>TL;DR</h2>
+<p>A purely algebraic derivation shows that the Eckhardt (2005) recursive digital baseflow filter—widely labeled "empirical"—is a special case of the explicitly physically derived Furey &amp; Gupta (2001) filter, differing only in the assumed time delay between precipitation and baseflow response. This equivalence yields a physical interpretation of the BFImax parameter as groundwater recharge divided by streamflow, enabling objective parameter estimation.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Theory / position paper — a mathematical derivation with no new empirical data.</p>
+<p><strong>Context.</strong> Catchment hydrology / hydrograph separation. Builds directly on: Furey &amp; Gupta (2001) — physically-derived filter used as the comparison benchmark; Eckhardt (2005) — the two-parameter filter under scrutiny; Lyne &amp; Hollick (1979) — originator of recursive digital filtering in hydrology; Chapman &amp; Maxwell (1996) — one-parameter filter shown to be a limiting case of the same family.</p>
+<p><strong>Correctness.</strong> Load-bearing assumption: the time delay d between precipitation and groundwater exfiltration into streams satisfies d − 1 = 0 (i.e., delay is sub-timestep). This is the sole transformation needed; the algebra that follows is straightforward. The assumption is partially supported by citing pre-event water isotope literature (Buttle 1994; Klaus &amp; McDonnell 2013) but is not validated with data in this paper. Secondary assumptions (linear-reservoir aquifer; no lateral groundwater export; no ET from groundwater or surface waters) underpin Eq. (11) and are stated but not quantified for error.</p>
+<p><strong>Contributions.</strong>
+- Algebraic proof that setting d − 1 = 0 in Furey &amp; Gupta (2001) Eq. (5) directly yields Eckhardt (2005) Eq. (1), establishing formal equivalence.
+- Physical interpretation of BFImax as c₃/(c₁ + c₃) = groundwater recharge / (overland flow + groundwater recharge) via Eq. (10).
+- Simplified estimator BFImax ≈ groundwater recharge / streamflow under stated catchment-boundary assumptions, Eq. (11).
+- Extension of physical basis claim to a whole family of linear-reservoir-based filters (e.g., Chapman &amp; Maxwell 1996 recovered by BFImax = 0.5).</p>
+<p><strong>Clarity.</strong> Writing is concise and the logical flow is easy to follow for a hydrology audience; the paper is very short (6 pages of text), and several algebraic steps between equations are left for the reader to verify without intermediate working.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Setting the precipitation-to-baseflow delay to zero in Furey &amp; Gupta (2001) algebraically collapses their four-parameter physically based filter into the two-parameter Eckhardt (2005) filter, proving the latter is not "merely a low-pass filter" but physically grounded, and giving BFImax a computable physical meaning.</p>
+<p><strong>Supporting evidence:</strong>
+- Eq. (5) → Eq. (6): substituting d − 1 = 0 into Furey &amp; Gupta's Eq. (5) yields a one-step expression in bₖ₋₁ and yₖ.
+- Eq. (6) → Eq. (7): algebraic rearrangement produces the same structural form as Eckhardt (2005) Eq. (1).
+- Coefficient matching of Eqs. (7) and (1) yields the closed-form result BFImax = c₃ / (c₁ + c₃), Eq. (10).
+- BFImax ≈ groundwater recharge / streamflow, Eq. (11), under no-boundary-flux and no-groundwater-ET assumptions.
+- Cited from Eckhardt (2012): a ±40% uncertainty in BFImax propagates to &lt; 10% uncertainty in the calculated baseflow index, making approximate recharge estimates sufficient.</p>
+<p><strong>Figures &amp; tables:</strong> None. The entire argument is carried by five numbered equations. No empirical data, no plots, no statistical reporting, no error bars. There is nothing to critique visually, but the absence of any empirical illustration is a substantive limitation.</p>
+<p><strong>Follow-up references:</strong>
+- Furey &amp; Gupta (2001) — essential; the paper is unintelligible without reading this derivation.
+- Eckhardt (2005) — original filter construction; needed to verify the coefficient comparison.
+- Eckhardt (2012) — provides the sensitivity analysis underpinning the 40% / 10% uncertainty claim.
+- Klaus &amp; McDonnell (2013) — review of isotope hydrograph separation supporting the zero-delay assumption.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- d − 1 = 0 (sub-timestep precipitation-to-baseflow delay) is the entire pivot of the paper; if d ≥ 1 for a given catchment (e.g., deep aquifer, arid systems), the algebraic equivalence breaks and BFImax loses the physical meaning derived here — this failure mode is acknowledged but not bounded.
+- Linear reservoir aquifer: stated as an assumption but not evaluated; real aquifers are frequently nonlinear, especially at high storage.
+- Overland flow + groundwater recharge = streamflow (Eq. 11): requires zero net subsurface exchange across catchment boundaries and zero ET from groundwater/surface waters. The error from violating these conditions in real catchments is not estimated.
+- c₁ and c₃ partition precipitation implicitly assuming other loss pathways (interception, deep percolation beyond the water table) are either zero or lumped into c₁ and c₃; this is not stated explicitly.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with Pelletier &amp; Andréassian (2020) beyond citing their criticism; their proposed alternative parametrization is not compared.
+- No discussion of how to actually estimate mean groundwater recharge for Eq. (11) — methods (water-table fluctuation, chloride mass balance, model-based) differ by orders of magnitude in some settings; this gap makes the "approach for BFImax calculation" qualitative only.
+- Interflow / subsurface stormflow is not discussed; the two-component partitioning (overland flow + groundwater) ignores a potentially large fast subsurface pathway that does not fit neatly into either c₁ or c₃.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- No empirical validation whatsoever. The paper does not test whether BFImax computed from Eq. (10) or Eq. (11) produces baseflow series that match tracer-based separation or the Furey &amp; Gupta filter applied with independently estimated d values.
+- The 40% / &lt;10% sensitivity result is borrowed from Eckhardt (2012) without specifying the range of a values or catchment types for which it holds; generalization is implicit.
+- Self-referential structure: the author is defending an algorithm bearing his own name, with no independent replication or external dataset.
+- The zero-delay justification relies on the pre-event water literature, but that literature concerns rapid <em>old</em> water release — a hydrological mechanism quite distinct from aquifer-to-stream exfiltration dynamics assumed in the filter derivation; the conceptual link is asserted, not argued.</p>
+<p><strong>Ideas for future work:</strong>
+1. Empirically compare baseflow index outputs from Furey &amp; Gupta (2001) (with independently estimated d) against Eckhardt (2005) with BFImax from Eq. (10) across catchments spanning a range of aquifer depths and climates, to quantify where the d = 0 approximation breaks down.
+2. Validate Eq. (11) by comparing BFImax computed from independent groundwater recharge estimates (e.g., chloride mass balance, water-table fluctuation) against BFImax calibrated to isotope-based hydrograph separations in the same catchments.
+3. Extend the algebraic analysis to multi-component filters or nonlinear reservoir formulations to test whether the physical equivalence holds beyond the linear-reservoir case.
+4. Quantify the error in Eq. (11) introduced by subsurface lateral exchange and groundwater ET across a range of catchment types, to give practitioners guidance on when Eq. (11) is a reasonable approximation.</p></div>
+            
+            
+              <div class="academic-auto">
+                <h4>Methods</h4><ul><li>recursive digital filtering</li><li>linear reservoir assumption</li><li>Eckhardt (2005) filter</li><li>Furey and Gupta (2001) physically based filter</li><li>isotope tracer hydrograph separation</li><li>sensitivity analysis</li></ul>
+                
+                <h4>Claims</h4><ul><li>The recursive digital filter of Eckhardt (2005) is largely identical to the physically based algorithm of Furey and Gupta (2001), differing only in the assumed time delay between precipitation and groundwater exfiltration.</li><li>The parameter BFImax in Eckhardt&#39;s filter can be physically interpreted as the ratio of groundwater recharge to the sum of overland flow and groundwater recharge.</li><li>A whole family of recursive digital filters based on the linear reservoir assumption, including those of Chapman and Maxwell (1996) and Boughton (1993), can be considered physically based.</li><li>BFImax can be estimated objectively via groundwater recharge, and uncertainties of up to 40% in BFImax likely lead to less than 10% uncertainty in the calculated baseflow index.</li><li>The assumption that there is no major time lag between precipitation and groundwater exfiltration into streams is supported by isotope tracer studies showing rapid release of pre-event water.</li></ul>
+              </div>
+            
+          </div>
+        </article>
+      
         <article class="paper-entry" id="p-e7f727c8a138">
           <div class="paper-entry-head" data-toggle="p-e7f727c8a138">
             <div class="paper-thumb" data-hash="e7f727c8a138"></div>
@@ -888,7 +1144,7 @@
                 <span class="venue">· <em>Journal of Water Resources Planning and Management</em></span>
                 <span class="year">· 2022</span>
               </div>
-              <p class="paper-entry-tldr">Water resources decision support modelers embed value-laden choices into both their processes and models whether they intend to or not; this forum paper argues that the field has an ethical obligation to make those choices explicit and equity-centered. It synthesizes guidance on participatory process design, equity metric selection, and modeling methods, illustrated with the Omo River basin (DAFNE project) and California drinking water cases.</p>
+              <p class="paper-entry-tldr">A forum/position paper arguing that water resources decision support modelers embed inequitable values into their work through framing choices, metric selection, and stakeholder processes—whether or not they intend to. It offers actionable recommendations on procedural equity, equity-aware metric design, and modeling methods, illustrated by two case studies (Ethiopia&#39;s Omo River, California drinking water access).</p>
               <div class="paper-entry-links">
                 <a href="https://doi.org/10.1061/(ASCE)WR.1943-5452.0001573" target="_blank">[doi]</a>
                 
@@ -903,55 +1159,61 @@
             <div class="summary-md"><h1>Equity in Water Resources Planning: A Path Forward for Decision Support Modelers</h1>
 <p><strong>Authors:</strong> Sarah Fletcher, Antonia Hadjimichael, Julianne Quinn, Khalid Osman, Matteo Giuliani, David Gold, Anjuli Jain Figueroa, Bethany Gordon
 <strong>Year:</strong> 2022
-<strong>Tags:</strong> water-resources-equity, decision-support-modeling, participatory-modeling, environmental-justice, performance-metrics, sociotechnical-systems</p>
+<strong>Tags:</strong> water-resources-equity, decision-support-modeling, participatory-modeling, environmental-justice, sociotechnical-systems, performance-metrics</p>
 <h2>TL;DR</h2>
-<p>Water resources decision support modelers embed value-laden choices into both their processes and models whether they intend to or not; this forum paper argues that the field has an ethical obligation to make those choices explicit and equity-centered. It synthesizes guidance on participatory process design, equity metric selection, and modeling methods, illustrated with the Omo River basin (DAFNE project) and California drinking water cases.</p>
+<p>A forum/position paper arguing that water resources decision support modelers embed inequitable values into their work through framing choices, metric selection, and stakeholder processes—whether or not they intend to. It offers actionable recommendations on procedural equity, equity-aware metric design, and modeling methods, illustrated by two case studies (Ethiopia's Omo River, California drinking water access).</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Position/opinion forum paper — no original empirical data; normative advocacy grounded in literature synthesis and secondary case examples.</p>
-<p><strong>Context.</strong> Water resources systems modeling and environmental justice. Builds directly on: Cash et al. 2003 (salience/credibility/legitimacy framework for knowledge systems); Jafino et al. 2021 (constructive decision aiding as iterative learning); Rawls 1999 (difference principle applied via min-max metrics); Osman and Faust 2021 (water equity vs. equality definitions).</p>
-<p><strong>Correctness.</strong> Three load-bearing assumptions: (1) modelers' framing choices are inherently value-laden and have distributional consequences — well-supported in science-policy literature; (2) skilled facilitation can render participatory coproduction meaningfully equitable despite power imbalances — empirically contested and acknowledged as uncertain by the authors; (3) existing quantitative tools (multiobjective optimization, agent-based modeling, exploratory modeling) are sufficient, if reoriented, to operationalize community-identified equity concepts — plausible but undemonstrated at scale.</p>
+<p><strong>Category.</strong> Position/opinion paper (explicitly labeled a Forum paper by the journal; speculative and normative in parts).</p>
+<p><strong>Context.</strong> Water resources systems modeling and environmental justice; builds on Cash et al. 2003 (salience–credibility–legitimacy framework for knowledge systems), Jafino et al. 2021 (constructive decision aiding with equity framing), Rawls 1999 (difference principle as basis for min-max metrics), and Osman and Faust 2021 (equity vs. equality definitions in water systems).</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) skilled facilitation can meaningfully offset power imbalances in participatory processes; (2) social science equity concepts can be operationalized quantitatively without critical loss of meaning; (3) better metrics translate into better policy outcomes. The paper acknowledges tensions in (1) and (3) but does not resolve them. Assumption (2) is taken largely on faith.</p>
 <p><strong>Contributions.</strong>
-- Identifies specific failure modes of commonly used equity metrics: Gini coefficient and coefficient of variation (COV) can penalize policies that improve outcomes for the worst-off if they simultaneously reduce relative variance faster than the mean.
-- Frames the equity problem across three coupled dimensions: process design (procedural equity), metric selection (distributional equity), and modeling method choice.
-- Synthesizes two concrete case examples — DAFNE/Omo River and California human right to water — as partial demonstrations of equity-centered modeling in practice.
-- Issues three practitioner-facing recommendations: center the model's audience on marginalized communities, advance specific methodological gaps (spatial resolution, hydroecological relationships, data collection), and collaborate with social scientists.</p>
-<p><strong>Clarity.</strong> Well-organized with a logical progression from process to metrics to methods to cases; the forum genre permits normative assertion without full evidentiary burden, and the boundary between advocacy and demonstrated best practice is occasionally blurred.</p>
+- Synthesizes procedural and distributional equity concepts and maps them explicitly to modeling choices (framing, metric aggregation, method selection).
+- Demonstrates with a hypothetical but logically sound example (Fig. 2) that relative variability metrics (Gini index, COV) can penalize policies that genuinely improve outcomes for the worst-off.
+- Presents two illustrative case studies applying the framework in contrasting global contexts (Ethiopia, California).
+- Consolidates three concrete, practitioner-facing recommendations: center marginalized communities in model design, advance specific methodological gaps, and collaborate with social scientists.</p>
+<p><strong>Clarity.</strong> Well-organized and readable for a multidisciplinary audience; the transition from process equity to metric design to modeling methods is logical, though the case studies are loosely integrated with the recommendations that follow.</p>
+<hr />
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Because water resources models encode choices about framing, aggregation, and whose interests are measured, equity cannot be achieved by process participation alone — it must be embedded in metric design (favoring min-max and satisficing over Gini/COV) and in modeling methods that represent multiactor sociotechnical dynamics.</p>
+<p><strong>Main thrust:</strong> Equity failures in water resources systems are partly an artifact of modeling choices (who is in the room, which metrics are used, how outcomes are aggregated); the paper maps these failure modes and proposes corrective practices across process, metric, and method dimensions.</p>
 <p><strong>Supporting evidence:</strong>
-- Illustrative flood damage example (Fig. 2): Policy 2 reduces damages for all residents except the one already least affected, yet scores <em>worse</em> on both Gini coefficient and COV than Policy 1 — demonstrating that relative variability metrics can misclassify equitable policies.
-- California: approximately 1 million people lack access to clean, affordable drinking water; state developed three parallel affordability indicators (cost relative to median household income, county poverty level, and deep poverty income level) to avoid single-metric masking.
-- Jordan Water Project (Yoon et al. 2021): coupled human–natural–engineered model with thousands of agents; used Gini coefficient for water-use disparity, satisficing metric of percentage of households receiving fewer than 40 L per person per day, and consumer surplus for economic well-being.
-- DAFNE/Omo project: after two Negotiation Simulation Lab sessions, stakeholders identified six negotiated solutions that prioritized flood recession agriculture and Lake Turkana fish yield targets, accepting reduced irrigation supply and hydropower performance.
-- Post-Katrina: lower-income and minority households received disproportionately less federal assistance relative to damage incurred (Drakes et al. 2021, as cited); Harris County, Texas subsequently adopted an explicit vulnerability-weighted flood risk prioritization framework.</p>
-<p><strong>Figures &amp; tables:</strong> Two figures only. Fig. 1 is a conceptual diagram contrasting idealized versus power-imbalanced coproduction — no data, no axes, qualitative only. Fig. 2 is a stylized bar chart of per-resident flood damages under two policies; its axes appear labeled but the data are fabricated for illustration, no statistical testing is applied, and no real case underlies it. No tables. The paper's entire quantitative argument rests on a constructed example, not empirical measurement.</p>
+- ~1 million Californians lack access to clean, affordable drinking water, concentrated in economically disadvantaged areas (Water Education Foundation 2020, cited).
+- Post-Katrina: lower-income and minority households received disproportionately less federal disaster assistance relative to damage sustained (Drakes et al. 2021, cited).
+- Ethiopia's Gibe III: environmental and social impact assessment for transboundary impacts approved only 3 years after construction began (EEPCO 2009, cited).
+- DAFNE project Negotiation Simulation Lab: participating stakeholders selected 6 negotiated solutions that largely traded irrigation supply and hydropower performance to safeguard recession agriculture and Lake Turkana fish yields (Castelletti et al. 2020, cited).
+- California Office of Environmental Health Hazards: developed 3 separate affordability indicators benchmarked against median income, county poverty level, and deep poverty level, rather than a single composite (Balazs et al. 2021b, cited).</p>
+<p><strong>Figures &amp; tables:</strong>
+- <strong>Fig. 1</strong> (conceptual): Contrasts idealized co-production (equal voices) with reality (power imbalances distort outcomes). No quantitative axes; purely schematic. No error bars—appropriate for this purpose.
+- <strong>Fig. 2</strong> (illustrative): Bar chart of hypothetical flood damages per resident under two policies, with Gini and COV values annotated. Data are fabricated to make the logical point; no statistical significance reported or needed. The figure is effective but the hypothetical nature should be flagged to readers who may treat it as empirical.
+- No tables present in the paper.</p>
 <p><strong>Follow-up references:</strong>
-- Cash et al. 2003 (PNAS) — foundational salience/credibility/legitimacy framework invoked throughout.
-- Jafino et al. 2021 — constructive decision aiding; directly operationalizes the iterative metric-exploration approach recommended here.
-- Yoon et al. 2021 — Jordan Water Project; the most complete realized example of the equity metric battery the paper advocates.
-- Butler and Adamowski 2015 (<em>J. Environ. Manage.</em>) — strategies for empowering marginalized communities specifically within participatory modeling, directly recommended for implementation guidance.</p>
+- <strong>Cash et al. 2003</strong> — foundational framework on salience, credibility, and legitimacy; underpins the paper's process-equity argument.
+- <strong>Jafino et al. 2021</strong> — constructive decision aiding; most technically developed equity-modeling reference cited.
+- <strong>Butler and Adamowski 2015</strong> — concrete strategies for empowering marginalized communities within participatory modeling processes.
+- <strong>Yoon et al. 2021</strong> (Jordan Water Project) — multi-agent coupled human–natural–engineered system with explicit equity metrics (Gini for disparity, satisficing threshold at 40 L/person/day, consumer surplus); best worked example of the paper's prescriptions.</p>
+<hr />
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- Skilled facilitation is assumed sufficient to neutralize structural power imbalances in coproduction; this is optimistic and not empirically demonstrated — the critique of coproduction (Klenk et al. 2015; Wyborn et al. 2019, cited) undercuts the paper's own remedy.
-- Recommendation 2 (advance methodological gaps independently of community input) implicitly assumes that modelers can anticipate equity-relevant metrics without sustained codesign — in tension with the paper's own procedural equity argument.
-- Water utilities and public agencies are assumed to be willing to adopt equity-reoriented models once provided; regulatory capture, political economy, and legal constraints on utility mandates are noted briefly but not systematically addressed.
-- The equity–equality distinction is treated as settled; competing frameworks (capabilities approach, recognition justice, procedural vs. substantive justice) are not engaged.</p>
+- Skilled facilitation is scalable and broadly accessible to water agencies — not demonstrated; highly resource-intensive and context-dependent.
+- Marginalized community preferences are internally coherent and articulable in ways that map to quantitative model objectives — elides deep heterogeneity within communities.
+- Modelers retain institutional freedom to reframe models around community values rather than those of the utility or agency paying for the study — directly contradicted by the authors' own observation that primary model clients are utilities with "neither a mandate nor the capacity to address the fundamental causes of inequity."
+- Min-max/satisficing metrics are unambiguously preferable to relative variability metrics — true in the constructed example, but the choice is context-dependent and not always clear-cut.</p>
 <p><strong>Missing context or citations:</strong>
-- No engagement with algorithmic fairness or data justice literatures, which have developed extensive quantitative critiques of equity metrics in other infrastructure domains — directly relevant to the Gini/COV discussion.
-- The Ethiopia example touches on postcolonial and sovereignty concerns only superficially; critical development studies literature on dam financing and land rights (e.g., World Commission on Dams) is absent.
-- Transportation equity toolkits are mentioned as analogues but not substantively synthesized — the reader cannot extract what specifically was adapted or why water modeling differs.
-- No discussion of legal mechanisms (Clean Water Act environmental justice provisions, Title VI, state human-right-to-water statutes beyond California) that shape what practitioners are permitted or required to do.</p>
+- Does not engage with data justice or critical data studies literature (e.g., D'Ignazio and Klein's <em>Data Feminism</em>), which scrutinizes the act of quantifying marginalization itself.
+- No engagement with water rate design or affordability literature (e.g., tiered pricing research) where the equity–efficiency tension is extensively analyzed.
+- Transportation equity toolkit examples are invoked as precedent but not evaluated for transferability; the analogy is asserted, not argued.
+- Legal and regulatory constraints on what utilities can optimize for are not discussed, though they directly limit implementability of the recommended approaches.
+- No review of how often existing peer-reviewed water resources DSMs include any equity metric, which would establish the empirical baseline gap the paper implicitly assumes.</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- The paper contains no original data, models, or statistical analysis — the sole quantitative illustration (Fig. 2) is constructed and cannot be falsified.
-- The DAFNE/Omo case is explicitly described as a research demonstration, not an implementation — there is no outcome data on whether the negotiated solutions influenced actual dam operations, making it impossible to assess whether the process produced equity in practice.
-- California case limitations (communities excluded due to mistrust or time constraints; technical capacity barriers to grant applications) are acknowledged qualitatively but not quantified — the scale of remaining inequity post-intervention is unknown.
-- The claim that Gini/COV systematically mislead in water contexts is valid under the paper's constructed example but is not validated against a corpus of real planning decisions; the practical prevalence of this failure mode is asserted, not measured.
-- No systematic review methodology is described; case selection appears illustrative rather than representative, creating potential confirmation bias toward cases where equity-oriented approaches were attempted.</p>
+- Both case studies are descriptive and qualitative; neither presents outcome data demonstrating that the equity-oriented interventions actually improved distributional outcomes for marginalized groups.
+- The Gini/COV critique (Fig. 2) is logically sound but rests on hypothetical numbers; a scan of published studies where these metrics produced perverse recommendations would substantially strengthen the point.
+- The paper simultaneously endorses participatory processes and acknowledges they can "further entrench the framings and policies of the establishment" without providing a decision rule for when co-design is net beneficial versus net harmful.
+- "Skilled facilitation" is recommended as the remedy for power imbalances without specifying what qualifications, training, or institutional structures constitute skill in this context.
+- The paper's own framing—written by academics at well-resourced US and European institutions—exemplifies the power dynamics it critiques but does not reflect on this positionality.</p>
 <p><strong>Ideas for future work:</strong>
-- Empirical audit of water resources optimization literature: classify what fraction of published studies include equity metrics, of what type (Gini, satisficing, min-max, etc.), and whether community-identified needs drove metric selection.
-- Controlled comparison of participatory modeling outcomes with and without trained equity facilitators across matched water planning contexts to test the facilitation-as-remedy assumption.
-- Development and cross-case validation of a standardized equity metric battery (parallel to robustness metric libraries), tested against community-validated outcome data rather than constructed examples.
-- Longitudinal policy tracking of the DAFNE Omo negotiated solutions: did any of the six solutions influence Koysha Dam operating rules or irrigation district allocations, and what barriers to implementation arose?</p></div>
+- Systematic review or meta-analysis of water resources DSM publications to quantify the frequency, type, and aggregation choices of equity metrics actually used, establishing a defensible empirical baseline.
+- Controlled comparison of participatory modeling processes with and without explicit power-mapping facilitation to test whether acknowledging imbalances measurably shifts outcomes toward marginalized stakeholders.
+- Development of a decision-tree toolkit for metric selection—operationalizing the Gini/COV pitfall identified in Fig. 2—with guidance on when satisficing, min-max, or distributional metrics are appropriate given system structure.
+- Longitudinal tracking of the California drinking water monitoring tool (OEHHA GIS) to assess whether transparent equity indicators actually redirect funding and infrastructure investment toward the most disadvantaged communities over a 5–10 year horizon.</p></div>
             
             
               <div class="academic-auto">
@@ -973,7 +1235,7 @@
                 <span class="venue">· <em>MIT Press</em></span>
                 <span class="year">· 2022</span>
               </div>
-              <p class="paper-entry-tldr">A graduate-level textbook unifying classical statistics, Bayesian inference, and modern deep learning under a single probabilistic modeling lens, spanning foundations through transformers and graph neural networks. Intended as a self-contained replacement for Murphy&#39;s 2012 *Machine Learning: A Probabilistic Perspective*, updated for the deep learning era with Python/JAX/PyTorch code and Colab notebooks.</p>
+              <p class="paper-entry-tldr">A graduate-level textbook unifying classical probabilistic/Bayesian ML with modern deep learning under a single lens of probabilistic modeling and Bayesian decision theory, spanning 23 chapters from probability and optimization foundations through transformers, VAEs, and graph embeddings. It is the introductory volume of a two-volume series that supersedes Murphy&#39;s 2012 *Machine Learning: A Probabilistic Perspective*, incorporating the deep learning advances made since 2012. All code is in Python with Jupyter notebooks runnable in Google Colab.</p>
               <div class="paper-entry-links">
                 
                 
@@ -986,57 +1248,56 @@
           </div>
           <div class="paper-entry-body">
             <div class="summary-md"><h1>Probabilistic Machine Learning: An Introduction</h1>
-<p><strong>Authors:</strong> Kevin P. Murphy
-<strong>Year:</strong> 2022
-<strong>Tags:</strong> probabilistic-ml, bayesian-inference, deep-learning, textbook, supervised-learning, unsupervised-learning</p>
+<p><strong>Authors:</strong> Kevin P. Murphy (with chapter contributions from Zico Kolter, Frederik Kunstner, Si Yi Meng, Aaron Mishkin, Sharan Vaswani, Mark Schmidt, Mathieu Blondel, Krzysztof Choromanski, Colin Raffel, Bryan Perozzi, Sami Abu-El-Haija, Ines Chami)
+<strong>Year:</strong> 2022 (first printing March 2022; online version updated April 2025)
+<strong>Tags:</strong> probabilistic-machine-learning, bayesian-inference, deep-learning, supervised-learning, unsupervised-learning, textbook</p>
 <h2>TL;DR</h2>
-<p>A graduate-level textbook unifying classical statistics, Bayesian inference, and modern deep learning under a single probabilistic modeling lens, spanning foundations through transformers and graph neural networks. Intended as a self-contained replacement for Murphy's 2012 <em>Machine Learning: A Probabilistic Perspective</em>, updated for the deep learning era with Python/JAX/PyTorch code and Colab notebooks.</p>
+<p>A graduate-level textbook unifying classical probabilistic/Bayesian ML with modern deep learning under a single lens of probabilistic modeling and Bayesian decision theory, spanning 23 chapters from probability and optimization foundations through transformers, VAEs, and graph embeddings. It is the introductory volume of a two-volume series that supersedes Murphy's 2012 <em>Machine Learning: A Probabilistic Perspective</em>, incorporating the deep learning advances made since 2012. All code is in Python with Jupyter notebooks runnable in Google Colab.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Textbook / pedagogical survey of an established field (~800 pages, 23 chapters).</p>
-<p><strong>Context.</strong> Subfield: machine learning broadly. Builds directly on Murphy's own 2012 MLAPP; situates itself alongside Bishop's PRML, Koller &amp; Friedman's <em>Probabilistic Graphical Models</em>, Rasmussen &amp; Williams' <em>Gaussian Processes for ML</em>, and Schölkopf &amp; Smola's <em>Learning with Kernels</em>. The Bayesian decision-theoretic framing follows Jaynes-style probabilism as a foundation for reasoning under uncertainty.</p>
-<p><strong>Correctness.</strong> Load-bearing assumption: probabilistic modeling is a sufficient unifying lens for nearly all of ML. This is a methodological commitment, not empirically validated in the book itself; optimization-centric and PAC-learning perspectives are acknowledged but secondary. A second assumption is that epistemic and aleatoric uncertainty distinctions motivate the Bayesian treatment — valid conceptually but the book does not critically engage with cases where calibrated frequentist methods suffice.</p>
+<p><strong>Category.</strong> Graduate textbook / comprehensive survey of the ML field as of ~2021.</p>
+<p><strong>Context.</strong> Direct successor to Murphy (2012) <em>Machine Learning: A Probabilistic Perspective</em> (DeGroot Prize 2013). Situated within the MIT Press <em>Adaptive Computation and Machine Learning</em> series alongside Koller &amp; Friedman <em>Probabilistic Graphical Models</em>, Rasmussen &amp; Williams <em>Gaussian Processes for Machine Learning</em>, and Schölkopf &amp; Smola <em>Learning with Kernels</em>. Pairs with a sequel volume [Mur23] covering variational inference, generative models, and reinforcement learning. Cites the 2012 ImageNet result [KSH12] (Krizhevsky, Sutskever, Hinton) as the triggering event motivating the revision.</p>
+<p><strong>Correctness.</strong> Load-bearing assumption: probabilistic modeling is a sufficient unifying lens for nearly all of ML (attributed to Shakir Mohamed). This is a pedagogical choice, not a theorem—frequentist and algorithmic perspectives receive secondary treatment. Additional assumption: readers have implicit calculus and linear algebra background; formal prerequisites are not stated in the provided text. Both assumptions are broadly defensible for the intended audience but limit the book's universality.</p>
 <p><strong>Contributions.</strong>
-- Single-volume integration of Bayesian foundations, linear models, deep neural networks (CNNs, RNNs, Transformers), and nonparametric methods absent from the 2012 book in this form.
-- Replaced Matlab codebase entirely with Python (NumPy, Scikit-learn, JAX, PyTorch, TensorFlow, PyMC), with figure-generating Jupyter notebooks runnable on free Colab GPUs.
-- Added self-contained background chapters on linear algebra (Ch. 7) and optimization (Ch. 8) omitted from the 2012 book.
-- Coverage of post-2012 topics: transformers and efficient attention (Ch. 15), self-supervised / contrastive learning (Ch. 19), VAEs (Ch. 20), graph neural networks (Ch. 23), and large language models (Ch. 15.7).</p>
-<p><strong>Clarity.</strong> Writing is consistently clear with uniform notation (summarized in Appendix A); advanced sections marked * allow selective reading, though the sheer breadth means some later chapters (e.g., Ch. 23 on graph embeddings) are notably thinner than earlier ones.</p>
+- Unified probabilistic/Bayesian treatment spanning foundations through modern deep learning (transformers, self-supervised learning, VAEs) in a single coherent framework.
+- Integration of background material (linear algebra Ch. 7, optimization Ch. 8) omitted from the 2012 book, making the volume more self-contained.
+- Full migration of code from MATLAB to Python (NumPy, Scikit-learn, JAX, PyTorch, TensorFlow, PyMC) with reproducible Jupyter notebooks linked from figure captions.
+- Advanced sections marked with * throughout, enabling instructors to scope an introductory course without restructuring.</p>
+<p><strong>Clarity.</strong> Writing is clear and pedagogically careful throughout Chapter 1, with running examples (Iris, polynomial regression) that reappear across topics; multi-author sections (e.g., optimization, graph embeddings) may vary in style, but this cannot be assessed from the provided excerpt alone.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Treats all ML quantities as random variables endowed with probability distributions, using Bayesian decision theory as the normative framework for both model fitting and prediction, then applies this lens uniformly from logistic regression through deep transformers and clustering.</p>
+<p><strong>Main thrust:</strong> Treat all unknown quantities as random variables with probability distributions; use Bayesian decision theory to unify model fitting, regularization, uncertainty quantification, and evaluation across classification, regression, unsupervised learning, and beyond. The 23-chapter arc moves from mathematical foundations → linear models → deep networks → nonparametric models → semi-supervised/unsupervised methods.</p>
 <p><strong>Supporting evidence:</strong>
-- Pedagogical examples rather than novel benchmarks: Iris dataset (N=150, D=4, 3 classes) used throughout Part I to ground classification, decision theory, and generalization concepts.
-- Overfitting illustrated concretely: degree-20 polynomial fit to N=21 points achieves 0 training MSE but visually fails to generalize (Figure 1.7).
-- MLE shown equivalent to MSE minimization for Gaussian regression (NLL ∝ MSE, Section 1.2.2), and to cross-entropy minimization for classification.
-- EM algorithm derived as bound optimization (Section 8.7), connecting to GMM fitting (Section 8.7.3) and FA/PPCA (Section 20.2.3).
-- Transformer self-attention, multi-head attention, and positional encoding derived from first principles and compared empirically (qualitatively) to CNNs and RNNs in Section 15.5.5.</p>
-<p><strong>Figures &amp; tables:</strong> Figures are numerous and pedagogically motivated; captions name the generating notebook (e.g., <code>iris_plot.ipynb</code>), enabling reproduction. Axes are labeled in visible figures. No error bars or confidence intervals appear in illustrative figures — appropriate for a textbook but means readers cannot assess statistical precision of any claimed numerical results. No original empirical benchmark tables exist; the book cites external results rather than reporting its own.</p>
+- Iris dataset (N=150, D=4 features, C=3 classes, 50 examples per class) used as the primary running classification example; depth-2 decision tree on petal length/width shown to separate classes.
+- Polynomial regression demonstration: degree-2 fit visually adequate, degree-14 overfits, degree-20 achieves 0 training MSE on N=21 points; MSE-vs-degree curve shows train/test divergence (Figure 1.7d).
+- NLL ∝ MSE derivation for Gaussian regression: NLL(θ) = (1/2σ²)·MSE(θ) + const, establishing MLE ≡ least-squares under Gaussian noise assumption.
+- Softmax formulation p(y=c|x;θ) = softmax_c(f(x;θ)) given explicitly, connecting logits to probability distributions for multi-class classification.
+- Asymmetric loss matrix example (Virginica poisonous: misclassification cost 10 vs. 1) motivates empirical risk minimization beyond zero-one loss.</p>
+<p><strong>Figures &amp; tables:</strong> Chapter 1 figures include: pairwise scatter plot of Iris data color-coded by class (Fig. 1.3, axes labeled with feature names and units in cm); decision tree + 2D decision surface (Fig. 1.4, node counts shown); linear regression with residuals (Fig. 1.5, axes unlabeled for units); 2D temperature surface fits (Fig. 1.6, vertical axis is temperature, horizontal axes are room coordinates in unspecified units); polynomial-degree vs. MSE (Fig. 1.7d, train and test curves shown, no error bars or confidence intervals). No statistical significance reporting is present in Chapter 1; this is expected for illustrative textbook figures but means readers cannot assess sampling variability of the demonstrations. Figures link to named Jupyter notebooks (.ipynb) for reproduction.</p>
 <p><strong>Follow-up references:</strong>
-- Murphy 2023 <em>Probabilistic Machine Learning: Advanced Topics</em> [Mur23] — companion volume covering variational inference, diffusion models, RL, and causal ML.
-- Koller &amp; Friedman <em>Probabilistic Graphical Models</em> — deeper formal treatment of PGMs introduced briefly in Ch. 3.6.
-- Rasmussen &amp; Williams <em>Gaussian Processes for Machine Learning</em> — authoritative reference for GP material in Ch. 17.2.
-- Goodfellow, Bengio &amp; Courville <em>Deep Learning</em> — alternative deep-learning-centric treatment for comparison with Ch. 13–15.</p>
+- Murphy [Mur23] <em>Probabilistic Machine Learning: Advanced Topics</em> — the sequel covering variational inference, generative models, RL.
+- Krizhevsky, Sutskever, Hinton [KSH12] — the ImageNet result cited as the empirical starting point of the deep learning era.
+- Géron [Gér19] — cited as source for decision tree figure adaptation; practical complement to this book.
+- Koller &amp; Friedman <em>Probabilistic Graphical Models</em> — listed in the same MIT Press series; deeper treatment of PGMs covered lightly in Ch. 3.</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- Probabilistic framing adds value uniformly across problem types — not always true; for large-scale discriminative tasks, calibrated softmax outputs may be sufficient and Bayesian overhead unjustified.
-- Python + Colab access is a given for readers — excludes practitioners in compute-constrained environments.
-- Mathematical maturity (calculus, linear algebra) is assumed despite background chapters; the optimization chapter (Ch. 8) is dense enough that true beginners will struggle.
-- The "no free lunch theorem" (Section 1.2.4) is invoked to motivate probabilistic inductive biases but this implication is not formally established in the text.</p>
+- The probabilistic lens is claimed to be (nearly) universal; this marginalizes PAC-learning / computational learning theory perspectives that do not reduce neatly to probabilistic models—if a reader's domain relies on worst-case guarantees, this framing breaks.
+- No formal prerequisite list is stated in the provided text; the book implicitly assumes multivariable calculus, introductory linear algebra, and programming fluency. Readers lacking these will be lost before Chapter 7 (Linear Algebra) despite its inclusion.
+- Python library ecosystem (JAX, PyTorch, TensorFlow, PyMC) is assumed stable; rapid API churn in these libraries is a real reproducibility risk for the code-linked figures.
+- The "deep learning revolution started in 2012" framing (based on ImageNet [KSH12]) is a simplification that omits parallel advances in speech (cited as [Cir+10; Cir+11; Hin+12]) and may misattribute the tipping point.</p>
 <p><strong>Missing context or citations:</strong>
-- Causal inference (Pearl's do-calculus, structural causal models) is almost entirely absent — a significant gap given its overlap with probabilistic ML.
-- Reinforcement learning appears only in the one-page Section 1.4 introduction with no dedicated chapter, despite being a core ML paradigm.
-- PAC-learning / statistical learning theory gets only a brief subsection (5.4.4) with no proofs; readers seeking theoretical guarantees are not well served.
-- Diffusion models / score-based generative models — state-of-the-art by 2021 — are deferred entirely to the Advanced Topics volume without acknowledgment of their growing importance at the time of writing.
-- Comparison to Bishop's PRML (the most direct competitor) is not discussed explicitly.</p>
+- Causal inference receives only a dismissive note ("correlation does not imply causation," §3.1.4) with no substantive treatment, despite being closely related to the probabilistic framework; Pearl's do-calculus or Spirtes et al. (listed in the series) are not engaged with in the provided content.
+- Reinforcement learning is introduced in §1.4 but has no dedicated chapter in this volume (deferred to the advanced volume); readers expecting RL coverage based on the introduction will be disappointed.
+- Fairness, accountability, and societal impact of ML are mentioned only under "Caveats" (§1.6.3), which is not provided in the excerpt; given the book's 2022 publication date, this coverage appears minimal based on the TOC.
+- No chapter on causal generative models or structural causal models, despite the probabilistic graphical models chapter (§3.6).</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- No original experiments: all numerical illustrations use toy datasets or cite external results, so there is nothing to reproduce or falsify in a research sense.
-- Coverage of LLMs (Section 15.7) is thin given the field's trajectory; GPT-3 is mentioned but the treatment predates instruction tuning, RLHF, and chain-of-thought prompting — likely to mislead readers about the state of the art.
-- The book's treatment of Bayesian neural networks (Section 13.5.5) is brief and does not engage seriously with scalability concerns or the empirical evidence against common BNN approximations.
-- Graph embeddings chapter (Ch. 23) was contributed by external authors and has noticeably shallower integration with the probabilistic theme of the rest of the book.</p>
+- As a textbook, there are no novel experimental results to critique; illustrative figures use small toy datasets (N=21 for polynomial regression, N=150 for Iris) whose conclusions are pedagogically appropriate but cannot be generalized.
+- The MSE-vs-degree plot (Fig. 1.7d) shows no confidence intervals or multiple random seeds; it is a single illustrative run, which is standard for textbooks but could mislead readers about the reliability of the bias-variance tradeoff visualization.
+- Multi-author sections (optimization, graph embeddings, transformers) are acknowledged in the preface but no mechanism is described for ensuring notational or conceptual consistency across contributors; inconsistencies may exist but cannot be verified from the provided excerpt.
+- The online version (April 2025) post-dates the first printing (March 2022) by three years; the changelog is not included in the excerpt, so it is unknown which sections have been substantively revised versus merely corrected for typos.</p>
 <p><strong>Ideas for future work:</strong>
-- Integrate a dedicated chapter on causal ML (do-calculus, counterfactuals, identifiability) to close the largest conceptual gap.
-- Expand the RL chapter with the same depth as supervised/unsupervised sections, given the book's Bayesian decision-theoretic foundation naturally extends to MDPs.
-- Add a chapter on diffusion models and score matching, connecting to the variational autoencoder material already present in Ch. 20.
-- Provide systematic empirical comparisons (benchmark tables with confidence intervals) for competing methods within each chapter, moving beyond purely illustrative figures to help readers calibrate method selection.</p></div>
+- Add a dedicated chapter on causal inference (do-calculus, counterfactuals) to make the probabilistic framework applicable to intervention and not just prediction.
+- Include a formal prerequisites section and a self-assessment diagnostic so readers can gauge readiness before Chapter 1.
+- Given the April 2025 online update, a systematic comparison of the LLM coverage in §15.7 against post-GPT-4 developments (instruction tuning, RLHF, chain-of-thought) would update the most rapidly changing section of the book.
+- A companion chapter on ML fairness and uncertainty quantification for high-stakes decisions would address the gap hinted at in §1.6.3 ("Caveats") without requiring restructuring of the existing content.</p></div>
             
             
               <div class="academic-auto">
@@ -1745,6 +2006,98 @@
   
     <section class="year-block">
       <h2 class="year-heading">2020</h2>
+      
+        <article class="paper-entry" id="p-4d01e5abfb13">
+          <div class="paper-entry-head" data-toggle="p-4d01e5abfb13">
+            <div class="paper-thumb" data-hash="4d01e5abfb13"></div>
+            <div class="paper-entry-text">
+              <div class="paper-entry-title">Statistical Learning Approaches for the Control of Stormwater Systems</div>
+              <div class="paper-entry-meta">
+                Abhiram Mullapudi
+                <span class="venue">· <em>University of Michigan (doctoral dissertation)</em></span>
+                <span class="year">· 2020</span>
+              </div>
+              <p class="paper-entry-tldr">This dissertation develops and evaluates statistical learning methods — deep reinforcement learning (RL) and Bayesian optimization (BO) — for autonomous real-time control of distributed stormwater assets (valves, gates) to achieve watershed-scale flood and water quality objectives. It also delivers two open-source artifacts: a modular simulation toolchain coupling hydraulic and water quality models, and *pystorms*, a Python benchmark library for quantitatively comparing stormwater control algorithms.</p>
+              <div class="paper-entry-links">
+                
+                
+                <a href="./paper/4d01e5abfb13.html">[detail]</a>
+                
+                
+                <span class="entry-tag">stormwater-control</span><span class="entry-tag">reinforcement-learning</span><span class="entry-tag">bayesian-optimization</span><span class="entry-tag">smart-water-systems</span><span class="entry-tag">urban-hydrology</span>
+              </div>
+            </div>
+          </div>
+          <div class="paper-entry-body">
+            <div class="summary-md"><h1>Statistical Learning Approaches for the Control of Stormwater Systems</h1>
+<p><strong>Authors:</strong> Abhiram Mullapudi
+<strong>Year:</strong> 2020
+<strong>Tags:</strong> stormwater-control, reinforcement-learning, bayesian-optimization, real-time-control, urban-hydrology, smart-water-systems</p>
+<h2>TL;DR</h2>
+<p>This dissertation develops and evaluates statistical learning methods — deep reinforcement learning (RL) and Bayesian optimization (BO) — for autonomous real-time control of distributed stormwater assets (valves, gates) to achieve watershed-scale flood and water quality objectives. It also delivers two open-source artifacts: a modular simulation toolchain coupling hydraulic and water quality models, and <em>pystorms</em>, a Python benchmark library for quantitatively comparing stormwater control algorithms.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Dissertation comprising a position/framework chapter, one real-world field study, two simulation-based research prototypes, and one open-source software contribution.</p>
+<p><strong>Context.</strong> Urban stormwater real-time control subfield; builds on: Kerkez et al. (smart stormwater systems review and sensor-actuator deployment in Ann Arbor); EPA SWMM (hydraulic simulator underlying all computational experiments); deep Q-network (DQN) RL methodology from the ML literature; genetic algorithms as the incumbent search-based stormwater control baseline.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) SWMM simulation is a sufficiently faithful proxy for real watershed dynamics to train and evaluate control policies; (2) valve position can be held approximately constant through a storm event, motivating BO as a pre-storm planner; (3) sensor readings are noise-free and communications are reliable (both assumed throughout simulation chapters). All three are asserted rather than validated.</p>
+<p><strong>Contributions.</strong>
+- First formulation and simulation evaluation of a deep RL (DQN) controller for urban stormwater networks, including reward-function sensitivity and multi-basin scalability analysis.
+- First field demonstration of coordinated, multi-asset real-time flow shaping in a real watershed (Ann Arbor), achieving a flat set-point hydrograph over a 6 km stream reach.
+- Bayesian optimization framework for pre-storm valve setting that outperforms genetic algorithms at 30-iteration budgets (30 random seeds) and quantifies rainfall uncertainty via a multi-output latent heteroscedastic Gaussian process (MLH-GP).
+- <em>pystorms</em>: open-source Python library providing anonymized real-world stormwater scenarios, a SWMM interface, and a standardized performance metric for algorithm benchmarking.</p>
+<p><strong>Clarity.</strong> Generally well-organized for a multi-paper dissertation; Chapter 2 is more conceptual and review-heavy than the others, and the provided text is truncated before results appear — the abstract must substitute for the missing detail in several places.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Model-free statistical learning (RL for reactive control, BO for proactive pre-storm planning) can manage distributed stormwater assets to achieve system-scale flood and water quality benefits without requiring explicit linearized dynamics, outperforming or matching incumbent rule-based and genetic-algorithm approaches in simulation and, for flow shaping, in the field.</p>
+<p><strong>Supporting evidence:</strong>
+- Ch. 3 (field): 30-minute pulse releases from a single controlled basin, dispersed over a 6 km stream, produce a flat hydrograph at the watershed outlet; coordinated interleaved releases from two basins successfully superpose and offset flow peaks over an 18–44 hour window.
+- Ch. 4 (simulation): RL agent evaluated on a 25-year, 6-hour storm and a 10-year, 24-hour storm on an 11-basin urban network; batch-normalized DQN achieves consistently higher rewards and faster convergence than a generic DQN; in the multi-basin scenario the agent preferentially exploits the most upstream controllable asset (basin 4) to shift the peak hydrograph.
+- Ch. 4 (appendix): Equal-filling degree heuristic successfully maintains outflows below threshold for all tested storm events, providing a strong deterministic baseline that RL must compete with.
+- Ch. 5 (simulation): BO identifies lower-cost control decisions than a genetic algorithm across 30 iterations × 30 random seeds (Table 5.1 reports mean ± SD; lower values = better; exact numbers not legible in provided text); MLH-GP uncertainty bounds align more closely with empirically computed bounds than standard GP for the same 200 samples.
+- Ch. 6 (demonstration): Equal-filling degree controller holds outlet flow below 0.5 m³s⁻¹ in Scenario theta; outperforms rule-based control, which outperforms uncontrolled (Table 6.3 gives performance metric values; exact numbers not provided in the excerpt).</p>
+<p><strong>Figures &amp; tables:</strong>
+- <strong>Fig. 4.3</strong> (RL single-basin): six-panel layout comparing reward functions, training curves, controlled vs. uncontrolled flows and water levels; Y-axis scales differ across reward columns (noted in caption); no confidence intervals on training curves; results shown for the single highest-reward episode only — no cross-run statistics.
+- <strong>Fig. 4.7</strong> (storm spectrum performance map): normalized performance heat map for uncontrolled vs. RL-controlled across a range of storm magnitudes and durations; axes appear labeled; no uncertainty quantification.
+- <strong>Fig. 5.5</strong> (uncertainty quantification): GP vs. MLH-GP uncertainty bands compared to empirical values; 200 samples; shows BO's acquisition function concentrating evaluations around 0.23 — informative but no formal coverage statistics reported.
+- <strong>Table 5.1</strong>: only summary shown is the key BO-vs-GA comparison with mean ± SD; no formal hypothesis test for statistical significance stated.
+- <strong>Table 6.3</strong>: three-row performance metric table (equal-filling, rule-based, uncontrolled); no confidence intervals; single-run values.
+- General weakness: most figures lack error bars or cross-replicate confidence intervals; axis label legibility is not assessable from text alone.</p>
+<p><strong>Follow-up references:</strong>
+- Kerkez et al. [3] — foundational smart stormwater review and deployment context; essential background.
+- Emerson et al. [6] — demonstrates that locally optimal SCM placement can degrade watershed-scale outcomes; motivates the coordinated control problem.
+- Borsányi et al. [34] — identified need for quantitative benchmarking of stormwater control algorithms; conceptual predecessor to <em>pystorms</em>.
+- Langergraber et al. [30, 84] — finite-element water quality model for subsurface flow wetlands; relevant to extending RL/BO to water quality objectives.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- <strong>Sim-to-real fidelity</strong>: RL and BO controllers are trained and evaluated entirely in SWMM simulation (Ch. 4–5); the gap between simulated and real hydraulic behavior is never quantified; if violated, trained policies may fail or require significant re-training on the physical system.
+- <strong>Near-constant optimal valve position</strong>: the motivation for pre-storm BO relies on the claim (attributed to prior RL work [32]) that reactive controllers tend to hold near-constant valve settings throughout a storm; this is illustrated anecdotally but not proved theoretically — storm variability could invalidate the pre-storm planning assumption.
+- <strong>Perfect sensing and communication</strong>: all simulation experiments assume noise-free, synchronous sensor readings; real deployments (Ch. 3) involve polling-based asynchronous communication with unquantified latency and dropout.
+- <strong>Stationarity of rainfall statistics</strong>: RL training uses fixed design storms (25-year 6-hour, 10-year 24-hour); climate non-stationarity would shift the distribution and may degrade policy performance without retraining.</p>
+<p><strong>Missing context or citations:</strong>
+- Model predictive control (MPC) is cited as state-of-the-art (Ch. 4 intro) but is never directly compared to RL or BO in a controlled experiment; the dissertation cannot claim superiority over MPC without this comparison.
+- Multi-agent RL (MARL) is not discussed despite coordinated multi-asset control being a central goal; relevant MARL literature for networked infrastructure is absent.
+- Water quality objectives are addressed only in Ch. 2 (simulation) and Ch. 3 (conceptually); the RL and BO chapters focus exclusively on hydraulic (flow/level) objectives, leaving the water quality control gap largely open.
+- The equal-filling degree algorithm — a competitive heuristic from the literature — appears only in Appendix B as a post-hoc comparison with RL; it is not introduced as a formal baseline in the main Ch. 4 results.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- <strong>Cherry-picking in Ch. 4</strong>: single-basin RL results are presented for "the episode that resulted in the highest reward" (Fig. 4.3 caption) rather than mean performance across training runs or held-out evaluations; this overstates policy reliability.
+- <strong>BO vs. GA budget fairness</strong>: comparison uses only 30 function evaluations; GA convergence typically requires many more; the comparison may structurally favor BO without establishing whether GA would eventually match BO given a larger budget.
+- <strong>No formal statistical tests</strong>: Table 5.1 reports mean ± SD but no p-values or confidence intervals on the BO-vs-GA comparison; statistical significance is not established.
+- <strong>Generalization of RL</strong>: training on specific design storms and testing on nearby storm magnitudes (Fig. 4.7) is not a true out-of-distribution test; performance on prolonged low-intensity events or back-to-back events (addressed briefly in Appendix B but described as the controller treating two events as one) reveals a fundamental limitation of the state-space design.
+- <strong>pystorms reproducibility</strong>: scenarios are derived from "anonymized" real-world networks — the anonymization prevents independent verification that scenarios are representative of actual system dynamics.
+- <strong>No safety or stability guarantees</strong>: the RL controller has no formal constraint mechanism; it could produce valve actions that cause flooding or structural stress, yet no safety layer or constraint formulation is presented.</p>
+<p><strong>Ideas for future work:</strong>
+- Deploy trained RL or BO controllers on the Ann Arbor sensor-actuator network (Ch. 3) and measure sim-to-real performance degradation, quantifying the fidelity gap and informing necessary re-training or domain randomization.
+- Formulate a constrained multi-agent RL problem where each controlled basin has a local agent sharing a global reward, enabling decentralized execution and reducing the combinatorial action space as networks scale beyond 3–4 basins.
+- Extend the RL/BO reward and objective functions to include water quality metrics (e.g., nitrate load reduction from Ch. 2), testing whether joint hydraulic-quality optimization degrades performance on either objective individually.
+- Investigate transfer learning or meta-RL across <em>pystorms</em> scenarios to determine whether a policy trained on one network topology generalizes to others without full retraining — a prerequisite for practical deployment at scale.</p></div>
+            
+            
+              <div class="academic-auto">
+                <h4>Methods</h4><ul><li>Deep Q-Learning</li><li>Bayesian Optimization</li><li>Gaussian Processes</li><li>model-predictive control</li><li>equal-filling degree algorithm</li><li>coupled hydraulic-water-quality modeling</li><li>sensor-actuator networks</li><li>genetic algorithms</li></ul>
+                <h4>Datasets</h4><ul><li>Ann Arbor wireless sensor-actuator network watershed</li><li>simulated urban stormwater network with 11 basins</li><li>combined sewer network with inflatable storage dams</li></ul>
+                <h4>Claims</h4><ul><li>Real-time coordinated control of distributed stormwater assets can achieve system-scale watershed outcomes that localized best management practices cannot guarantee.</li><li>Deep reinforcement learning can serve as a model-free algorithm for controlling stormwater networks without requiring explicit dynamical assumptions or surrogate models.</li><li>Bayesian Optimization identifies optimal pre-storm control actions more efficiently than genetic algorithms and can quantify rainfall uncertainty impacts on control decisions.</li><li>A wireless sensor-actuator network can precisely shape hydrographs at the outlet of an urban watershed through coordinated multi-site control.</li><li>The open-source pystorms library enables systematic quantitative evaluation and comparison of stormwater control algorithms across standardized scenarios.</li></ul>
+              </div>
+            
+          </div>
+        </article>
       
         <article class="paper-entry" id="p-9157a08a54f5">
           <div class="paper-entry-head" data-toggle="p-9157a08a54f5">
@@ -2571,6 +2924,99 @@
     </section>
   
     <section class="year-block">
+      <h2 class="year-heading">1975</h2>
+      
+        <article class="paper-entry" id="p-e58a26057ba4">
+          <div class="paper-entry-head" data-toggle="p-e58a26057ba4">
+            <div class="paper-thumb" data-hash="e58a26057ba4"></div>
+            <div class="paper-entry-text">
+              <div class="paper-entry-title">Automatic Control of Large-Scale Combined Sewer Systems</div>
+              <div class="paper-entry-meta">
+                John W. Labadie, Neil S. Grigg, Bruce H. Bradford
+                <span class="venue">· <em>Journal of the Environmental Engineering Division, ASCE</em></span>
+                <span class="year">· 1975</span>
+              </div>
+              <p class="paper-entry-tldr">The paper proposes hierarchical decomposition and aggregation strategies to make real-time optimal control of large combined sewer systems computationally tractable, reducing an LP with 108M variables and 78M constraints to ~10 subproblems each requiring ~1/30th the memory. The framework is illustrated on the proposed San Francisco Master Plan with 58 detention reservoirs, with the goal of minimizing weighted combined sewer overflows to receiving waters.</p>
+              <div class="paper-entry-links">
+                
+                
+                <a href="./paper/e58a26057ba4.html">[detail]</a>
+                
+                
+                <span class="entry-tag">combined-sewer-overflow</span><span class="entry-tag">optimal-control</span><span class="entry-tag">hierarchical-control</span><span class="entry-tag">urban-stormwater</span><span class="entry-tag">wastewater-management</span>
+              </div>
+            </div>
+          </div>
+          <div class="paper-entry-body">
+            <div class="summary-md"><h1>Automatic Control of Large-Scale Combined Sewer Systems</h1>
+<p><strong>Authors:</strong> John W. Labadie, Neil S. Grigg, Bruce H. Bradford
+<strong>Year:</strong> 1975
+<strong>Tags:</strong> combined-sewer-overflow, real-time-control, hierarchical-optimization, urban-stormwater, linear-programming, wastewater-management</p>
+<h2>TL;DR</h2>
+<p>The paper proposes hierarchical decomposition and aggregation strategies to make real-time optimal control of large combined sewer systems computationally tractable, reducing an LP with 108M variables and 78M constraints to ~10 subproblems each requiring ~1/30th the memory. The framework is illustrated on the proposed San Francisco Master Plan with 58 detention reservoirs, with the goal of minimizing weighted combined sewer overflows to receiving waters.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / position paper — a framework description with illustrative application; no controlled experiment and no measured overflow reduction reported.</p>
+<p><strong>Context.</strong> Urban drainage engineering and large-scale systems control. Builds on: McPherson's MWIS concept (Metropolitan Water Intelligence System, 1971); Lasdon's optimization theory for large systems (1970); Mesarovic, Macko &amp; Takahara's hierarchical multilevel systems theory (1970); Wismer's large-scale optimization methods (1971); and the authors' own Colorado State MWIS project Phase II–III reports (1973–1974).</p>
+<p><strong>Correctness.</strong> Central assumptions: sewer transport can be approximated as linear (enabling LP); subbasins receive spatially lumped rainfall; interceptor routing lag and attenuation are negligible for illustration; subbasins are otherwise independent except through the treatment plant capacity constraint. The linearity assumption is acknowledged as site-specific: San Francisco's steep gradients support it, but the authors warn it may fail elsewhere.</p>
+<p><strong>Contributions.</strong>
+- Formal stochastic optimal control problem statement (minimize expected weighted overflows over N bypass points and M time steps) with explicit weighting for spatial/temporal pollution intensity.
+- Two complementary hierarchical strategies — Lagrangian decomposition (iterative master/subproblem) and progressive aggregation (top-down disaggregation of storage) — applied to a real city-scale system.
+- Reduction of a 108M-variable, 78M-constraint LP to ~10 subproblems, each ~1/30th original memory, demonstrated on a 58-reservoir, M = 9 instance (64,000 octal words, ~90-sec execution).
+- Explicit framework for incorporating future water quality models via bypass-point weighting factors.</p>
+<p><strong>Clarity.</strong> Readable and well-structured for a 1975 systems paper; figures are schematic rather than quantitative, and the illustrative restriction to 4 subbasins and M = 9 limits the reader's ability to assess scalability independently.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> A monolithic LP for real-time combined sewer overflow control is computationally infeasible at city scale; decomposing it into a hierarchy of coupled subbasin problems (via either Lagrangian relaxation or storage aggregation) makes it tractable while preserving near-optimal system coordination.</p>
+<p><strong>Supporting evidence:</strong>
+- Full San Francisco system LP: 108M variables, 78M constraints — stated infeasible for real-time use.
+- Aggregation highest-level LP for 4 subbasins: 22M variables, 13M constraints (after slack augmentation).
+- Aggregation applied to 58 reservoirs, M = 9: memory 64,000 (octal) words, execution ~90 sec — no baseline comparison execution time given.
+- Northampton, England study: cumulative BOD from combined sewer overflows ≈ BOD from the local secondary treatment plant.
+- EPA-calculated estimate: a 2-hr average storm over a metropolitan area generates BOD 1.5× raw dry weather sewage and 8× secondary effluent BOD in the same period.</p>
+<p><strong>Figures &amp; tables:</strong> Seven conceptual figures (system schematic, San Francisco plan map, control problem block diagram, subbasin map, interaction schematic, two hierarchical control flowcharts). No quantitative axes, no error bars, no confidence intervals, no tables. Figures are illustrative only; none conveys performance data. No statistical significance reported anywhere in the paper.</p>
+<p><strong>Follow-up references:</strong>
+- Grigg et al. Phase III CSU report (1974, Ref. 9) — detailed subbasin optimization methods and stochastic formulations referenced throughout but not reproduced here.
+- Lasdon (1970, Ref. 13) — foundational text on large-system optimization underlying the decomposition approach.
+- Mesarovic, Macko &amp; Takahara (1970, Ref. 15) — theoretical basis for hierarchical multilevel control.
+- Haimes (1973, Ref. 10) — hierarchical decomposition applied to water resource systems specifically.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Interceptor routing lag and attenuation are zero — explicitly flagged as illustrative but never relaxed in any presented result; violation would break the independence of subbasin subproblems.
+- LP linearity of sewer transport is load-bearing for the aggregation approach; non-linear flow in flat-gradient cities would require nonlinear programming with unknown convergence properties.
+- Storm prediction is feasible in real time — acknowledged as an open problem, but the entire on-line optimization path depends on it.
+- Subbasin boundaries are stable across storms — no sensitivity analysis on boundary placement is provided.
+- Treatment plant capacity is the sole coupling constraint between subbasins; interceptor capacity constraints are noted as "less of a factor" for San Francisco but may dominate other systems.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with simple rule-based or threshold control strategies as baselines; the paper asserts optimality advantages without comparing to any heuristic.
+- Water quality routing models (component 3) are entirely excluded from all results, though they motivate the weighting framework.
+- Short-term storm prediction literature is acknowledged as absent but no path forward is cited.
+- No citation of hydraulic transient or surcharge modeling literature, relevant when pipes are near capacity.
+- Cities with flat topography (non-San Francisco conditions) are mentioned but no example or citation is provided.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- No overflow reduction result is reported — the paper presents a framework and a memory/time count for one instance, not a performance outcome. The claim that the approach "minimizes pollution-causing overflows" is unvalidated.
+- The 90-sec execution time for M = 9 intervals is reported without stating the required real-time control cycle length; feasibility for on-line use cannot be assessed.
+- Convergence of the decomposition (Lagrangian relaxation) approach is explicitly stated as not guaranteed a priori; no conditions under which it fails are identified.
+- Aggregation feasibility across levels is described as requiring "some degree of arbitrariness," but no bound on suboptimality introduced by this arbitrariness is given.
+- Memory reported in octal words (64,000₈) is hardware-specific and non-portable; no FLOP-equivalent or algorithmic complexity analysis is offered.
+- M = 9 time intervals is very coarse for real storm dynamics; sensitivity of solution quality to M is not discussed.</p>
+<p><strong>Ideas for future work:</strong>
+- Validate overflow reduction against historical San Francisco storm records or simulation, comparing hierarchical LP to both a centralized LP (on a small instance) and a simple rule-based policy.
+- Derive an explicit suboptimality bound for the aggregation approach as a function of aggregation error in storage and transport linearity.
+- Incorporate short-term probabilistic rainfall forecasts into the stochastic formulation and quantify how forecast skill degrades control performance.
+- Test the decomposition framework on a flat-gradient city (e.g., Minneapolis–St. Paul, already instrumented) where transport nonlinearity is more pronounced to assess transferability.</p></div>
+            
+            
+              <div class="academic-auto">
+                <h4>Methods</h4><ul><li>linear programming</li><li>hierarchical decomposition</li><li>aggregation</li><li>stochastic optimal control</li><li>rainfall-runoff modeling</li><li>flow routing</li><li>mass-balance equations</li></ul>
+                <h4>Datasets</h4><ul><li>San Francisco Master Plan for Wastewater Management (58 detention reservoirs)</li></ul>
+                <h4>Claims</h4><ul><li>Hierarchical decomposition of the large-scale combined sewer control problem into subbasin-level optimizations reduces computational infeasibility for real-time control.</li><li>An aggregation approach, representing groups of reservoirs as single aggregated storage units at higher levels, provides a tractable multilevel control structure.</li><li>The original linear programming formulation with 108M variables and 78M constraints can be replaced by approximately 10 smaller problems each requiring about one-thirtieth of the original computer memory.</li><li>Weighting factors on overflows by location and storm timing can incorporate water quality considerations into the minimization objective.</li><li>Hierarchical control strategies are compatible with distributed minicomputer hardware architectures, offering advantages in reliability and software development.</li></ul>
+              </div>
+            
+          </div>
+        </article>
+      
+    </section>
+  
+    <section class="year-block">
       <h2 class="year-heading">Undated</h2>
       
         <article class="paper-entry" id="p-9f504df1da58">
@@ -2759,9 +3205,7 @@
                 <span class="venue">· <em>Environmental Science &amp; Technology</em></span>
                 
               </div>
-              <p class="paper-entry-tldr">A narrative review of data-driven approaches across the urban water management (UWM) lifecycle — rainfall sensing, flood modelling, network operation, water productivity, wastewater-based epidemiology, and on-site treatment. It argues that increased data availability is a necessary (though not sufficient) precondition for shifting UWM from passive conveyance infrastructure toward adaptive, smarter services, and identifies three UWM-specific barriers: data ownership, engineering culture change, and difficulty quantifying cost-benefit trade-offs.
-
----</p>
+              <p class="paper-entry-tldr">A narrative review of seven data-driven approaches in urban water management (UWM)—rainfall sensing, pluvial flood risk, network operation, water productivity, integrated design, wastewater-based epidemiology, and on-site treatment—arguing that increased data availability is a necessary (though not sufficient) precondition for UWM transformation. Three UWM-specific barriers are identified: data ownership/privacy, engineering culture change, and inability to quantify cost-benefit trade-offs.</p>
               <div class="paper-entry-links">
                 
                 
@@ -2773,67 +3217,59 @@
             </div>
           </div>
           <div class="paper-entry-body">
-            <div class="summary-md"><h1>The Potential of Knowing More – A Review of Data-Driven Urban Water Management</h1>
+            <div class="summary-md"><h1>The potential of knowing more – a review of data-driven urban water management</h1>
 <p><strong>Authors:</strong> Sven Eggimann, Lena Mutzner, Omar Wani, Mariane Yvonne Schneider, Dorothee Spuhler, Matthew Moy de Vitry, Philipp Beutler, Max Maurer
-<strong>Year:</strong> 2017
-<strong>Tags:</strong> urban-water-management, data-driven, smart-infrastructure, wastewater-epidemiology, real-time-control, review</p>
-<hr />
+<strong>Year:</strong> Not stated.
+<strong>Tags:</strong> urban-water-management, data-driven-sensing, smart-metering, flood-risk-forecasting, wastewater-epidemiology, on-site-treatment</p>
 <h2>TL;DR</h2>
-<p>A narrative review of data-driven approaches across the urban water management (UWM) lifecycle — rainfall sensing, flood modelling, network operation, water productivity, wastewater-based epidemiology, and on-site treatment. It argues that increased data availability is a necessary (though not sufficient) precondition for shifting UWM from passive conveyance infrastructure toward adaptive, smarter services, and identifies three UWM-specific barriers: data ownership, engineering culture change, and difficulty quantifying cost-benefit trade-offs.</p>
-<hr />
+<p>A narrative review of seven data-driven approaches in urban water management (UWM)—rainfall sensing, pluvial flood risk, network operation, water productivity, integrated design, wastewater-based epidemiology, and on-site treatment—arguing that increased data availability is a necessary (though not sufficient) precondition for UWM transformation. Three UWM-specific barriers are identified: data ownership/privacy, engineering culture change, and inability to quantify cost-benefit trade-offs.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Narrative review / position paper.</p>
-<p><strong>Context.</strong> Urban water management and smart infrastructure subfields. Builds on Bach et al. (integrated UWM modelling taxonomy, basis for Figure 2), Panasiuk et al. (review of human-waste monitoring methods in sewers), broader "internet of things" and smart-city literature (Kerkez et al. and others on RTC of stormwater), and wastewater-based epidemiology literature (multiple groups on illicit drug monitoring).</p>
-<p><strong>Correctness.</strong> Central load-bearing assumption: data scarcity and sensing limitations are a primary bottleneck for UWM improvement. This is plausible for technical optimization tasks but questionable for system-level change, where the paper itself acknowledges institutional barriers dominate. A secondary assumption — that field performance will follow laboratory or simulation demonstrations — is largely unvalidated in the cited literature.</p>
+<p><strong>Category.</strong> Survey/narrative review of research prototypes and emerging field applications; no original data collected.</p>
+<p><strong>Context.</strong> Urban water/environmental engineering. Builds on: Bach et al. (integrated UWM modelling taxonomy); Panasiuk et al. (comprehensive review of human waste monitoring methods); Quigley and Braun (dynamically controlled retention structures demonstration projects); and a broad real-time control (RTC) and model predictive control (MPC) literature in drainage engineering.</p>
+<p><strong>Correctness.</strong> The central load-bearing assumption—that data availability is the primary enabling precondition for UWM transformation—is stated explicitly but not empirically tested. A second implicit assumption is that technology barriers dominate over institutional and political ones; the paper acknowledges institutional barriers but then underweights them analytically. Both assumptions are contestable.</p>
 <p><strong>Contributions.</strong>
-- Synthesizes data-driven opportunities across the full UWM lifecycle into a single framework (seven sub-domains), including the under-reviewed domain of decentralised/on-site systems.
-- Distinguishes three UWM-specific challenges (data ownership/privacy, engineering practice inertia, cost-benefit opacity) from generic "big data" challenges.
-- Proposes a schematic relating data availability to UWM utility as a conceptual tool for practitioners.
-- Extends the data-driven argument explicitly to low-income and decentralised contexts (hand-pump sensors, biosensors for settings without laboratories).</p>
-<p><strong>Clarity.</strong> Well-organised by sub-domain with consistent structure; breadth forces each section to be shallow, and transitions between sub-domains lack integrating synthesis until the discussion section.</p>
-<hr />
+- Synthesises data-driven opportunities across seven UWM sub-domains under a single conceptual frame, linking sensing revolutions to service-model change.
+- Identifies three UWM-specific challenges (data ownership, practice change, cost-benefit quantification) distinct from generic "smart system" barriers.
+- Argues on-site/decentralised treatment can escape niche status via improved sensing and automation, reframing it as a data-enabled complement to centralised infrastructure.
+- Provides a non-exhaustive but structured catalogue (Table 1) of wastewater-borne indicator substances for epidemiology, spanning epidemic, health/lifestyle, and drug categories.</p>
+<p><strong>Clarity.</strong> Well-organised and readable; breadth is achieved at the cost of depth in individual sections, and the consistently optimistic framing makes critical assessment of individual claims difficult.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> Data and sensing advances external to the water sector (cheaper sensors, IoT transmission, cloud computing) create an opportunity to transform UWM from passive, capacity-based infrastructure toward actively managed, data-optimised systems — but realising that potential requires resolving privacy, institutional, and cost-justification challenges specific to water utilities.</p>
+<p><strong>Main thrust:</strong> Advances in sensors, IoT transmission, and analytics can both optimise existing centralised UWM infrastructure and enable fundamentally different decentralised service models, but realising this potential requires overcoming privacy, cultural, and economic barriers specific to the water sector.</p>
 <p><strong>Supporting evidence:</strong>
-- Model results suggest dynamically controlled cisterns using MPC could reduce combined sewer releases by up to 92% compared to static systems.
-- Case studies report residential water use reductions of ≥10% and monthly peak demand reductions of 10% from smart metering; corresponding infrastructure downsizing could yield capital cost savings estimated at 11–51%.
-- Hydrological flood modelling requires terrain raster resolution of ~2.5 m for realistic surface flow between buildings; higher-resolution data improve flow-path delineation but are computationally prohibitive at catchment scale.
-- Currently only 1.7% of urban water use is reused globally; real-time monitoring is identified as a prerequisite for safe scale-up.
-- Spatially explicit Australian modelling found that 10% park area allocation could produce 62% nitrogen reduction from stormwater; experimental studies show vegetated roofs reduce rainwater runoff volume by 52–95%; integrated models show urban cooling of up to 2°C when green roofs are combined with street-level vegetation.
-- Small-scale WWTPs in Germany are monitored only 2–3 times annually, illustrating the monitoring gap for on-site systems.</p>
-<p><strong>Figures &amp; tables:</strong>
-- <em>Figure 1</em> (scope of UWM variables): qualitative schematic; no axes, no quantification — illustrative only.
-- <em>Figure 2</em> (integrated model data hierarchy, adapted from Bach et al.): shows layered data demand from basic to advanced decision-support; no axes or quantitative content; no error bars; useful conceptually but not analytically.
-- <em>Table 1</em> (wastewater epidemiology indicators): non-exhaustive catalogue of substance categories with example compounds and references; no quantitative detection limits or field performance data — functions as a literature map, not a comparative analysis.
-- No figures carry statistical evidence; no error bars or confidence intervals appear anywhere in the reviewed text.</p>
+- Smart metering: case studies report potential residential water use reductions ≥10% and monthly peak demand reductions of 10%; capital cost savings from downsized supply infrastructure estimated at 11%–51% (single cited study, ref 98).
+- Dynamically controlled cisterns via MPC: model results suggest up to 92% reduction of combined sewer releases theoretically achievable (ref 87; single modelling study).
+- Green infrastructure (Australian spatially explicit model): 10% park area allocation associated with 62% nitrogen reduction from stormwater runoff; vegetated roofs reported to reduce rainwater volume by 52%–95% in experimental studies.
+- Integrated models: green roof + street-level vegetation estimated to cool urban temperatures up to 2°C.
+- On-site WWTPs in Germany: monitored only 2–3 times annually, offered as evidence of monitoring deficit.
+- Urban flood modelling: ~2.5 m raster cell size identified as required resolution for realistic surface flow delineation between buildings.</p>
+<p><strong>Figures &amp; tables:</strong> Figure 1 (scope of UWM variables affected by sensing revolution) and Figure 2 (integrated model data-demand layers, adapted from Bach et al.) are referenced but not reproduced in the extracted text; no axes, error bars, or confidence intervals are assessable. Table 1 (wastewater indicator substances) is the most concrete artefact: clearly categorised with reference anchors, but explicitly labelled non-exhaustive and carries no quantitative detection limits or method performance data. No statistical significance is reported anywhere (expected for a narrative review, but limits claim strength).</p>
 <p><strong>Follow-up references:</strong>
-- Bach et al. (integrated UWM modelling framework) — foundational taxonomy underpinning Figure 2 and the integrated design section.
-- Panasiuk et al. (comprehensive review of human-waste monitoring methods) — most rigorous methodological review cited for wastewater epidemiology and contamination detection.
-- Quigley &amp; Braun [cited as ref 87] — demonstration projects on forecast-controlled retention structures; directly supports the MPC/cistern 92% figure.
-- Kerkez et al. [cited as ref 23 in smart stormwater context] — empirical RTC field work underlying Section 3.3 claims.</p>
-<hr />
+- Bach et al. (ref 62) — foundational integrated UWM modelling taxonomy; essential for the design section.
+- Panasiuk et al. (ref 118) — comprehensive review of human waste monitoring methods; most directly relevant prior synthesis.
+- Quigley and Braun (ref 87) — demonstration projects for forecast-controlled retention structures; primary empirical anchor for MPC claims.
+- Relevant smart metering references (refs 94–98) — basis for the 10% demand reduction and 11%–51% cost-saving figures; worth reading to assess generalisability.</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- Data scarcity is the <em>primary</em> bottleneck; if institutional, financial, or political constraints dominate (which the paper's own Section 4.1 suggests), data investment yields much smaller returns than claimed.
-- Laboratory or simulation performance of sensing technologies (biosensors, MPC algorithms, molecular pathogen detection) will translate to field conditions — the paper repeatedly notes this is unproven.
-- The energy-sector smart-grid analogy is informative; UWM is structurally different (monopoly provision, public health obligations, longer asset lives), making the analogy weaker than implied.
-- Aggregated wastewater signals are sufficient for epidemiological inference without resolving spatial attribution uncertainty — open methodological question acknowledged but not resolved.</p>
+- Data scarcity is the binding constraint on UWM improvement; if institutional, financial, or political constraints dominate instead, the review's prescriptions do not follow.
+- Findings from industrialised-country pilot studies transfer to low-income and rapidly urbanising contexts; the paper flags this briefly (smart metering in developing countries) but does not engage it systematically.
+- The seven selected domains are representative of "decisive trends"; no justification for exclusions is given, making coverage completeness unverifiable.
+- Data-driven approaches produce net benefits; cost-benefit evidence is conspicuously absent, and the authors themselves admit this is unresolved.</p>
 <p><strong>Missing context or citations:</strong>
-- No systematic literature search protocol is described (no PRISMA, no search terms, no inclusion/exclusion criteria); the review is explicitly selective ("additional examples could potentially be identified"), undermining reproducibility of coverage claims.
-- Equity and environmental-justice dimensions of data-driven UWM (who benefits from smart metering pricing schemes; differential impacts on low-income users of "drought pricing") are absent despite being relevant to the cost-benefit discussion.
-- Cybersecurity risk is flagged in one paragraph but not analysed; the growing literature on SCADA vulnerabilities in water infrastructure is not engaged.
-- Comparative performance data between data-driven and conventional approaches (e.g., RTC vs. static retention tanks in matched systems) are not synthesised; the review describes promises, not head-to-head evidence.</p>
+- No systematic search protocol is described; inclusion/exclusion criteria are absent, making the review susceptible to confirmation and availability bias.
+- Cross-sector comparison with smart electricity grids or transport is explicitly scoped out, despite being acknowledged as potentially valuable—this forfeits the most direct benchmark for feasibility and pitfalls.
+- Cybersecurity and adversarial risk literature for critical infrastructure is barely engaged beyond a passing mention.
+- Economic modelling of data-driven UWM transitions (whole-life costs, stranded asset risk) is not reviewed despite being identified as a key challenge.</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- The 92% CSO reduction figure originates from a single modelling study, not a field trial; presented without uncertainty bounds and without noting that it is a theoretical maximum under idealised control.
-- The 11–51% capital cost savings range is extremely wide and aggregated from heterogeneous contexts; no meta-analysis or weighting is applied, making the figure of limited practical use.
-- Most quantitative claims derive from single studies in specific geographies (Czech Republic, Netherlands, Switzerland, Australia); generalisability to other urban morphologies, climates, or regulatory contexts is asserted but undemonstrated.
-- Smart metering demand-reduction evidence is acknowledged to lack long-term behavioural data — the 10% figures are short-term case study results.
-- The paper conflates research prototypes, pilot demonstrations, and deployed systems without a consistent technology-readiness framing, making it hard to assess what is actionable now versus aspirational.</p>
+- Quantitative claims (92% CSO reduction; 11–51% capital savings) derive from single modelling or case studies with unstated scope and assumptions; no attempt is made to bound their generalisability or report uncertainty ranges.
+- The consistently positive "potential" framing renders almost no claim falsifiable; negative results or failed pilots are absent from the evidence base.
+- No meta-analytic or systematic synthesis is attempted even where sufficient primary literature exists (e.g., smart metering demand response), so effect-size estimates remain anecdotal.
+- Long-term behavioural effects of smart metering are explicitly flagged by the authors as unknown, yet the section's conclusion remains optimistic without qualification.
+- Wastewater epidemiology section conflates field-applicable methods (chemical markers) with still-developmental ones (microbial markers) without a clear readiness-level taxonomy.</p>
 <p><strong>Ideas for future work:</strong>
-- Systematic meta-analysis of smart metering demand reduction studies stratified by context (climate, tariff structure, housing type, income level) to replace the single-study point estimates used here.
-- Controlled field trials comparing MPC-equipped drainage infrastructure against matched static retention systems across multiple cities to validate the modelled 92% CSO reduction claim.
-- Development and empirical testing of a cost-benefit framework that explicitly monetises the option value and flexibility of data-driven infrastructure, addressing the acknowledged gap in Section 4.1(iii).
-- Longitudinal institutional studies of water utilities that have adopted RTC or smart metering to identify which organisational and regulatory factors actually enable or block the engineering practice change discussed in Section 4.1(ii).</p></div>
+- Systematic meta-analysis of realized (not modelled) cost and performance outcomes from deployed data-driven UWM systems to replace the current "potential" narrative with effect-size estimates and confidence intervals.
+- Development and application of a standardised cost-benefit or multi-criteria assessment framework comparing data-driven vs. conventional infrastructure investment paths across different urban contexts.
+- Longitudinal field studies on smart metering to resolve the acknowledged gap in long-term consumption behaviour change evidence.
+- Structured readiness-level assessment (analogous to TRL scales) for each wastewater-epidemiology indicator category, separating lab-proven from field-deployable methods to guide practitioner adoption priorities.</p></div>
             
             
               <div class="academic-auto">
@@ -2855,7 +3291,7 @@
                 <span class="venue">· <em>U.S. Geological Survey / USGS National Water-Quality Assessment (NAWQA) Program</em></span>
                 
               </div>
-              <p class="paper-entry-tldr">Presents Optimal Hydrograph Separation (OHS), which couples the Eckhardt (2005) Recursive Digital Filter with a Chemical Mass Balance using specific conductance (SC) to objectively optimize the filter parameters α (recession constant) and β (BFImax) without relying on a priori geological classification. Tested at 47 USGS stream sites, the method produces acceptable fits (Nash-Sutcliffe &gt; 0.3, β not at bounds) at 34 sites.</p>
+              <p class="paper-entry-tldr">Presents Optimal Hydrograph Separation (OHS), a method that objectively estimates base-flow parameters by coupling Eckhardt&#39;s (2005) Recursive Digital Filter with a specific-conductance chemical mass balance. Applied to 47 USGS NAWQA sites, it addresses the long-standing problem of user-prescribed, non-reproducible parameters (especially BFImax) in digital filter methods.</p>
               <div class="paper-entry-links">
                 
                 
@@ -2868,57 +3304,61 @@
           </div>
           <div class="paper-entry-body">
             <div class="summary-md"><h1>Base Flow Discharge to Streams and Rivers: Terminology, Concepts, and Base-flow Estimation using Optimal Hydrograph Separation</h1>
-<p><strong>Authors:</strong> Unknown (USGS, in cooperation with NAWQA Program; file hint suggests Raffensperger)
-<strong>Year:</strong> Not stated. (Latest cited work is Rimmer &amp; Hartmann, 2014.)
-<strong>Tags:</strong> baseflow-estimation, hydrograph-separation, recursive-digital-filter, specific-conductance, groundwater-discharge, streamflow</p>
+<p><strong>Authors:</strong> Not stated.
+<strong>Year:</strong> Not stated. (Most recent cited work: Rimmer and Hartmann, 2014.)
+<strong>Tags:</strong> base-flow-estimation, hydrograph-separation, recursive-digital-filter, chemical-mass-balance, groundwater-discharge, streamflow-analysis</p>
 <h2>TL;DR</h2>
-<p>Presents Optimal Hydrograph Separation (OHS), which couples the Eckhardt (2005) Recursive Digital Filter with a Chemical Mass Balance using specific conductance (SC) to objectively optimize the filter parameters α (recession constant) and β (BFImax) without relying on a priori geological classification. Tested at 47 USGS stream sites, the method produces acceptable fits (Nash-Sutcliffe &gt; 0.3, β not at bounds) at 34 sites.</p>
+<p>Presents Optimal Hydrograph Separation (OHS), a method that objectively estimates base-flow parameters by coupling Eckhardt's (2005) Recursive Digital Filter with a specific-conductance chemical mass balance. Applied to 47 USGS NAWQA sites, it addresses the long-standing problem of user-prescribed, non-reproducible parameters (especially BFImax) in digital filter methods.</p>
 <h2>First pass — the five C's</h2>
-<p><strong>Category.</strong> Research prototype / technical report (slide-deck format, USGS internal/program presentation).</p>
-<p><strong>Context.</strong> Hydrograph separation subfield. Builds directly on: Eckhardt (2005) recursive digital filter with fixed geological BFImax values; Rimmer &amp; Hartmann (2014) RMSE-based OHS concept; BFI turning-point method (Wahl &amp; Wahl 1995); PART (Rutledge 1998); HySEP (Sloto &amp; Crouse 1996).</p>
-<p><strong>Correctness.</strong> Load-bearing assumptions: (1) SC is a valid two-component tracer cleanly separating base flow from surface runoff; (2) the groundwater system behaves as a linear reservoir (exponential recession, justifying α); (3) base-flow SC can be adequately modeled as either a peak-interpolated time series or a sin-cos function. None of these are tested for validity across the 47 sites; they are asserted.</p>
+<p><strong>Category.</strong> Research prototype / methodological development report (USGS, in cooperation with NAWQA).</p>
+<p><strong>Context.</strong> Hydrograph separation subfield; builds directly on Eckhardt (2005) recursive digital filter (RDF) formulation, Rimmer and Hartmann (2014) optimal separation framework, BFI method (Wahl and Wahl 1995), PART (Rutledge 1998), and HYSEP (Sloto and Crouse 1996).</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) the groundwater system acts as a linear reservoir, justifying exponential recession and the α parameter; (2) specific conductance (SC) is a conservative, two-end-member tracer separating base flow from runoff; (3) base-flow SC can be adequately represented either by interpolated SC peaks or a sin-cos function of time. All three are stated but only partially justified within the document.</p>
 <p><strong>Contributions.</strong>
-- Automates optimization of β (BFImax) from SC data via RMSE minimization, replacing Eckhardt's a priori geological lookup.
-- Automates selection of the BFI block length N using a knee-point detection algorithm applied to the BFI-vs.-N curve.
-- Proposes two methods for estimating base-flow SC end-member CB: peak interpolation on BFI-identified base-flow days (SCfit) and sin-cos seasonal function(s).
-- Reports parameter ranges and Nash-Sutcliffe efficiency across 47 USGS sites with explicit acceptance criteria.</p>
-<p><strong>Clarity.</strong> Slide-deck format is terse and functional for a familiar audience, but equations are partially rendered, figure axes cannot be verified from the text alone, and several key quantities (e.g., "CS" column in results table) are undefined.</p>
+- Automated, objective optimization of the β (BFImax) parameter in the Eckhardt RDF using geochemical (SC) mass balance rather than a priori geological lookup tables.
+- Automated optimization of the BFI block-length parameter N using a piecewise-linear knee-point algorithm over the range 1–30 days, replacing the conventional fixed value of 5 days.
+- Two alternative methods for estimating the base-flow SC end-member (CB): SC-peak interpolation (SCfit) and sin-cos harmonic function fitting.
+- Application and acceptance-criterion evaluation across 47 NAWQA sites, yielding 34 acceptable solutions (21 unique).</p>
+<p><strong>Clarity.</strong> Written as a slide-deck or technical presentation rather than a formal paper; equations and methods are introduced without full derivation; several figures lack accompanying axis labels or legends in the provided text, reducing standalone readability.</p>
 <h2>Second pass — content</h2>
-<p><strong>Main thrust:</strong> OHS replaces the subjective geological classification of β in the Eckhardt filter with an automated RMSE minimization against SC-derived chemical mass balance, yielding site-specific, reproducible base-flow partitioning with quantifiable fit statistics.</p>
+<p><strong>Main thrust:</strong> OHS estimates base-flow hydrographs by jointly optimizing α (recession constant, from automated recession analysis) and β (BFImax, via RMSE minimization against a SC mass balance), making both parameters reproducible and physically grounded rather than user-prescribed.</p>
 <p><strong>Supporting evidence:</strong>
-- 34 of 47 sites meet acceptance criteria (Nash-Sutcliffe &gt; 0.3, β not at optimization bounds); 21 yield unique solutions, 13 non-unique.
-- Optimized α range: 0.86–0.98; β range: 0.43–0.94; N-S efficiency range: 0.30–0.85.
-- "CS" values range 49–388 (units and definition not stated in text).
-- SCfit approach used at 25 sites (19 uniquely); sin-cos at 6 (2 uniquely); sin-cos² at 3 (0 uniquely).
-- Scatter plots show OHS vs. BFI base-flow index (0–100% range) and days at base flow (0–50% range); visual agreement not quantified in text.</p>
-<p><strong>Figures &amp; tables:</strong> Scatter plots comparing OHS and BFI outputs are included; axis labels appear present but cannot be confirmed from extracted text. No error bars, confidence intervals, or statistical significance reported for any comparison. The results summary table omits a definition for the "CS" column. Example hydrograph and SC fit figures are referenced but not interpretable from text alone.</p>
+- Applied to 47 sites; 34 met acceptance criteria (Nash-Sutcliffe efficiency &gt; 0.3, β not at parameter limits); 21 of those yielded unique solutions.
+- SCfit approach succeeded at 25 sites (19 unique); sin-cos at 6 (2 unique); sin-cos² at 3 (0 unique).
+- Optimized α range: 0.86–0.98; optimized β range: 0.43–0.94; Nash-Sutcliffe efficiency range: 0.30–0.85.
+- A tabulated column labeled "CS" reports values of 49–388 (units and definition not explicitly stated in the provided text).
+- Scatter plots shown comparing OHS vs. BFI for both base-flow index (%) and fraction of days at base flow (%); OHS and BFI diverge at higher base-flow fractions.</p>
+<p><strong>Figures &amp; tables:</strong>
+- Scatter plots (OHS vs. BFI for base-flow index and days at base flow) convey method comparison but axes are unlabeled beyond percentage ticks in the provided rendering; no error bars or confidence intervals shown.
+- Example SCfit and sin-cos fit figures illustrate CB estimation but lack axis labels, units, and site identifiers in the provided text.
+- Recession analysis plots and N-optimization plots are referenced but no formal statistical uncertainty bounds are shown.
+- No summary table of per-site results is provided in the excerpt.</p>
 <p><strong>Follow-up references:</strong>
-- Eckhardt (2005) — foundational RDF and BFImax geological classification being extended.
-- Rimmer &amp; Hartmann (2014) — originating OHS RMSE optimization concept.
-- Sanford et al. (2012) — alternative SC-based chemical hydrograph separation used as a model for CB estimation.
-- Wahl &amp; Wahl (1995) — BFI method and N-optimization rationale.</p>
+- Eckhardt (2005) — original RDF formulation and BFImax lookup values; foundational to the entire method.
+- Rimmer and Hartmann (2014), <em>Journal of Hydrology</em> v. 514, p. 249–257 — proposed the geochemical RMSE optimization framework that OHS extends.
+- Rutledge (1998), USGS WRI 98-4148 — PART method; key alternative for mean groundwater discharge estimation.
+- Sanford and others (2012), USGS SIR 2011-5198 — manual chemical hydrograph separation approach used as conceptual basis for CB estimation.</p>
 <h2>Third pass — critique</h2>
 <p><strong>Implicit assumptions:</strong>
-- SC perfectly represents a two-component (base flow / surface runoff) mixing system; violations (e.g., multiple groundwater sources, road-salt contamination acknowledged but only partially addressed) would invalidate β estimates.
-- Linear reservoir assumption (exponential recession) is asserted, not tested against observed recession behavior at each site; if violated, α loses its physical interpretation.
-- The BFI turning-point factor f = 0.9 is fixed, not optimized; its effect on the recession periods used to estimate α is unexamined.
-- Median α across recession events is used without justification that the distribution is stable or unimodal.</p>
+- SC behaves as a conservative two-component tracer with distinct, stable end-members for base flow and storm runoff; violated when runoff chemistry resembles groundwater (e.g., in karst or soils with high ion exchange), which would break β optimization.
+- Base-flow SC varies smoothly and seasonally (sin-cos or interpolable peaks); violated during road-salt events, drought, or rapid land-use change — the document notes road-salt spikes as outliers but does not fully characterize their frequency or impact.
+- The linear reservoir assumption (exponential recession) is universally applicable; this fails in multi-aquifer or highly heterogeneous systems where recession is non-exponential.
+- α estimated from a minimum of 3 consecutive declining-flow days is representative of the system; short recession windows may conflate inter-storm drainage with true groundwater recession.</p>
 <p><strong>Missing context or citations:</strong>
-- No engagement with tracers other than SC (chloride, silica, δ¹⁸O) to evaluate whether results are tracer-dependent.
-- Deterministic modeling and end-member mixing analysis (EMMA) are listed as alternative approaches but never compared to OHS outputs.
-- No discussion of how anthropogenic SC signals (wastewater effluent, irrigation return flows) affect optimization at the 47 sites.</p>
+- No engagement with tracer-based studies that challenge two-component SC separation (e.g., variable groundwater SC with depth or season).
+- No comparison to deterministic or physically-based models mentioned in the hydrograph separation approaches list; that category is listed but never discussed.
+- No discussion of the theoretical consistency between the BFI-derived base-flow days used for recession analysis and the OHS-derived base flow — circular dependency risk not addressed.
+- The "CS" column in the results table is unexplained; its range (49–388) is inconsistent with the stated N range of 1–30 days, suggesting it is a different parameter, but this is never clarified.</p>
 <p><strong>Possible experimental / analytical issues:</strong>
-- 13 of 47 sites (28%) produce non-unique β solutions; this is a substantial fraction and receives no mechanistic explanation.
-- Nash-Sutcliffe &gt; 0.3 is a very low acceptance threshold; results at the lower end of this range may not be physically meaningful.
-- "CS" column in the results table (range 49–388) is never defined; if it is N (block length), values up to 388 days far exceed the literature-standard 5 days and require justification.
-- No cross-validation, holdout period, or split-sample test; optimized parameters are evaluated on the same record used to fit them.
-- Uncertainty quantification is stated as a design goal but is absent from reported results.
-- Non-uniqueness (13 sites) suggests the SC signal may be insufficient to constrain β at many locations, yet this limitation is not discussed as a condition for method applicability.</p>
+- 13 of 47 sites (28%) failed acceptance criteria; reasons are not analyzed — systematic failure modes (geology, land use, climate) are not examined.
+- 7 of 34 acceptable solutions are flagged as nonunique, meaning the RMSE surface has multiple minima; the implications for reported α and β values at those sites are not discussed.
+- No formal uncertainty quantification is reported despite being listed as a stated goal; the Nash-Sutcliffe threshold of 0.3 is applied as a binary cutoff without sensitivity analysis.
+- The knee-point algorithm (Kaplan 2012, MATLAB script) for N optimization is cited by personal name only; no validation of that algorithm's behavior on hydrological data is provided.
+- Results are compared only to BFI; no comparison to PART, HYSEP, or chemical separation from independent laboratory data (e.g., isotopes) is presented.</p>
 <p><strong>Ideas for future work:</strong>
-- Conduct split-sample validation: optimize α and β on one half of the record, predict SC on the other, and report out-of-sample RMSE.
-- Compare OHS-derived base-flow fractions against independent estimates from calibrated groundwater models or environmental tracers (e.g., ³H/³He ages) to establish ground truth.
-- Quantify sensitivity of β to the choice of CB modeling approach (SCfit vs. sin-cos) and to the fixed BFI parameters (f = 0.9, NR = 3 days).
-- Investigate whether non-unique sites share identifiable watershed characteristics (geology, land use, SC variability), enabling an a priori flag for method inapplicability.</p></div>
+- Validate OHS β estimates against independent tracers (e.g., ²H/¹⁸O isotopes, dissolved silica) to test whether optimized β reflects true base-flow fraction rather than SC end-member misspecification.
+- Analyze the 13 rejected sites to identify whether failure correlates with aquifer type, climate, or SC data density, and develop site-screening criteria.
+- Propagate parameter uncertainty (α, β, CB estimation error) through the filter to produce base-flow uncertainty bounds, fulfilling the stated but unmet goal.
+- Test sensitivity of results to the NR = 3 day minimum recession length and the f = 0.9 BFI turning-point factor, neither of which is varied in the current study.</p></div>
             
             
               <div class="academic-auto">

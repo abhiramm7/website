@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Statistical Learning Approaches for the Control of Stormwater Systems</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Statistical Learning Approaches for the Control of Stormwater Systems</h1>
+      <p class="paper-detail-meta">
+        Abhiram Mullapudi
+         · <em>University of Michigan (doctoral dissertation)</em>
+         · 2020
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">stormwater-control</span><span class="entry-tag">reinforcement-learning</span><span class="entry-tag">bayesian-optimization</span><span class="entry-tag">smart-water-systems</span><span class="entry-tag">urban-hydrology</span><span class="entry-tag">real-time-control</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Statistical Learning Approaches for the Control of Stormwater Systems</h1>
+<p><strong>Authors:</strong> Abhiram Mullapudi
+<strong>Year:</strong> 2020
+<strong>Tags:</strong> stormwater-control, reinforcement-learning, bayesian-optimization, real-time-control, urban-hydrology, smart-water-systems</p>
+<h2>TL;DR</h2>
+<p>This dissertation develops and evaluates statistical learning methods — deep reinforcement learning (RL) and Bayesian optimization (BO) — for autonomous real-time control of distributed stormwater assets (valves, gates) to achieve watershed-scale flood and water quality objectives. It also delivers two open-source artifacts: a modular simulation toolchain coupling hydraulic and water quality models, and <em>pystorms</em>, a Python benchmark library for quantitatively comparing stormwater control algorithms.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Dissertation comprising a position/framework chapter, one real-world field study, two simulation-based research prototypes, and one open-source software contribution.</p>
+<p><strong>Context.</strong> Urban stormwater real-time control subfield; builds on: Kerkez et al. (smart stormwater systems review and sensor-actuator deployment in Ann Arbor); EPA SWMM (hydraulic simulator underlying all computational experiments); deep Q-network (DQN) RL methodology from the ML literature; genetic algorithms as the incumbent search-based stormwater control baseline.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) SWMM simulation is a sufficiently faithful proxy for real watershed dynamics to train and evaluate control policies; (2) valve position can be held approximately constant through a storm event, motivating BO as a pre-storm planner; (3) sensor readings are noise-free and communications are reliable (both assumed throughout simulation chapters). All three are asserted rather than validated.</p>
+<p><strong>Contributions.</strong>
+- First formulation and simulation evaluation of a deep RL (DQN) controller for urban stormwater networks, including reward-function sensitivity and multi-basin scalability analysis.
+- First field demonstration of coordinated, multi-asset real-time flow shaping in a real watershed (Ann Arbor), achieving a flat set-point hydrograph over a 6 km stream reach.
+- Bayesian optimization framework for pre-storm valve setting that outperforms genetic algorithms at 30-iteration budgets (30 random seeds) and quantifies rainfall uncertainty via a multi-output latent heteroscedastic Gaussian process (MLH-GP).
+- <em>pystorms</em>: open-source Python library providing anonymized real-world stormwater scenarios, a SWMM interface, and a standardized performance metric for algorithm benchmarking.</p>
+<p><strong>Clarity.</strong> Generally well-organized for a multi-paper dissertation; Chapter 2 is more conceptual and review-heavy than the others, and the provided text is truncated before results appear — the abstract must substitute for the missing detail in several places.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Model-free statistical learning (RL for reactive control, BO for proactive pre-storm planning) can manage distributed stormwater assets to achieve system-scale flood and water quality benefits without requiring explicit linearized dynamics, outperforming or matching incumbent rule-based and genetic-algorithm approaches in simulation and, for flow shaping, in the field.</p>
+<p><strong>Supporting evidence:</strong>
+- Ch. 3 (field): 30-minute pulse releases from a single controlled basin, dispersed over a 6 km stream, produce a flat hydrograph at the watershed outlet; coordinated interleaved releases from two basins successfully superpose and offset flow peaks over an 18–44 hour window.
+- Ch. 4 (simulation): RL agent evaluated on a 25-year, 6-hour storm and a 10-year, 24-hour storm on an 11-basin urban network; batch-normalized DQN achieves consistently higher rewards and faster convergence than a generic DQN; in the multi-basin scenario the agent preferentially exploits the most upstream controllable asset (basin 4) to shift the peak hydrograph.
+- Ch. 4 (appendix): Equal-filling degree heuristic successfully maintains outflows below threshold for all tested storm events, providing a strong deterministic baseline that RL must compete with.
+- Ch. 5 (simulation): BO identifies lower-cost control decisions than a genetic algorithm across 30 iterations × 30 random seeds (Table 5.1 reports mean ± SD; lower values = better; exact numbers not legible in provided text); MLH-GP uncertainty bounds align more closely with empirically computed bounds than standard GP for the same 200 samples.
+- Ch. 6 (demonstration): Equal-filling degree controller holds outlet flow below 0.5 m³s⁻¹ in Scenario theta; outperforms rule-based control, which outperforms uncontrolled (Table 6.3 gives performance metric values; exact numbers not provided in the excerpt).</p>
+<p><strong>Figures &amp; tables:</strong>
+- <strong>Fig. 4.3</strong> (RL single-basin): six-panel layout comparing reward functions, training curves, controlled vs. uncontrolled flows and water levels; Y-axis scales differ across reward columns (noted in caption); no confidence intervals on training curves; results shown for the single highest-reward episode only — no cross-run statistics.
+- <strong>Fig. 4.7</strong> (storm spectrum performance map): normalized performance heat map for uncontrolled vs. RL-controlled across a range of storm magnitudes and durations; axes appear labeled; no uncertainty quantification.
+- <strong>Fig. 5.5</strong> (uncertainty quantification): GP vs. MLH-GP uncertainty bands compared to empirical values; 200 samples; shows BO's acquisition function concentrating evaluations around 0.23 — informative but no formal coverage statistics reported.
+- <strong>Table 5.1</strong>: only summary shown is the key BO-vs-GA comparison with mean ± SD; no formal hypothesis test for statistical significance stated.
+- <strong>Table 6.3</strong>: three-row performance metric table (equal-filling, rule-based, uncontrolled); no confidence intervals; single-run values.
+- General weakness: most figures lack error bars or cross-replicate confidence intervals; axis label legibility is not assessable from text alone.</p>
+<p><strong>Follow-up references:</strong>
+- Kerkez et al. [3] — foundational smart stormwater review and deployment context; essential background.
+- Emerson et al. [6] — demonstrates that locally optimal SCM placement can degrade watershed-scale outcomes; motivates the coordinated control problem.
+- Borsányi et al. [34] — identified need for quantitative benchmarking of stormwater control algorithms; conceptual predecessor to <em>pystorms</em>.
+- Langergraber et al. [30, 84] — finite-element water quality model for subsurface flow wetlands; relevant to extending RL/BO to water quality objectives.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- <strong>Sim-to-real fidelity</strong>: RL and BO controllers are trained and evaluated entirely in SWMM simulation (Ch. 4–5); the gap between simulated and real hydraulic behavior is never quantified; if violated, trained policies may fail or require significant re-training on the physical system.
+- <strong>Near-constant optimal valve position</strong>: the motivation for pre-storm BO relies on the claim (attributed to prior RL work [32]) that reactive controllers tend to hold near-constant valve settings throughout a storm; this is illustrated anecdotally but not proved theoretically — storm variability could invalidate the pre-storm planning assumption.
+- <strong>Perfect sensing and communication</strong>: all simulation experiments assume noise-free, synchronous sensor readings; real deployments (Ch. 3) involve polling-based asynchronous communication with unquantified latency and dropout.
+- <strong>Stationarity of rainfall statistics</strong>: RL training uses fixed design storms (25-year 6-hour, 10-year 24-hour); climate non-stationarity would shift the distribution and may degrade policy performance without retraining.</p>
+<p><strong>Missing context or citations:</strong>
+- Model predictive control (MPC) is cited as state-of-the-art (Ch. 4 intro) but is never directly compared to RL or BO in a controlled experiment; the dissertation cannot claim superiority over MPC without this comparison.
+- Multi-agent RL (MARL) is not discussed despite coordinated multi-asset control being a central goal; relevant MARL literature for networked infrastructure is absent.
+- Water quality objectives are addressed only in Ch. 2 (simulation) and Ch. 3 (conceptually); the RL and BO chapters focus exclusively on hydraulic (flow/level) objectives, leaving the water quality control gap largely open.
+- The equal-filling degree algorithm — a competitive heuristic from the literature — appears only in Appendix B as a post-hoc comparison with RL; it is not introduced as a formal baseline in the main Ch. 4 results.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- <strong>Cherry-picking in Ch. 4</strong>: single-basin RL results are presented for "the episode that resulted in the highest reward" (Fig. 4.3 caption) rather than mean performance across training runs or held-out evaluations; this overstates policy reliability.
+- <strong>BO vs. GA budget fairness</strong>: comparison uses only 30 function evaluations; GA convergence typically requires many more; the comparison may structurally favor BO without establishing whether GA would eventually match BO given a larger budget.
+- <strong>No formal statistical tests</strong>: Table 5.1 reports mean ± SD but no p-values or confidence intervals on the BO-vs-GA comparison; statistical significance is not established.
+- <strong>Generalization of RL</strong>: training on specific design storms and testing on nearby storm magnitudes (Fig. 4.7) is not a true out-of-distribution test; performance on prolonged low-intensity events or back-to-back events (addressed briefly in Appendix B but described as the controller treating two events as one) reveals a fundamental limitation of the state-space design.
+- <strong>pystorms reproducibility</strong>: scenarios are derived from "anonymized" real-world networks — the anonymization prevents independent verification that scenarios are representative of actual system dynamics.
+- <strong>No safety or stability guarantees</strong>: the RL controller has no formal constraint mechanism; it could produce valve actions that cause flooding or structural stress, yet no safety layer or constraint formulation is presented.</p>
+<p><strong>Ideas for future work:</strong>
+- Deploy trained RL or BO controllers on the Ann Arbor sensor-actuator network (Ch. 3) and measure sim-to-real performance degradation, quantifying the fidelity gap and informing necessary re-training or domain randomization.
+- Formulate a constrained multi-agent RL problem where each controlled basin has a local agent sharing a global reward, enabling decentralized execution and reducing the combinatorial action space as networks scale beyond 3–4 basins.
+- Extend the RL/BO reward and objective functions to include water quality metrics (e.g., nitrate load reduction from Ch. 2), testing whether joint hydraulic-quality optimization degrades performance on either objective individually.
+- Investigate transfer learning or meta-RL across <em>pystorms</em> scenarios to determine whether a policy trained on one network topology generalizes to others without full retraining — a prerequisite for practical deployment at scale.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Deep Q-Learning</li><li>Bayesian Optimization</li><li>Gaussian Processes</li><li>model-predictive control</li><li>equal-filling degree algorithm</li><li>coupled hydraulic-water-quality modeling</li><li>sensor-actuator networks</li><li>genetic algorithms</li></ul>
+        <h4>Datasets</h4><ul><li>Ann Arbor wireless sensor-actuator network watershed</li><li>simulated urban stormwater network with 11 basins</li><li>combined sewer network with inflatable storage dams</li></ul>
+        <h4>Claims</h4><ul><li>Real-time coordinated control of distributed stormwater assets can achieve system-scale watershed outcomes that localized best management practices cannot guarantee.</li><li>Deep reinforcement learning can serve as a model-free algorithm for controlling stormwater networks without requiring explicit dynamical assumptions or surrogate models.</li><li>Bayesian Optimization identifies optimal pre-storm control actions more efficiently than genetic algorithms and can quantify rainfall uncertainty impacts on control decisions.</li><li>A wireless sensor-actuator network can precisely shape hydrographs at the outlet of an urban watershed through coordinated multi-site control.</li><li>The open-source pystorms library enables systematic quantitative evaluation and comparison of stormwater control algorithms across standardized scenarios.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>
