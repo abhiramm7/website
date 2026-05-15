@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scientific Visualization: Python + Matplotlib</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Scientific Visualization: Python + Matplotlib</h1>
+      <p class="paper-detail-meta">
+        Nicolas P. Rougier
+        
+         · 2021
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">scientific-visualization</span><span class="entry-tag">matplotlib</span><span class="entry-tag">python</span><span class="entry-tag">data-visualization</span><span class="entry-tag">figure-design</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Scientific Visualization: Python + Matplotlib</h1>
+<p><strong>Authors:</strong> Nicolas P. Rougier
+<strong>Year:</strong> 2021
+<strong>Tags:</strong> scientific-visualization, matplotlib, python, data-visualization, tutorial-book, publication-quality-figures</p>
+<h2>TL;DR</h2>
+<p>Open-access textbook (CC BY-NC-SA 4.0) covering the full Matplotlib stack for publication-quality scientific figures, from figure anatomy and coordinate transforms through design principles, 3D/animation, and a curated showcase. Targets intermediate Python users who need fine-grained control over figures rather than quick exploratory plotting.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Instructional textbook / practitioner reference; not a research paper reporting original experiments or theory.</p>
+<p><strong>Context.</strong> Python scientific visualization ecosystem, 2021; situates itself within the landscape mapped by Jake Vanderplas (adapted diagram included); builds directly on John D. Hunter's Matplotlib (first release 2003, v3.4 current at time of writing); Volume II of a "Scientific Python" series; author also co-created VisPy and glumpy.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) Matplotlib is the appropriate primary tool for publication-quality 2D scientific figures; (2) readers have intermediate Python and beginner NumPy; (3) desktop/print use cases dominate over browser/interactive. All three are reasonable but narrow the book's scope explicitly.</p>
+<p><strong>Contributions.</strong>
+- Systematic exposition of Matplotlib's four coordinate systems (FC, NFC, DC, NDC) and how to compose/invert their transforms for precise element placement.
+- Design-principle chapter ("Ten simple rules") and defaults/styling chapter aimed at improving default figure quality, not just API coverage.
+- Advanced showcase section with full annotated source code for non-trivial figures (domain coloring, Escher projections, self-organizing maps, etc.).
+- Open-access release with all source code on GitHub, under CC BY-NC-SA 4.0 / BSD-2-clause.</p>
+<p><strong>Clarity.</strong> Writing is concise and technically precise; code snippets are directly executable with stated imports; a few sections in the provided excerpt end mid-sentence due to OCR/extraction artifacts, which is an artifact of the excerpt, not the original book.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Progressively builds Matplotlib expertise from the object hierarchy (Figure → Axes → Axis → Artist) through coordinate transforms, scales, projections, design principles, and advanced topics, with every concept accompanied by minimal reproducible code and a labeled source file.</p>
+<p><strong>Supporting evidence:</strong>
+- Figure dimensions and DPI: default dpi=100 yields 600×600 px for a 6×6 in figure; publishers require 300–600 dpi; a 4.25 in wide figure at 600 dpi yields 2550 px width.
+- Version environment stated explicitly: Python 3.7.4, NumPy 1.16.4, SciPy 1.3.0, Matplotlib 3.1.0 (as of June 2019 at time of writing; book published November 2021).
+- Coordinate transform verification: log-scale equidistance confirmed numerically (all three intervals = 155.0 figure units); linear scale shows 4.185 / 41.85 / 418.5 (factor-of-10 increments).
+- Five renderer types (Agg/PS/PDF/SVG/Cairo) and six interactive interface types documented in Tables 1.1–1.2.
+- LaTeX point = 1/72.27 in; Matplotlib point = 1/72 in — noted explicitly as a discrepancy relevant to font-size matching.</p>
+<p><strong>Figures &amp; tables:</strong> Figures carry source-file citations (e.g., <code>anatomy/anatomy.py</code>), making them reproducible. Axes are labeled in all example figures. No error bars, confidence intervals, or statistical significance — none are appropriate for a textbook. Tables 1.1 and 1.2 are simple lookup tables, clearly structured. Some figure captions in the OCR'd text are partially garbled (Unicode escape sequences visible in scales/projections chapter).</p>
+<p><strong>Follow-up references:</strong>
+- Matplotlib official documentation / transformation tutorial — repeatedly cited as the authoritative deep-dive on backends and transforms.
+- Jake Vanderplas's Python visualization landscape (2018) — source of the ecosystem map reproduced in the Introduction.
+- pyviz.org — described as maintaining an up-to-date active-package list beyond what the book can track.
+- Bibliography listed in TOC (pp. 221+) but not included in the provided excerpt; specific cited works not stated here.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Matplotlib alone is sufficient for the vast majority of scientific publishing needs; interactive/web scenarios are acknowledged but not taught.
+- Static print/PDF is the primary output target; figures optimized for screen (responsive sizing, tooltips) are out of scope.
+- Code version pinning (Matplotlib 3.1.0, Python 3.7) may silently break for readers using current releases (3.8+), since the API has changed (e.g., <code>ScaledTranslation</code> import path, <code>subplot_kw</code> dict syntax shown uses <code>=</code> inside a dict literal, which is a Python syntax error — <code>{"aspect"=1}</code> should be <code>{"aspect": 1}</code>).</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison of Matplotlib's coordinate/transform system against equivalent mechanisms in Bokeh, Plotly, or Altair, even though these are named in the introduction.
+- No discussion of accessibility (colorblind-safe palettes, screen-reader compatibility) despite a full chapter on colors.
+- The "ten simple rules" chapter is referenced but not included in the provided excerpt; its relationship to prior visualization guidelines literature (e.g., Tufte, Cleveland) is not stated in the excerpt.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Not a research paper; no experiments, baselines, or datasets to critique.
+- The Python syntax error in <code>subplot_kw={"aspect"=1}</code> (Chapter 1) suggests at least one code snippet was not mechanically tested before publication.
+- Version mismatch: code written for Matplotlib 3.1.0 (June 2019) but book released November 2021, when Matplotlib 3.4 was current; no compatibility notes provided.
+- OCR/extraction of the HAL PDF introduces Unicode escape artifacts in figures (Chapter 3 scale comparison figures are unreadable in the provided text).</p>
+<p><strong>Ideas for future work:</strong>
+- Add a compatibility matrix or version-conditional code blocks for Matplotlib ≥ 3.5, where several APIs changed.
+- Extend the showcase to include interactive figures (ipywidgets + Matplotlib) to bridge the gap with browser-native tools mentioned in the introduction.
+- Add a chapter on accessibility: colorblind-safe palette selection, hatching as a redundant encoding channel, and alt-text generation for figures.
+- Provide a CI-tested repository that runs all source files against the current Matplotlib release and flags breaking changes automatically.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>matplotlib plotting</li><li>coordinate transforms</li><li>logarithmic scales</li><li>polar projection</li><li>3D projection</li><li>custom scales</li><li>affine transforms</li><li>animation</li><li>object-oriented figure architecture</li></ul>
+        
+        <h4>Claims</h4><ul><li>Matplotlib is the de facto standard library for Python scientific visualization, offering both a simple pyplot interface and a full object-oriented architecture.</li><li>A matplotlib figure is composed of a hierarchy of elements (Figure, Axes, Axis, Spines, Artists) that together form the rendered output.</li><li>Coordinate systems in matplotlib (FC, NFC, DC, NDC) can be composed and inverted to precisely position any element within a figure.</li><li>Matplotlib supports multiple scales (linear, log, symlog, logit, custom) and projections (polar, 3D) that transform data before rendering without modifying the underlying data.</li><li>Publication-quality figures require careful management of DPI, physical dimensions, and vector versus raster output formats.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

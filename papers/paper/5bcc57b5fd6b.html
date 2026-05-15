@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Chapter Five: Linear Systems</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Chapter Five: Linear Systems</h1>
+      <p class="paper-detail-meta">
+        
+        
+        
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">linear-systems</span><span class="entry-tag">state-space</span><span class="entry-tag">matrix-exponential</span><span class="entry-tag">convolution</span><span class="entry-tag">dynamical-systems</span><span class="entry-tag">control-theory</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Chapter Five: Linear Systems</h1>
+<p><strong>Authors:</strong> Unknown
+<strong>Year:</strong> Unknown
+<strong>Tags:</strong> linear-systems, state-space, matrix-exponential, convolution, lti-systems, linearization</p>
+<h2>TL;DR</h2>
+<p>A textbook chapter developing the complete analytical framework for linear time-invariant (LTI) state-space systems dx/dt = Ax + Bu, y = Cx + Du. Two central tools — the matrix exponential e^(At) for the initial-condition response and the convolution equation for the forced response — fully characterize system behavior. The chapter closes with Jacobian linearization as a principled reduction of nonlinear dynamics to local linear approximations near equilibria.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Textbook chapter (expository/tutorial); not a research paper. Presents established control-theory results with worked examples.</p>
+<p><strong>Context.</strong> Classical control systems and dynamical systems theory. Builds directly on Chapters 2–4 (differential equation modeling, equilibria, stability). Cites Cannon (1967) for the linear-approximation philosophy and Strang [Str88] for the Jordan decomposition proof. Connects to Black's negative-feedback amplifier as historical motivation for engineered linear behavior.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) f and h are smooth and solutions exist for all time under piecewise-continuous inputs; (2) the equilibrium of interest can be shifted to the origin without loss of generality; (3) deviations from equilibrium are small enough that higher-order terms are negligible (for linearization). All are standard and internally consistent within the chapter's scope.</p>
+<p><strong>Contributions.</strong>
+- Unified derivation from the definition of linearity (superposition conditions) through matrix exponential to the general convolution equation y(t) = Ce^(At)x(0) + ∫h(t−τ)u(τ)dτ + Du(t).
+- Proof of Theorem 4.1 (asymptotic stability iff Re λ_i &lt; 0) and Proposition 5.3 (marginal stability via Jordan block size) using the Jordan canonical form.
+- Exact continuous-to-discrete sampling transformation: Φ = e^(Ah), Γ = (∫₀ʰ e^(As)ds)B, with invertibility condition on Φ.
+- Jacobian linearization framework with explicit coordinate shift and Taylor expansion (section cut off mid-derivation in the provided text).</p>
+<p><strong>Clarity.</strong> Writing is systematic and pedagogically clear, with each concept anchored by a worked example; the provided text ends mid-sentence in Section 5.4, and the Jordan-form section opens with a formatting artifact (char7f), indicating possible transcription issues.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> The eigenstructure of A (eigenvalues → stability and decay rates; eigenvectors → mode shapes) combined with the matrix exponential completely determines how an LTI system responds to any initial condition and input; the convolution equation makes this explicit and connects to frequency response and step response metrics.</p>
+<p><strong>Supporting evidence:</strong>
+- Proposition 5.1: Homogeneous solution is x(t) = e^(At)x(0); linearity in initial conditions follows directly.
+- Theorem 5.4: Convolution equation x(t) = e^(At)x(0) + ∫₀ᵗ e^(A(t−τ))Bu(τ)dτ proved by differentiation.
+- Stable step response: y(t) = CA⁻¹e^(At)B (transient, decays to 0) + (D − CA⁻¹B) (steady-state).
+- Frequency response at s = iω: Me^(iθ) = C(sI−A)⁻¹B + D; gain M = A_y/A_u, phase θ = φ − ψ.
+- AFM example (5.9): resonant peaks M_r1 = 2.12 at ω_mr1 = 238 krad/s, M_r2 = 4.29 at ω_mr2 = 746 krad/s; bandwidth ω_b = 292 krad/s; antiresonance M_d = 0.556 at ω_md = 268 krad/s.
+- IBM Lotus server (5.10): discrete a = 0.43, b = 0.47, h = 60 s maps to continuous A = −0.0141, B = 0.0116.
+- Cruise control linearization (5.11): at v_e = 25 m/s, θ_e = 0: a = −0.0101, b = 1.32, u_e = 0.1687.</p>
+<p><strong>Figures &amp; tables:</strong> Figures 5.1, 5.2, 5.5, 5.6, 5.8, 5.9, 5.11–5.14 carry the argument. Axes are labeled with units where physical quantities appear. No error bars or statistical significance reported — appropriate for a deterministic mathematical exposition. Figure 5.9 clearly annotates rise time T_r (10%–90%), overshoot M_p, settling time T_s (2%), and steady-state value y_ss. Figure 5.14 overlays linear and nonlinear cruise control simulations qualitatively; no quantitative error metric is shown.</p>
+<p><strong>Follow-up references:</strong>
+- Cannon [Can03], <em>Dynamics of Physical Systems</em> — foundational motivation for linear approximations of physical elements.
+- Strang [Str88], linear algebra text — proof of Jordan decomposition; essential for the stability analysis backbone.
+- Chapters 2–4 of the same text (unnamed) — prerequisite modeling and stability concepts referenced throughout.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Linearization validity: "small deviations" is invoked qualitatively; no explicit bound on ‖x − x_e‖ within which the linear approximation achieves a specified error tolerance is provided — the assumption would break results whenever trajectories are not locally confined.
+- Frequency response derivation assumes no eigenvalue of A equals ±iω; behavior at resonance (sI − A singular) is not addressed.
+- Sampling derivation assumes zero-order hold (control constant over interval h); other hold types are not discussed.
+- Jordan form computation is presented as exact; the method is numerically ill-conditioned for matrices with near-repeated eigenvalues, which is not flagged.
+- Impulse-response identification rule (ε·σ_max ≪ 1) is stated without derivation or error bound.</p>
+<p><strong>Missing context or citations:</strong>
+- Controllability and observability are entirely absent; the chapter develops the convolution equation without noting that the utility of B and C depends on these structural properties.
+- The Laplace transform / transfer function perspective is missing; frequency response is derived directly from the convolution equation, bypassing the more standard route that most readers will encounter in parallel coursework.
+- Numerical methods for computing e^(At) (e.g., Padé approximation, scaling and squaring) are not mentioned despite practical relevance.
+- Stability of the sampled system (conditions on Φ eigenvalues) is stated only in one sentence without development.
+- The predator–prey claim that nonlinear coupling is necessary to capture oscillations is asserted without reference to Poincaré–Bendixson or limit-cycle theory.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The linearization section (5.4) is cut off mid-sentence in the provided text ("the nonlinear terms can be thought of as"), so the Jacobian formula and its derivation are incomplete as presented.
+- Figure 5.14 states the linear model "provides a reasonable approximation" for the cruise control example but offers no quantitative error measure (e.g., maximum velocity deviation) to support this claim.
+- The coupled spring–mass eigenvalue formula in Example 5.5 contains an apparent sign error in the real part: decay rate is written as c/(2√(km)), which should be negative (−c/(2√(km))) for a stable damped system; the text does not flag the sign convention used.
+- No exercises or problems within the chapter text demonstrate failure cases of linearization (e.g., center equilibria where linearization gives misleading stability conclusions).</p>
+<p><strong>Ideas for future work:</strong>
+- Provide explicit linearization error bounds (e.g., via the Gronwall inequality or higher-order Taylor remainder) to make the "small deviations" assumption quantitative.
+- Extend the sampling section to analyze aliasing and stability margins as a function of h, connecting to Nyquist criteria.
+- Add a worked example where the Jordan form gives stability while the eigenvalue test alone is ambiguous (zero real-part eigenvalue with a non-trivial block), to sharpen Proposition 5.3 pedagogically.
+- Include a numerical experiment comparing matrix-exponential-based simulation against Euler integration to motivate why exact methods matter at varying step sizes.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>matrix exponential</li><li>convolution equation</li><li>Jordan decomposition</li><li>Jacobian linearization</li><li>modal decomposition</li><li>frequency response analysis</li><li>step response analysis</li><li>sampling of continuous-time systems</li><li>coordinate transformation</li></ul>
+        
+        <h4>Claims</h4><ul><li>The solution to a homogeneous linear system dx/dt = Ax is given by x(t) = e^{At} x(0), where e^{At} is the matrix exponential defined by an infinite series.</li><li>The input/output response of a linear time-invariant system is fully characterized by the convolution equation, which includes contributions from initial conditions and the impulse response.</li><li>A linear system&#39;s equilibrium point xe = 0 is asymptotically stable if and only if all eigenvalues of the dynamics matrix A have strictly negative real part.</li><li>Any matrix A can be transformed into Jordan form, and when Jordan blocks corresponding to zero-real-part eigenvalues are not scalar (1x1), the system is unstable.</li><li>A nonlinear system can be locally approximated by its Jacobian linearization around an equilibrium point, yielding a linear model valid for small perturbations.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Baseflow Separation Using the Digital Filter Method: Review and Sensitivity Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Baseflow Separation Using the Digital Filter Method: Review and Sensitivity Analysis</h1>
+      <p class="paper-detail-meta">
+        Taeuk Kang, Sangho Lee, Namjoo Lee, Youngkyu Jin
+         · <em>Water</em>
+         · 2022
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.3390/w14030485" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">baseflow-separation</span><span class="entry-tag">digital-filter</span><span class="entry-tag">streamflow</span><span class="entry-tag">hydrology</span><span class="entry-tag">sensitivity-analysis</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Baseflow Separation Using the Digital Filter Method: Review and Sensitivity Analysis</h1>
+<p><strong>Authors:</strong> Taeuk Kang, Sangho Lee, Namjoo Lee, Youngkyu Jin
+<strong>Year:</strong> 2022
+<strong>Tags:</strong> baseflow-separation, digital-filter, sensitivity-analysis, baseflow-index, streamflow, hydrograph-analysis</p>
+<h2>TL;DR</h2>
+<p>Four single-parameter digital filter baseflow separation methods (Lyne–Hollick, Chapman, Chapman–Maxwell, EWMA) are systematically evaluated across 25 Korean gauging stations using condition-number sensitivity analysis. Chapman and CM methods fail to reproduce the recession curve during dry seasons; EWMA (α: 0.012–0.015) and LH (α: 0.950–0.975) are recommended as reliable alternatives. The study provides the first comprehensive cross-method sensitivity analysis linking filter parameter sensitivity to watershed flow-variability metrics.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Evaluation/comparative study with sensitivity analysis and practical parameter recommendations applied to real streamflow records.</p>
+<p><strong>Context.</strong> Hydrological baseflow separation subfield; builds directly on Lyne &amp; Hollick [13] (original digital filter), Chapman [18] (critique and revision of LH), Chapman &amp; Maxwell [19] (recession-constant-based filter), and Tularam &amp; Ilahee [20] (EWMA method). Eckhardt [17, 23] is cited for context on two-parameter methods and recession constants but not included in the comparison.</p>
+<p><strong>Correctness.</strong> Load-bearing assumption: baseflow = low-frequency component of the streamflow signal, making digital filtering a valid separation proxy. This is explicitly acknowledged to have no physical basis. A second key assumption is that visual fit to the recession curve during dry seasons constitutes a valid adequacy criterion, which is subjective and not validated against an independent ground-truth estimate (tracer, lysimeter, etc.).</p>
+<p><strong>Contributions.</strong>
+- First systematic, cross-method sensitivity analysis using condition numbers (CN) for four single-parameter digital filter methods over 25 stations with diverse river regimes.
+- Introduces dimensionless variation (QDi,Dj) between flow-duration-curve quantiles as a robust, extreme-flow-insensitive watershed characteristic for relating BFI sensitivity to catchment behavior.
+- Documents a systematic failure of the Chapman and CM methods to reproduce the recession curve during dry seasons across all parameter values tested.
+- Proposes specific recommended parameter ranges: EWMA α ∈ [0.012, 0.015]; LH α ∈ [0.950, 0.975]; Chapman and CM deemed unsuitable.</p>
+<p><strong>Clarity.</strong> Generally readable, though the dual use of "Table 6" (once for condition numbers and once labeled "appropriate parameter estimation" in the text, actually Table 7 in the PDF) creates minor confusion; terminology is consistent and equations are clearly presented.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Among four single-parameter digital filter methods applied to Korean rivers, Chapman and CM systematically over-separate or misrepresent baseflow during dry seasons regardless of parameter choice, while EWMA and LH achieve reliable separation within narrow, identifiable parameter ranges; sensitivity to parameter variation is itself a function of watershed flow variability.</p>
+<p><strong>Supporting evidence:</strong>
+- BFI correlation with dimensionless variation QD1,D9: EWMA r = −0.813 (very high), LH r = −0.726 (high), Chapman r = −0.618 (high), CM r = −0.617 (high); all negative, indicating higher flow variability → lower BFI.
+- Condition numbers for LH: −3.08 to −6.70 across stations (most sensitive method); EWMA: +0.17 to +0.38 (least sensitive, smallest inter-station deviation).
+- Chapman and CM condition numbers fall between these extremes: −1.58 to −5.72 and −1.67 to −5.90, respectively.
+- 25 stations span drainage areas 92.16–2990.66 km² and river regime coefficients 88–1792, providing diverse test conditions.
+- Recommended parameter ranges derived from visual evaluation: EWMA α ∈ [0.012, 0.015]; LH α ∈ [0.950, 0.975]; no usable parameter range found for Chapman or CM.</p>
+<p><strong>Figures &amp; tables:</strong> Figures 2 and 3 (time-series separation by method and parameter) carry the key qualitative argument about dry-season failure; axes are labeled but no uncertainty bounds are shown. Figure 4 (BFI vs. filter parameter for all stations, four panels) is the central quantitative display; curves are distinguishable but overlapping and lack confidence intervals. Figure 6 (BFI vs. QD1,D9 scatter plots for EWMA and LH) supports the correlation claim but shows no regression line, confidence band, or p-value. Figure 7 (box-whisker of condition numbers) cleanly summarizes method-level sensitivity. No statistical significance is reported anywhere; no error bars appear on any figure.</p>
+<p><strong>Follow-up references:</strong>
+- Xie et al. [11] (J. Hydrol. 2020) — evaluated baseflow methods across the contiguous US; most directly comparable scope.
+- Eckhardt [17] (Hydrol. Process. 2005) — foundational recursive digital filter with two parameters; excluded here but widely used.
+- Nathan &amp; McMahon [14] (Water Resour. Res. 1990) — operationalized the LH method; essential background.
+- Lott &amp; Stewart [9] (J. Hydrol. 2016) — compares analytical and mass-balance (tracer) baseflow methods; provides the validation standard absent here.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Baseflow = low-frequency streamflow signal holds only where groundwater responds slowly; in flashy or karst catchments this assumption breaks down and the filter produces physically meaningless output.
+- The recession curve is treated as the correct baseline for dry-season baseflow, but it is itself an approximation; using it as an adequacy criterion is circular.
+- Uniform parameter ranges (0.9–0.99 for LH/Chapman/CM; 0.003–0.015 for EWMA) are borrowed from prior literature developed largely outside Korea; their coverage of the true parameter space for Korean monsoon rivers is unverified.
+- Stationarity of watershed behavior is assumed across the 8–12-year records; land-use change and dam operations are not discussed.</p>
+<p><strong>Missing context or citations:</strong>
+- The Eckhardt two-parameter method [17] is cited but excluded from comparison without quantitative justification; practitioners need guidance relative to this widely used method.
+- No engagement with tracer-based or recession-analysis-based baseflow estimates as a reference standard; Lott &amp; Stewart [9] is cited in the introduction but not used for validation.
+- Xie et al. [11] evaluated similar methods in the US but a direct comparison of findings across climatic regions is not attempted.
+- Human regulation (weirs, reservoirs, irrigation withdrawals) in the Nakdong River is not mentioned as a potential confound on the streamflow signal.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The "appropriateness" criterion for recommending parameters rests on two subjective visual checks (dry-season recession fit; wet-season rise reasonability) with no objective metric, reproducibility standard, or inter-rater agreement reported.
+- All 25 stations are within a single monsoon-dominated Korean basin; results may not generalize to arid, nival, or temperate oceanic regimes where the frequency separation assumption may perform differently.
+- Correlation coefficients in Table 5 are reported without p-values, confidence intervals, or correction for multiple comparisons across four methods and four cases.
+- The condition number is evaluated at a single default parameter (midpoint of range); sensitivity at the recommended operating range endpoints is not separately quantified.
+- Station selection (25 of 60 by data-completeness criterion) is not shown to be unbiased with respect to watershed characteristics; if complete-record stations have different hydrological behavior this could skew the findings.
+- Data are stated as not publicly available, severely limiting reproducibility.</p>
+<p><strong>Ideas for future work:</strong>
+- Validate recommended parameter ranges against independent ground-truth (electrical conductivity or isotope-based) baseflow estimates at a subset of the 25 stations to replace the visual adequacy criterion with an objective one.
+- Apply the same sensitivity framework to non-monsoon climates (arid semi-arid, snowmelt-dominated, temperate maritime) to test whether the EWMA and LH recommendations hold across hydrological regimes.
+- Incorporate the Eckhardt two-parameter method into the sensitivity comparison and test whether the added parameter degree of freedom compensates for or amplifies the dry-season failure observed in Chapman and CM.
+- Develop an automated parameter-selection algorithm that minimizes the condition number while satisfying a dry-season recession constraint, eliminating reliance on subjective visual inspection.</p></div>
+
+    
+      <div class="figures-block">
+        <h3 class="figures-head">Figures from the paper</h3>
+        <div class="figures-grid">
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-001.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-001.png" alt="figure 1, page 1" loading="lazy">
+              </a>
+              <figcaption>Fig. 1 · page 1</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-002.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-002.png" alt="figure 2, page 1" loading="lazy">
+              </a>
+              <figcaption>Fig. 2 · page 1</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-003.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-003.png" alt="figure 3, page 1" loading="lazy">
+              </a>
+              <figcaption>Fig. 3 · page 1</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-004.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-004.png" alt="figure 4, page 1" loading="lazy">
+              </a>
+              <figcaption>Fig. 4 · page 1</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-005.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-005.jpeg" alt="figure 5, page 5" loading="lazy">
+              </a>
+              <figcaption>Fig. 5 · page 5</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-006.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-006.jpeg" alt="figure 6, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 6 · page 6</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-007.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-007.jpeg" alt="figure 7, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 7 · page 6</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-008.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-008.jpeg" alt="figure 8, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 8 · page 6</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-009.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-009.jpeg" alt="figure 9, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 9 · page 6</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-010.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-010.jpeg" alt="figure 10, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 10 · page 6</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-011.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-011.jpeg" alt="figure 11, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 11 · page 6</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-012.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-012.jpeg" alt="figure 12, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 12 · page 6</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-013.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-013.jpeg" alt="figure 13, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 13 · page 6</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-014.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-014.png" alt="figure 14, page 8" loading="lazy">
+              </a>
+              <figcaption>Fig. 14 · page 8</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-015.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-015.png" alt="figure 15, page 8" loading="lazy">
+              </a>
+              <figcaption>Fig. 15 · page 8</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-016.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-016.png" alt="figure 16, page 8" loading="lazy">
+              </a>
+              <figcaption>Fig. 16 · page 8</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-017.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-017.png" alt="figure 17, page 8" loading="lazy">
+              </a>
+              <figcaption>Fig. 17 · page 8</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-018.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-018.jpeg" alt="figure 18, page 8" loading="lazy">
+              </a>
+              <figcaption>Fig. 18 · page 8</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-019.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-019.png" alt="figure 19, page 8" loading="lazy">
+              </a>
+              <figcaption>Fig. 19 · page 8</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-020.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-020.png" alt="figure 20, page 8" loading="lazy">
+              </a>
+              <figcaption>Fig. 20 · page 8</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-021.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-021.jpeg" alt="figure 21, page 10" loading="lazy">
+              </a>
+              <figcaption>Fig. 21 · page 10</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-022.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-022.jpeg" alt="figure 22, page 11" loading="lazy">
+              </a>
+              <figcaption>Fig. 22 · page 11</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-023.png" target="_blank">
+                <img src="../figures/6351598f13c0/figure-023.png" alt="figure 23, page 11" loading="lazy">
+              </a>
+              <figcaption>Fig. 23 · page 11</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/6351598f13c0/figure-024.jpeg" target="_blank">
+                <img src="../figures/6351598f13c0/figure-024.jpeg" alt="figure 24, page 11" loading="lazy">
+              </a>
+              <figcaption>Fig. 24 · page 11</figcaption>
+            </figure>
+          
+        </div>
+      </div>
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Lyne-Hollick filter</li><li>Chapman filter</li><li>Chapman-Maxwell filter</li><li>exponentially weighted moving average (EWMA)</li><li>baseflow index (BFI)</li><li>condition number sensitivity analysis</li><li>recession analysis</li><li>flow duration curve analysis</li></ul>
+        <h4>Datasets</h4><ul><li>25 stage stations on the Nakdong River, Republic of Korea (8+ years of daily streamflow records)</li></ul>
+        <h4>Claims</h4><ul><li>The Chapman and Chapman-Maxwell methods fail to properly separate baseflow during dry seasons, with the problem worsening as dry-season flow rates increase.</li><li>The EWMA and Lyne-Hollick methods achieve reliable baseflow separation when appropriate filter parameters are selected.</li><li>The Lyne-Hollick method is the most sensitive to filter parameter changes, while the EWMA method shows the least deviation in condition numbers across stations.</li><li>The BFI calculated by the EWMA method is very highly correlated with dimensionless flow variation, indicating it best reflects river characteristics.</li><li>Appropriate filter parameter ranges are 0.950-0.975 for the Lyne-Hollick method and 0.012-0.015 for the EWMA method.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

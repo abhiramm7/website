@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>XGBoost: A Scalable Tree Boosting System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>XGBoost: A Scalable Tree Boosting System</h1>
+      <p class="paper-detail-meta">
+        Tianqi Chen, Carlos Guestrin
+         · <em>KDD &#39;16</em>
+         · 2016
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/1603.02754" target="_blank">[arxiv]</a>
+        <a href="https://github.com/dmlc/xgboost" target="_blank">[github]</a><a href="https://github.com/dmlc/rabit" target="_blank">[github]</a>
+        
+        <span class="entry-tag">gradient-boosting</span><span class="entry-tag">tree-ensemble</span><span class="entry-tag">scalable-machine-learning</span><span class="entry-tag">distributed-computing</span><span class="entry-tag">sparse-data</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>XGBoost: A Scalable Tree Boosting System</h1>
+<p><strong>Authors:</strong> Tianqi Chen, Carlos Guestrin
+<strong>Year:</strong> 2016
+<strong>Tags:</strong> gradient-boosting, decision-trees, scalable-ml, sparse-data, distributed-systems, approximate-algorithms</p>
+<h2>TL;DR</h2>
+<p>XGBoost is an end-to-end gradient tree boosting system that combines a novel sparsity-aware split-finding algorithm, a theoretically justified weighted quantile sketch for approximate learning, and hardware-level systems optimizations (cache-aware prefetching, block compression, disk sharding) to scale to 1.7 billion examples on minimal cluster resources. It ran on every top-10 KDDCup 2015 winning team and in 17 of 29 Kaggle winning solutions in 2015, making it the empirically dominant ensemble method of its era.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / systems paper with algorithmic contributions.</p>
+<p><strong>Context.</strong> Gradient tree boosting subfield. Builds directly on Friedman 2001 (gradient boosting machine), Friedman, Hastie &amp; Tibshirani 2000 (second-order additive logistic regression / scoring derivation), Tyree et al. 2011 (pGBRT — main parallel baseline), and Zhang &amp; Johnson 2014 (regularized greedy forest — prior regularized tree objective).</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) second-order Taylor expansion adequately approximates arbitrary differentiable loss — breaks for highly non-quadratic losses; (2) second-order gradient statistics hi are non-negative, i.e., loss is strictly convex — required for hi to function as instance weights in the quantile sketch; (3) one-time sort cost is amortizable across training iterations — reasonable for many-tree ensembles. All three appear plausible within the paper's scope.</p>
+<p><strong>Contributions.</strong>
+- Novel sparsity-aware split-finding that learns optimal default directions for missing values and runs in O(∥x∥₀) time, achieving ~50× speedup over a naive implementation on sparse data.
+- Theoretically justified weighted quantile sketch with provable ε-approximation guarantees, merge and prune operations — the first such algorithm for weighted datasets.
+- Cache-aware prefetching via internal gradient-statistics buffers, delivering ~2× speedup on 10M-instance datasets versus naive block access.
+- Out-of-core computation through column-block compression (26–29% compression ratio) and multi-disk sharding, enabling 1.7B example training on a single machine and 4-machine clusters.</p>
+<p><strong>Clarity.</strong> Well-organized with clear pseudocode (Algorithms 1–4) and per-optimization microbenchmarks; the appendix proof for the weighted quantile sketch is rigorous but dense; Table 1's "partially" label for sparsity support across competing systems is used without a definition.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> XGBoost achieves &gt;10× single-machine speedup over scikit-learn's exact greedy implementation and outperforms distributed in-memory systems (Spark MLLib, H2O) on the 1.7B-row Criteo dataset by coupling algorithmic improvements (sparsity awareness, weighted quantile sketch) with systems engineering (pre-sorted column blocks, cache prefetching, disk-based out-of-core).</p>
+<p><strong>Supporting evidence:</strong>
+- Higgs-1M, 500 trees, exact greedy: XGBoost 0.6841 sec/tree, AUC 0.8304 vs. scikit-learn 28.51 sec/tree, AUC 0.8302; R GBM 1.032 sec/tree, AUC 0.6224 (different expansion strategy).
+- Yahoo LTRC, 500 trees: XGBoost 0.826 sec/tree, NDCG@10 0.7892 vs. pGBRT 2.576 sec/tree, NDCG@10 0.7915.
+- Sparsity-aware algorithm on Allstate-10K: &gt;50× faster than naive across all thread counts.
+- Cache-aware prefetching on Allstate-10M and Higgs-10M: ~2× speedup; effect negligible on 1M-instance datasets (gradient stats fit in cache).
+- Out-of-core on Criteo subsets (AWS c3.8xlarge, 32 vCores, 2×320 GB SSD, 60 GB RAM): block compression alone gives 3× speedup; adding two-disk sharding gives additional 2× speedup; combined method processes full 1.7B examples.
+- Distributed on 32 EC2 m3.2xlarge nodes: XGBoost &gt;10× faster per iteration than Spark MLLib; ~2.2× faster per iteration than H2O; scales to full 1.7B with 4 machines; near-linear (slightly super-linear due to file-cache growth) scaling from 4 to 32 machines.</p>
+<p><strong>Figures &amp; tables:</strong> Figs. 5, 7, 10–13 carry the performance argument; all use log-log axes with labels. No figure shows error bars, confidence intervals, or reports statistical significance — all timing results appear to be single runs. Fig. 3 shows AUC vs. iteration curves for approximate vs. exact greedy, axes labeled, no variance shown. Table 1 is a qualitative feature matrix; "partially" is undefined. Table 3 and 4 report single-run times and single evaluation-set accuracy scores with no variance. Visualization is functional but statistical rigor is absent throughout.</p>
+<p><strong>Follow-up references:</strong>
+- Friedman 2001 (<em>Greedy function approximation</em>) — foundational theory for gradient boosting and scoring function derivation used throughout.
+- Tyree et al. 2011 (pGBRT) — primary parallel baseline; understanding its limitations motivates XGBoost's design.
+- Greenwald &amp; Khanna 2001 (GK quantile sketch, SIGMOD) — classical unweighted algorithm that the weighted quantile sketch extends.
+- Zhang &amp; Johnson 2014 (Regularized greedy forest, IEEE TPAMI) — prior regularized tree objective that XGBoost's regularization resembles but simplifies.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- hi &gt; 0 everywhere is required for the weighted quantile sketch to be valid (hi is the instance weight); non-convex or piecewise losses can produce zero or negative second derivatives, breaking the sketch's theoretical guarantees.
+- The ~50× sparsity speedup is measured exclusively on data sparse due to one-hot encoding; the benefit is proportional to the fraction of missing entries and may be far smaller for dense data with moderate missingness.
+- Cache benefits (Fig. 7) are architecture-specific: the crossover point between cache-aware and naive depends on L2/L3 cache size and memory bandwidth of the specific CPU, which is not characterized.
+- The 26–29% compression ratio implicitly assumes that the "general purpose" compression algorithm (unnamed in the paper) performs comparably across feature distributions — not validated on diverse data types.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison against LightGBM-style histogram boosting (published concurrently by Microsoft Research; may postdate submission, but the absence limits long-term positioning).
+- PLANET (Panda et al. 2009, VLDB) is cited but not included in distributed experiments despite being a dedicated distributed tree system.
+- The "17 of 29 Kaggle winners" claim is sourced from blog posts, not a reproducible audit; no definition of "winning solution" (top-1? top-3?) is given consistently.
+- No evaluation on regression tasks: all headline benchmarks are binary classification or ranking, leaving generalization to regression undemonstrated.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Zero statistical replication: all timing numbers appear to be single-run point estimates; variance from OS scheduling, memory contention, and I/O jitter is ignored.
+- Higgs-1M is used for single-machine comparison specifically because scikit-learn cannot complete on larger subsets in reasonable time — the dataset size is chosen to accommodate the weakest baseline, not to stress-test XGBoost.
+- R GBM comparison is explicitly noted to use a different (single-branch) tree expansion, making the AUC comparison (0.8304 vs. 0.6224) misleading as a quality benchmark; it should be presented separately from speed comparisons.
+- Criteo preprocessing (replacing 26 ID features with count/CTR statistics) is a non-trivial feature engineering step that is not ablated; the results are entangled with this choice rather than reflecting raw system capability.
+- The distributed comparison uses only Spark MLLib and H2O — both general-purpose in-memory frameworks rather than specialized tree boosting systems — as baselines, which may understate competition.
+- Linear scaling claim (Fig. 13) is described by the authors as "slightly super-linear" due to file-cache accumulation with more machines, undermining the scaling narrative.</p>
+<p><strong>Ideas for future work:</strong>
+1. Evaluate the weighted quantile sketch under non-convex losses (e.g., focal loss, custom objectives with regions of negative curvature) and quantify the approximation error when hi ≤ 0 for a subset of instances.
+2. Direct head-to-head benchmarking against LightGBM on identical hardware and datasets, explicitly trading off histogram-based vs. sorted-column approaches for varying dataset densities and depths.
+3. Adaptive block sizing that profiles available CPU cache at runtime and adjusts the block size dynamically, rather than relying on the fixed empirical choice of 2¹⁶ rows.
+4. Replicated timing experiments (≥30 runs) with reported mean and standard deviation to establish whether observed speedup factors (2×, 3×, 50×) are statistically distinguishable from noise.</p></div>
+
+    
+      <div class="figures-block">
+        <h3 class="figures-head">Figures from the paper</h3>
+        <div class="figures-grid">
+          
+            <figure class="figure-tile">
+              <a href="../figures/52bc282c922a/figure-001.png" target="_blank">
+                <img src="../figures/52bc282c922a/figure-001.png" alt="figure 1, page 2" loading="lazy">
+              </a>
+              <figcaption>Fig. 1 · page 2</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/52bc282c922a/figure-002.png" target="_blank">
+                <img src="../figures/52bc282c922a/figure-002.png" alt="figure 2, page 3" loading="lazy">
+              </a>
+              <figcaption>Fig. 2 · page 3</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/52bc282c922a/figure-003.png" target="_blank">
+                <img src="../figures/52bc282c922a/figure-003.png" alt="figure 3, page 4" loading="lazy">
+              </a>
+              <figcaption>Fig. 3 · page 4</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/52bc282c922a/figure-004.png" target="_blank">
+                <img src="../figures/52bc282c922a/figure-004.png" alt="figure 4, page 5" loading="lazy">
+              </a>
+              <figcaption>Fig. 4 · page 5</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/52bc282c922a/figure-005.png" target="_blank">
+                <img src="../figures/52bc282c922a/figure-005.png" alt="figure 5, page 6" loading="lazy">
+              </a>
+              <figcaption>Fig. 5 · page 6</figcaption>
+            </figure>
+          
+        </div>
+      </div>
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>gradient tree boosting</li><li>exact greedy split finding</li><li>approximate split finding</li><li>weighted quantile sketch</li><li>sparsity-aware split finding</li><li>cache-aware prefetching</li><li>column block structure</li><li>out-of-core computation</li><li>block compression</li><li>block sharding</li><li>column subsampling</li><li>second-order gradient approximation</li></ul>
+        <h4>Datasets</h4><ul><li>Allstate insurance claim dataset</li><li>Higgs Boson dataset</li><li>Yahoo! Learning to Rank Challenge dataset</li><li>Criteo terabyte click log dataset</li></ul>
+        <h4>Claims</h4><ul><li>XGBoost runs more than ten times faster than existing popular single-machine tree boosting solutions such as scikit-learn.</li><li>A novel sparsity-aware algorithm reduces computation complexity to be linear in the number of non-missing entries and runs 50x faster than a naive implementation on sparse data.</li><li>A theoretically justified weighted quantile sketch enables approximate tree learning with instance weights and provable accuracy guarantees.</li><li>XGBoost scales to 1.7 billion examples on a single machine via out-of-core computation using block compression and sharding.</li><li>XGBoost outperforms distributed systems Spark MLLib and H2O in both speed and scalability, handling the full 1.7 billion example Criteo dataset with as few as four machines.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

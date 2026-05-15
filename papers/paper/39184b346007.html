@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Smart Stormwater Management Using Sensor-Driven Control Strategies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Smart Stormwater Management Using Sensor-Driven Control Strategies</h1>
+      <p class="paper-detail-meta">
+        Christopher J. Marshall, Natalie B. Rivera, Anthony S. Whitman, Laura K. Delgado, Maryam Yusuff
+        
+        
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">stormwater-management</span><span class="entry-tag">real-time-control</span><span class="entry-tag">sensor-networks</span><span class="entry-tag">urban-hydrology</span><span class="entry-tag">flood-mitigation</span><span class="entry-tag">water-quality</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Smart Stormwater Management Using Sensor-Driven Control Strategies</h1>
+<p><strong>Authors:</strong> Christopher J. Marshall, Natalie B. Rivera, Anthony S. Whitman, Laura K. Delgado, Maryam Yusuff
+<strong>Year:</strong> Not stated.
+<strong>Tags:</strong> smart-stormwater, real-time-control, model-predictive-control, sensor-networks, urban-hydrology, flood-mitigation</p>
+<h2>TL;DR</h2>
+<p>Reviews sensor-driven control strategies for urban stormwater systems, comparing threshold-based rules and model predictive control (MPC) across simulations and unspecified field deployments. Claims MPC outperforms static and threshold-based approaches for flood mitigation, combined sewer overflow reduction, and water quality, but reports no quantitative performance figures.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Review/synthesis with methodology description and reported simulation and field results; closer to a position/overview paper than an empirical research paper.</p>
+<p><strong>Context.</strong> Urban hydrology and real-time control subfield. Builds on: Shishegar et al. (2019) for predictive real-time control optimization; Rimer et al./pystorms (2021) for simulation sandboxes; Chen et al. (2023) for IoT in green stormwater infrastructure; Altami &amp; Salman (2022) for IoT-based sensor systems in stormwater.</p>
+<p><strong>Correctness.</strong> Central assumptions: (1) hydraulic models can be calibrated accurately enough for MPC to outperform simpler heuristics in real deployments; (2) sensor networks can maintain data quality sufficient for real-time decisions; (3) weather forecasts provide actionable lead time for anticipatory control. These are asserted but not tested with data in the paper.</p>
+<p><strong>Contributions.</strong>
+- Synthesizes system architecture principles (sensor selection, placement, redundancy, communication) for smart stormwater into a single design framework.
+- Articulates a methodology covering objective setting, control algorithm selection, simulation, field deployment, and multi-metric performance evaluation.
+- Identifies forecast integration and data assimilation as critical enablers of anticipatory (vs. reactive) MPC.
+- Highlights operational and institutional barriers (sensor maintenance, governance, funding) as co-equal challenges alongside algorithmic ones.</p>
+<p><strong>Clarity.</strong> Prose is fluent but consistently vague on specifics — no catchment names, no sensor counts, no storm return periods, and no numeric results are given anywhere in the paper.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Sensor-integrated MPC outperforms threshold rules and uncontrolled static systems for urban stormwater by enabling anticipatory storage pre-positioning and optimized release timing; realizing these benefits in practice requires addressing sensor reliability, forecast uncertainty, and institutional coordination.</p>
+<p><strong>Supporting evidence:</strong>
+- MPC "consistently reduced peak discharge rates at critical downstream nodes" under design storm events — magnitude not stated.
+- Threshold-based control improved on uncontrolled baselines but was "generally outperformed" by MPC, especially under complex storm patterns — no quantitative comparison given.
+- Field deployments showed "monitored reductions in turbidity and nutrient concentrations at outfall locations" — no values, units, or statistical tests reported.
+- Forecast-enhanced MPC was "superior" to reactive control in peak flow mitigation — no effect size stated.
+- Economic analysis found "favorable cost-benefit profiles" for smart systems — no cost figures, discount rates, or benefit estimates provided.</p>
+<p><strong>Figures &amp; tables:</strong> No figures or tables are present in the provided text. All results are conveyed in prose; no axes, error bars, confidence intervals, or statistical significance can be assessed.</p>
+<p><strong>Follow-up references:</strong>
+- Shishegar et al. (2019) — direct prior work on predictive real-time control optimization for stormwater; most methodologically relevant.
+- Rimer et al. / pystorms (2021) — simulation sandbox for evaluating stormwater control algorithms; essential for reproducing or extending the simulation claims.
+- Chen et al. (2023) — bibliometric review of IoT in green stormwater infrastructure; provides broader literature map.
+- Altami &amp; Salman (2022) — IoT-based sensor system implementation; closest empirical comparator cited.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Hydraulic models can be calibrated to sufficient accuracy that MPC's model-based predictions are reliable in real catchments — if model error is large, MPC's nominal superiority over threshold rules may not hold.
+- Forecast lead times are long enough for pre-positioning storage to be meaningful — not validated for convective events (the paper itself notes this as a failure mode).
+- Actuators (gates, valves, pumps) are available, functional, and responsive enough to execute MPC-prescribed actions within acceptable latency — field constraints on actuation speed are not characterized.
+- Cyber-physical security risks do not materially alter operational behavior — mentioned briefly but treated as out of scope.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with the extensive EPA SWMM or EPA RTC literature, nor with OpenStormwater or related open-source toolchains.
+- No comparison to green infrastructure hybrid approaches, despite the literature review acknowledging their relevance.
+- No citation of failure-mode or cybersecurity literature for water infrastructure control systems, despite raising the concern.
+- Machine learning controllers are discussed as future work but no citations to existing ML-in-stormwater literature (e.g., reinforcement learning approaches) are provided.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Zero quantitative results are reported anywhere. Claims of "significant enhancement," "consistent reduction," and "monitored reductions" are unverifiable without numbers, units, sample sizes, or statistical tests.
+- Catchments, storm events, and infrastructure configurations are never described; results cannot be assessed for generalizability or reproduced.
+- No baselines are formally defined; "uncontrolled system" is not characterized beyond being "static."
+- No ablation of individual system components (forecast vs. no forecast, sensor density, redundancy) with measured outcomes.
+- Economic analysis mentions "favorable cost-benefit profiles" with no figures, making the claim unexaminable.
+- Dual citation of Barua (2024) on PFAS adsorption in the reference list is tangential to sensor-driven control and unexplained in the text.</p>
+<p><strong>Ideas for future work:</strong>
+- Run controlled simulation experiments using pystorms or SWMM-RTC with reported catchment parameters, storm return periods, and numeric performance metrics (peak flow reduction %, CSO volume reduction %) to substantiate the qualitative claims made here.
+- Systematic sensitivity analysis: vary forecast lead time and error magnitude across storm types (convective vs. frontal) to establish thresholds where anticipatory MPC degrades to or below threshold-rule performance.
+- Benchmark ML-based controllers (e.g., deep reinforcement learning) against MPC on identical catchment models with identical storm ensembles, reporting computational overhead alongside performance.
+- Conduct longitudinal field study tracking sensor failure rates, calibration drift, and maintenance costs over multiple seasons to empirically characterize the reliability assumptions underlying the framework.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>model predictive control (MPC)</li><li>threshold-based rule control</li><li>sensor network deployment</li><li>hydraulic modeling</li><li>data assimilation</li><li>probabilistic rainfall forecast integration</li><li>uncertainty analysis</li><li>sensitivity analysis</li></ul>
+        
+        <h4>Claims</h4><ul><li>Sensor-driven model predictive control significantly reduces peak discharge rates at critical downstream nodes compared to static uncontrolled systems.</li><li>Anticipatory control strategies leveraging weather forecasts outperform purely reactive strategies, particularly for complex storm patterns.</li><li>Optimizing detention basin operations using real-time water quality measurements increases residence times and reduces pollutant export.</li><li>Redundant sensor networks maintain system functionality despite occasional sensor failures, contributing to fault tolerance.</li><li>Smart stormwater systems show favorable long-term cost-benefit profiles when accounting for reduced flood damage, lower maintenance costs, and improved regulatory compliance.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

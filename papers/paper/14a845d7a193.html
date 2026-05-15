@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Convex Optimization for Trajectory Generation: A Tutorial On Generating Dynamically Feasible Trajectories Reliably And Efficiently</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Convex Optimization for Trajectory Generation: A Tutorial On Generating Dynamically Feasible Trajectories Reliably And Efficiently</h1>
+      <p class="paper-detail-meta">
+        Danylo Malyuta, Taylor P. Reynolds, Michael Szmuk, Thomas Lew, Riccardo Bonalli, Marco Pavone, Behçet Açıkmeşe
+        
+         · 2021
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/2106.09125" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">trajectory-optimization</span><span class="entry-tag">convex-optimization</span><span class="entry-tag">sequential-convex-programming</span><span class="entry-tag">autonomous-vehicles</span><span class="entry-tag">optimal-control</span><span class="entry-tag">aerospace</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Convex Optimization for Trajectory Generation: A Tutorial On Generating Dynamically Feasible Trajectories Reliably And Efficiently</h1>
+<p><strong>Authors:</strong> Danylo Malyuta, Taylor P. Reynolds, Michael Szmuk, Thomas Lew, Riccardo Bonalli, Marco Pavone, Behçet Açıkmeşe
+<strong>Year:</strong> 2021 (arXiv preprint; title hint suggests 2022 publication)
+<strong>Tags:</strong> trajectory-optimization, convex-optimization, lossless-convexification, sequential-convex-programming, autonomous-vehicles, aerospace</p>
+<h2>TL;DR</h2>
+<p>A practitioner-oriented tutorial of three convex optimization-based trajectory generation algorithms — lossless convexification (LCvx), SCvx, and GuSTO — written by their respective developers. The paper provides unified theoretical foundations, algorithmic descriptions, and open-source Julia implementations targeting autonomous aerospace and robotic applications where onboard, real-time, reliable trajectory generation is required.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Tutorial (algorithm exposition with theoretical foundations; not a new research result).</p>
+<p><strong>Context.</strong> Nonlinear optimal control and autonomous vehicle motion planning. Builds on: Pontryagin maximum principle (Pontryagin et al.) for optimality proofs; Açıkmeşe &amp; Ploen for the original LCvx rocket-landing result; Mao/Szmuk et al. for SCvx (successive convexification); Bonalli et al. for GuSTO; Boyd &amp; Vandenberghe's convex optimization text as background framework.</p>
+<p><strong>Correctness.</strong> Core assumptions appear valid within stated scope: (1) convex solvers deliver polynomial-time globally optimal solutions — well-established; (2) LCvx theorems require system total controllability and linear independence conditions (Conditions 1–6) that must be verified per-application and can fail; (3) for general convex state constraints, lossless guarantee holds only if state constraints activate at isolated time instances — a restriction the paper acknowledges but that may be difficult to verify a priori.</p>
+<p><strong>Contributions.</strong>
+- First single tutorial unifying LCvx, SCvx, and GuSTO with a common problem formulation, highlighting where each method applies and its limits.
+- Systematic chronological survey of LCvx theory development from 2005 to 2021 across five distinct problem classes (no state constraints → affine → quadratic → general convex → nonlinear dynamics).
+- Open-source Julia implementation (GitHub, <code>csm</code> branch) reproducing all numerical examples in the paper.
+- Side-by-side geometric intuition for each convex relaxation via sidebar boxes (e.g., thrust annulus lifting, pointing constraint halfspace).</p>
+<p><strong>Clarity.</strong> Generally well-written with consistent notation and sidebar boxes that ground abstract conditions in physical examples; the paper is long and heavily theorem-dense in Part I, which may slow practitioners unfamiliar with Pontryagin theory.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> LCvx exactly reformulates certain nonconvex optimal control problems as convex ones (proved globally optimal via maximum principle), while SCvx and GuSTO handle far more general nonconvexities through iterative linearization within a trust-region SCP framework — all three reduce trajectory generation to repeated calls to a convex solver with polynomial-time guarantees.</p>
+<p><strong>Supporting evidence:</strong>
+- LCvx Theorem 1: under total controllability (Condition 1) and linear independence (Condition 2), the slack-variable relaxation of a nonconvex input-lower-bound problem recovers the globally optimal solution of the original problem.
+- LCvx extended to affine state constraints (Theorem 3, requires Condition 5: no transmission zeros in a dual linear system), quadratic state constraints (Theorem 4), and general convex state constraints active only at isolated times (Theorem 5).
+- Flight-validated applications cited: NASA JPL multi-year Masten Xombie sounding rocket campaign for Mars pinpoint landing; SCvx as experimental payload on Blue Origin New Shepard (NASA SPLICE project); SpaceX Falcon 9 terminal landing (hypothesized as LCvx relative).
+- Convex solvers (interior-point methods) stated to solve "substantially large trajectory generation problems in under one second" — attributed to references [9, 37, 63], not benchmarked within the paper itself.
+- SCP classified as a trust-region method; SCvx and GuSTO described as closely related but differing in constraint handling and convergence machinery (detailed treatment in Part II, not in the provided text excerpt).</p>
+<p><strong>Figures &amp; tables:</strong> Figure 4 (LCvx chronology 2005–2021) is a useful reference timeline — no axes, no quantitative data. Figure 3 (convex set/function illustrations) is schematic only. Sidebar figures S1–S6 provide 2D/3D geometric illustrations of constraint relaxations — clearly labeled but contain no empirical data, error bars, or statistical significance. No performance comparison tables appear in the provided excerpt. Numerical example figures are in Part III (not in provided text).</p>
+<p><strong>Follow-up references:</strong>
+- Açıkmeşe &amp; Ploen [45] — original LCvx derivation for rocket landing, source of Theorem 1.
+- Liu et al. / Mao et al. [49] / Bonalli et al. [50] — primary SCvx and GuSTO algorithm papers for theoretical depth beyond the tutorial.
+- Boyd &amp; Vandenberghe [26] — convex optimization textbook underpinning all solver properties claimed.
+- Recent survey [6] (unnamed in excerpt) — covers alternative SCP methods and applications not treated here.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- LCvx applicability assumes LTV (or very restricted nonlinear) dynamics; the double-integrator structure required for quadratic state constraint results (Problem 18) is quite narrow and may not hold in practice.
+- Total controllability (Condition 1) and no-transmission-zeros (Condition 5) must be verified per problem instance; the paper does not discuss how to handle cases where these fail.
+- The claim that general convex state constraints activate only at isolated time instances is a structural assumption on the optimal solution — not a design parameter the user controls — and could silently fail (as illustrated in Figure S6b) without a prior mechanism to detect or guarantee it.
+- Interior-point method polynomial complexity assumes the problem is presented in standard conic form; discretization quality and conditioning are not analyzed.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with direct collocation or pseudospectral methods (e.g., GPOPS-II, DIDO, PROPT), which are the dominant alternatives in aerospace trajectory optimization and solve similar problem classes.
+- ALTRO and other recent Augmented Lagrangian / iLQR-based methods for trajectory optimization are not mentioned.
+- Robustness, chance constraints, and stochastic trajectory optimization are explicitly out of scope but not contextualized relative to the growing literature in those areas.
+- No discussion of warm-starting strategies, which are critical for real-time MPC reuse of prior solutions.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The provided excerpt contains no runtime benchmarks with units, confidence intervals, or comparison baselines; the "under one second" performance claim is informal and sourced from external references.
+- Authors are developers of all three algorithms, creating potential for favorable framing relative to competing methods (no head-to-head comparison appears).
+- The text excerpt is truncated before Parts II and III; the SCvx and GuSTO algorithmic descriptions, convergence theory, and numerical examples cannot be evaluated from the provided material.
+- Open-source code is in Julia, which has lower adoption than Python or MATLAB in the robotics and controls communities, potentially limiting reproducibility for much of the target audience.
+- No discussion of how discretization error interacts with LCvx global optimality guarantees — the theorem chain assumes continuous-time optimality, but the implementable problem is always discretized.</p>
+<p><strong>Ideas for future work:</strong>
+- Extending LCvx global optimality guarantees to broader nonlinear dynamics classes beyond the double-integrator structure, or providing tight bounds on suboptimality when conditions are approximately satisfied.
+- A formal computational benchmark comparing LCvx, SCvx, GuSTO, and pseudospectral methods on identical problems with measured solve times on representative flight-grade hardware (e.g., RAD750-class processors).
+- Analysis of discretization error propagation into LCvx optimality certificates — how fine must the time grid be before the continuous-time theorem applies in practice?
+- Extension of GuSTO/SCvx to distributionally robust or tube-based formulations to handle the stochastic disturbances w(t) that appear in the problem formulations but are treated as fixed constants throughout Part I.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>lossless convexification (LCvx)</li><li>sequential convex programming (SCP)</li><li>SCvx (successive convexification)</li><li>GuSTO</li><li>interior point method (IPM)</li><li>Pontryagin maximum principle</li><li>slack variable relaxation</li><li>trust region methods</li><li>first-order hold (FOH) discretization</li><li>zeroth-order hold (ZOH) discretization</li></ul>
+        
+        <h4>Claims</h4><ul><li>Lossless convexification (LCvx) can reformulate certain nonconvex optimal control problems into equivalent convex problems solvable in polynomial time with global optimality guarantees.</li><li>Sequential convex programming methods SCvx and GuSTO can handle highly nonconvex trajectory generation tasks by iteratively solving convex subproblems.</li><li>Convex optimization-based trajectory generation provides deterministic runtime bounds and certificates of infeasibility, making it safer than general NLP methods for autonomous control.</li><li>The LCvx, SCvx, and GuSTO algorithms have been successfully applied to real-world problems including rocket landing, spacecraft rendezvous, quadrotor planning, and free-flyer robots.</li><li>The LCvx equality constraint is guaranteed to hold at the global optimum under conditions of total controllability and appropriate linear independence of cost and boundary terms.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

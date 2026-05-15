@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Probabilistic Machine Learning: An Introduction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Probabilistic Machine Learning: An Introduction</h1>
+      <p class="paper-detail-meta">
+        Kevin P. Murphy
+         · <em>MIT Press</em>
+         · 2022
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        <a href="https://github.com/probml/pml-book/issues" target="_blank">[github]</a><a href="https://github.com/probml/pml-book/issues/353#issuecomment-1120327442" target="_blank">[github]</a><a href="https://github.com/probml/pml-book/issues/512" target="_blank">[github]</a><a href="https://github.com/probml/pml-book/issues/266" target="_blank">[github]</a><a href="https://github.com/rwightman/pytorch-image-models" target="_blank">[github]</a><a href="https://github.com/dmlc/xgboost" target="_blank">[github]</a><a href="https://github.com/Microsoft/LightGBM" target="_blank">[github]</a><a href="https://github.com/jason718/awesome-self-supervised-learning" target="_blank">[github]</a><a href="https://huggingface.co/learn/nlp-course" target="_blank">[huggingface]</a>
+        
+        <span class="entry-tag">probabilistic-machine-learning</span><span class="entry-tag">bayesian-inference</span><span class="entry-tag">deep-learning</span><span class="entry-tag">supervised-learning</span><span class="entry-tag">unsupervised-learning</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Probabilistic Machine Learning: An Introduction</h1>
+<p><strong>Authors:</strong> Kevin P. Murphy
+<strong>Year:</strong> 2022
+<strong>Tags:</strong> probabilistic-ml, bayesian-inference, deep-learning, textbook, supervised-learning, unsupervised-learning</p>
+<h2>TL;DR</h2>
+<p>A graduate-level textbook unifying classical statistics, Bayesian inference, and modern deep learning under a single probabilistic modeling lens, spanning foundations through transformers and graph neural networks. Intended as a self-contained replacement for Murphy's 2012 <em>Machine Learning: A Probabilistic Perspective</em>, updated for the deep learning era with Python/JAX/PyTorch code and Colab notebooks.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Textbook / pedagogical survey of an established field (~800 pages, 23 chapters).</p>
+<p><strong>Context.</strong> Subfield: machine learning broadly. Builds directly on Murphy's own 2012 MLAPP; situates itself alongside Bishop's PRML, Koller &amp; Friedman's <em>Probabilistic Graphical Models</em>, Rasmussen &amp; Williams' <em>Gaussian Processes for ML</em>, and Schölkopf &amp; Smola's <em>Learning with Kernels</em>. The Bayesian decision-theoretic framing follows Jaynes-style probabilism as a foundation for reasoning under uncertainty.</p>
+<p><strong>Correctness.</strong> Load-bearing assumption: probabilistic modeling is a sufficient unifying lens for nearly all of ML. This is a methodological commitment, not empirically validated in the book itself; optimization-centric and PAC-learning perspectives are acknowledged but secondary. A second assumption is that epistemic and aleatoric uncertainty distinctions motivate the Bayesian treatment — valid conceptually but the book does not critically engage with cases where calibrated frequentist methods suffice.</p>
+<p><strong>Contributions.</strong>
+- Single-volume integration of Bayesian foundations, linear models, deep neural networks (CNNs, RNNs, Transformers), and nonparametric methods absent from the 2012 book in this form.
+- Replaced Matlab codebase entirely with Python (NumPy, Scikit-learn, JAX, PyTorch, TensorFlow, PyMC), with figure-generating Jupyter notebooks runnable on free Colab GPUs.
+- Added self-contained background chapters on linear algebra (Ch. 7) and optimization (Ch. 8) omitted from the 2012 book.
+- Coverage of post-2012 topics: transformers and efficient attention (Ch. 15), self-supervised / contrastive learning (Ch. 19), VAEs (Ch. 20), graph neural networks (Ch. 23), and large language models (Ch. 15.7).</p>
+<p><strong>Clarity.</strong> Writing is consistently clear with uniform notation (summarized in Appendix A); advanced sections marked * allow selective reading, though the sheer breadth means some later chapters (e.g., Ch. 23 on graph embeddings) are notably thinner than earlier ones.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Treats all ML quantities as random variables endowed with probability distributions, using Bayesian decision theory as the normative framework for both model fitting and prediction, then applies this lens uniformly from logistic regression through deep transformers and clustering.</p>
+<p><strong>Supporting evidence:</strong>
+- Pedagogical examples rather than novel benchmarks: Iris dataset (N=150, D=4, 3 classes) used throughout Part I to ground classification, decision theory, and generalization concepts.
+- Overfitting illustrated concretely: degree-20 polynomial fit to N=21 points achieves 0 training MSE but visually fails to generalize (Figure 1.7).
+- MLE shown equivalent to MSE minimization for Gaussian regression (NLL ∝ MSE, Section 1.2.2), and to cross-entropy minimization for classification.
+- EM algorithm derived as bound optimization (Section 8.7), connecting to GMM fitting (Section 8.7.3) and FA/PPCA (Section 20.2.3).
+- Transformer self-attention, multi-head attention, and positional encoding derived from first principles and compared empirically (qualitatively) to CNNs and RNNs in Section 15.5.5.</p>
+<p><strong>Figures &amp; tables:</strong> Figures are numerous and pedagogically motivated; captions name the generating notebook (e.g., <code>iris_plot.ipynb</code>), enabling reproduction. Axes are labeled in visible figures. No error bars or confidence intervals appear in illustrative figures — appropriate for a textbook but means readers cannot assess statistical precision of any claimed numerical results. No original empirical benchmark tables exist; the book cites external results rather than reporting its own.</p>
+<p><strong>Follow-up references:</strong>
+- Murphy 2023 <em>Probabilistic Machine Learning: Advanced Topics</em> [Mur23] — companion volume covering variational inference, diffusion models, RL, and causal ML.
+- Koller &amp; Friedman <em>Probabilistic Graphical Models</em> — deeper formal treatment of PGMs introduced briefly in Ch. 3.6.
+- Rasmussen &amp; Williams <em>Gaussian Processes for Machine Learning</em> — authoritative reference for GP material in Ch. 17.2.
+- Goodfellow, Bengio &amp; Courville <em>Deep Learning</em> — alternative deep-learning-centric treatment for comparison with Ch. 13–15.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Probabilistic framing adds value uniformly across problem types — not always true; for large-scale discriminative tasks, calibrated softmax outputs may be sufficient and Bayesian overhead unjustified.
+- Python + Colab access is a given for readers — excludes practitioners in compute-constrained environments.
+- Mathematical maturity (calculus, linear algebra) is assumed despite background chapters; the optimization chapter (Ch. 8) is dense enough that true beginners will struggle.
+- The "no free lunch theorem" (Section 1.2.4) is invoked to motivate probabilistic inductive biases but this implication is not formally established in the text.</p>
+<p><strong>Missing context or citations:</strong>
+- Causal inference (Pearl's do-calculus, structural causal models) is almost entirely absent — a significant gap given its overlap with probabilistic ML.
+- Reinforcement learning appears only in the one-page Section 1.4 introduction with no dedicated chapter, despite being a core ML paradigm.
+- PAC-learning / statistical learning theory gets only a brief subsection (5.4.4) with no proofs; readers seeking theoretical guarantees are not well served.
+- Diffusion models / score-based generative models — state-of-the-art by 2021 — are deferred entirely to the Advanced Topics volume without acknowledgment of their growing importance at the time of writing.
+- Comparison to Bishop's PRML (the most direct competitor) is not discussed explicitly.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- No original experiments: all numerical illustrations use toy datasets or cite external results, so there is nothing to reproduce or falsify in a research sense.
+- Coverage of LLMs (Section 15.7) is thin given the field's trajectory; GPT-3 is mentioned but the treatment predates instruction tuning, RLHF, and chain-of-thought prompting — likely to mislead readers about the state of the art.
+- The book's treatment of Bayesian neural networks (Section 13.5.5) is brief and does not engage seriously with scalability concerns or the empirical evidence against common BNN approximations.
+- Graph embeddings chapter (Ch. 23) was contributed by external authors and has noticeably shallower integration with the probabilistic theme of the rest of the book.</p>
+<p><strong>Ideas for future work:</strong>
+- Integrate a dedicated chapter on causal ML (do-calculus, counterfactuals, identifiability) to close the largest conceptual gap.
+- Expand the RL chapter with the same depth as supervised/unsupervised sections, given the book's Bayesian decision-theoretic foundation naturally extends to MDPs.
+- Add a chapter on diffusion models and score matching, connecting to the variational autoencoder material already present in Ch. 20.
+- Provide systematic empirical comparisons (benchmark tables with confidence intervals) for competing methods within each chapter, moving beyond purely illustrative figures to help readers calibrate method selection.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>maximum likelihood estimation</li><li>Bayesian inference</li><li>logistic regression</li><li>linear regression</li><li>neural networks</li><li>convolutional neural networks</li><li>recurrent neural networks</li><li>transformers</li><li>support vector machines</li><li>Gaussian processes</li><li>variational autoencoders</li><li>principal component analysis</li><li>stochastic gradient descent</li><li>EM algorithm</li><li>decision trees</li><li>random forests</li><li>boosting</li><li>k-means clustering</li></ul>
+        <h4>Datasets</h4><ul><li>Iris dataset</li><li>ImageNet</li><li>MNIST</li></ul>
+        <h4>Claims</h4><ul><li>Almost all of machine learning can be viewed in probabilistic terms, making probabilistic thinking a unifying framework connecting ML to other computational sciences.</li><li>A probabilistic approach to ML is optimal for decision making under uncertainty and provides a principled way to represent epistemic and aleatoric uncertainty.</li><li>Deep learning, particularly using DNNs, achieved breakthrough performance on tasks such as image classification starting in 2012, catalyzing a revolution in ML.</li><li>Empirical risk minimization on the training set must be balanced with generalization to unseen data to avoid overfitting.</li><li>Bayesian methods provide a coherent framework for model selection, regularization, and uncertainty quantification beyond point estimation.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

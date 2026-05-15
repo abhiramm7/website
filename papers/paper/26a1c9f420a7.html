@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>On the slow death of scaling</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>On the slow death of scaling</h1>
+      <p class="paper-detail-meta">
+        Sara Hooker
+        
+        
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">scaling-laws</span><span class="entry-tag">large-language-models</span><span class="entry-tag">compute-efficiency</span><span class="entry-tag">ai-policy</span><span class="entry-tag">model-compression</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>On the Slow Death of Scaling</h1>
+<p><strong>Authors:</strong> Sara Hooker
+<strong>Year:</strong> Not stated. (Latest citations are from 2025; paper is consistent with a 2025 composition date.)
+<strong>Tags:</strong> scaling-laws, compute-efficiency, large-language-models, ai-governance, algorithmic-progress, position-paper</p>
+<h2>TL;DR</h2>
+<p>The essay argues that raw compute scaling is a weakening driver of AI progress: smaller models now routinely outperform much larger ones, scaling laws fail to predict downstream task performance, and the most consequential near-term gains will come from inference-time compute, data quality, and algorithmic innovation rather than additional pre-training FLOPs. The argument carries policy implications because compute thresholds underpin major AI governance frameworks.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Position essay / opinion piece. No original experiments; synthesizes published results and leaderboard observations.</p>
+<p><strong>Context.</strong> AI scaling subfield. Builds on: Sutton's "Bitter Lesson" (compute beats domain knowledge as the dominant historical driver); Kaplan et al. (2020) scaling laws for LMs; Hooker's own prior work on the hardware lottery (Hooker 2020, 2021b); Schaeffer et al. (2023/2024) on emergent abilities as artifact of evaluation metrics.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) Open LLM Leaderboard rankings are a valid proxy for general model capability; (2) the observed small-beats-large trend will persist rather than revert; (3) inference-time compute gains (estimated at 5×–20×, citing Davidson et al. 2023) generalize broadly. All three are asserted rather than rigorously established.</p>
+<p><strong>Contributions.</strong>
+- Synthesizes leaderboard evidence that models with 4.5%–5% of the parameters of larger contemporaries can outperform them (e.g., Aya Expanse 8B vs. BLOOM 176B, Llama-3 8B vs. Falcon 180B).
+- Identifies four internal contradictions in the scaling thesis: weight redundancy, long-tail learning inefficiency, data-quality substitutability, and architecture-dependence of any scaling law.
+- Argues that inference-time, gradient-free optimization constitutes a qualitatively new paradigm displacing training-compute scaling.
+- Critiques compute-threshold governance (EU AI Act, US executive orders) as built on an assumption of monotonically growing model size that the empirical record does not support.</p>
+<p><strong>Clarity.</strong> Readable and well-structured for a broad technical audience; leans on analogy (magnetron/microwave, silver bullet, barber anecdote) in places where quantitative precision would be more convincing.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> The compute–performance relationship is structurally weakening because of architectural redundancy, data-quality substitution effects, and a growing suite of algorithmic improvements that add little or no training compute; governance and investment frameworks that treat scaling as inevitable are therefore mispricing both risk and opportunity.</p>
+<p><strong>Supporting evidence:</strong>
+- Aya 23 8B and Aya Expanse 8B each outperform BLOOM 176B (≈22× the parameters) on the Open LLM Leaderboard (Beeching et al., 2023).
+- Llama-3 8B outperforms Falcon 180B (≈22× the parameters) on the same leaderboard.
+- Denil et al. (2014): a small subset of weights can predict 95% of all weights in a network, implying high redundancy.
+- Inference-time compute improvements estimated to yield 5×–20× gains over base post-training performance, at minimal footprint relative to pre-training cost (Davidson et al., 2023).
+- Scaling laws for downstream task performance are inconsistent or murky (Ganguli et al., 2022; Schaeffer et al., 2023, 2024) and scaling law datasets frequently contain fewer than 100 model data points (Ruan et al., 2024).</p>
+<p><strong>Figures &amp; tables:</strong> Figure 1 (training cost log-scale 2016–23, axes labeled, sourced from Epoch/AI Index 2024 — no error bars, observational). Figure 3a/3b (Open LLM Leaderboard trends for small vs. large models — axes exist but are not described textually in sufficient detail to audit; no error bars, no statistical significance reported; selection methodology for "notable" models not specified). Figures 4 and 5 are illustrative/conceptual (no data axes). No formal tables. Statistical rigor in figures is absent throughout.</p>
+<p><strong>Follow-up references:</strong>
+- Kaplan et al. (2020) — foundational scaling laws this essay directly contests.
+- Schaeffer et al. (2023/2024) — empirical challenge to emergent abilities and downstream scaling predictability.
+- Ho et al. (2024a/b) — quantitative treatment of algorithmic progress in LMs.
+- Davidson et al. (2023) — the primary source for the 5×–20× inference-time compute gain claim; essential to evaluate that figure independently.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Open LLM Leaderboard rankings are an unbiased measure of general capability; if the leaderboard is gamed or narrowly scoped, the central small-beats-large trend is undermined.
+- The observed parameter-efficiency trend will continue; the essay does not address whether it could reverse with a new architecture class.
+- Inference-time compute is economically cheaper than training-time compute in relevant deployment settings — not demonstrated; inference at scale can dominate cost.
+- A "new architecture" will emerge that enables continual learning — asserted in §5.2 without candidate specification.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with Hoffmann et al. (2022) "Chinchilla" (compute-optimal training), which is arguably the most direct prior work on the compute–data tradeoff and central to any serious treatment of scaling law limitations.
+- No discussion of OpenAI o1/o3-class reasoning models as concrete existence proofs of inference-time scaling — conspicuously absent given the essay's thesis.
+- The claim that frontier labs have "stopped publishing" (§1) is made without citation and is contested by available evidence.
+- No engagement with literature on neural scaling in domains where power-law scaling has been robust (e.g., the code-generation figure of 10 orders of magnitude is mentioned but not balanced against the essay's broader skepticism).</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The Open LLM Leaderboard data is presented as a trend without controlling for: submission selection bias (authors choose when to submit), benchmark saturation, or data contamination — all known confounds on this leaderboard.
+- The 5×–20× inference-time compute gain comes from one source (Davidson et al., 2023) studying "a subset" of techniques; range, conditions, and task domains are unspecified in the essay.
+- Denil et al. (2014) results on weight predictability were obtained on architectures far smaller than modern LLMs; direct applicability is not argued.
+- The claim that scaling laws rest on &lt;100 data points (Ruan et al., 2024) is stated without nuance about which specific laws or papers this applies to.
+- As a position essay, no methodology section exists; claims are not falsifiable from the text alone.</p>
+<p><strong>Ideas for future work:</strong>
+- Controlled comparison of inference-time compute vs. equivalent training-time compute budgets across matched task types and model families, with cost measured in wall-clock time and dollars.
+- Systematic replication of the Open LLM Leaderboard small-beats-large trend on held-out, contamination-audited benchmarks to verify it is not an artifact of benchmark saturation or submission timing.
+- Empirical study of which governance compute thresholds would have correctly flagged historically dangerous capability jumps, to test whether threshold-based policy is as flawed as argued.
+- Architecture search experiment explicitly targeting continual learning desiderata (minimal catastrophic forgetting, local weight updates) to operationalize the essay's claim that a successor to Transformers is needed.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>data pruning</li><li>instruction fine-tuning</li><li>model distillation</li><li>retrieval-augmented generation</li><li>preference training</li><li>chain-of-thought reasoning</li><li>inference-time compute scaling</li></ul>
+        <h4>Datasets</h4><ul><li>Open LLM Leaderboard</li><li>ImageNet</li><li>MNIST</li><li>SQuAD</li></ul>
+        <h4>Claims</h4><ul><li>The relationship between training compute and performance is highly uncertain and rapidly changing, undermining the &#39;bigger is always better&#39; assumption.</li><li>Smaller models increasingly outperform far larger ones due to algorithmic improvements, better data quality, and new optimization techniques.</li><li>Scaling laws have only been reliably shown to hold for pre-training test loss and fail when extrapolated to downstream task performance or over medium time horizons.</li><li>Data quality improvements, instruction fine-tuning, and inference-time compute strategies can compensate for reduced model size and training compute.</li><li>Policies and responsible scaling frameworks that use compute thresholds as proxies for capability and risk are built on an increasingly unreliable assumption.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

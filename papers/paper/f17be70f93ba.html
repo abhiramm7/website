@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tanglewood Catchment I&amp;I Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Tanglewood Catchment I&amp;I Analysis</h1>
+      <p class="paper-detail-meta">
+        Inframark
+         · <em>Internal Technical Report</em>
+         · 2026
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">infiltration-inflow</span><span class="entry-tag">wastewater-collection</span><span class="entry-tag">catchment-analysis</span><span class="entry-tag">data-driven-analytics</span><span class="entry-tag">sewer-network-monitoring</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Tanglewood Catchment I&amp;I Analysis</h1>
+<p><strong>Authors:</strong> Inframark (no individual authors named)
+<strong>Year:</strong> 2026 (presentation dated March 10; event period Feb 10 – Mar 4, year not explicitly stated)
+<strong>Tags:</strong> inflow-and-infiltration, wastewater-collection, data-driven-analytics, catchment-analysis, utility-operations</p>
+<h2>TL;DR</h2>
+<p>A slide-deck report applying data-driven I&amp;I analytics to the Tanglewood subcatchment of the Gwinnett sewer network to isolate pipe segments with disproportionate infiltration loads. Two sites (Site 6 and Site 9) account for the largest infiltration volumes — 336.03 MG and 377.01 MG respectively over a 22-day wet-weather event — and a near-real-time dashboard is proposed to support ongoing monitoring.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Practitioner analysis report / operational case study (not a peer-reviewed research paper).</p>
+<p><strong>Context.</strong> Utility operations subfield; builds on standard I&amp;I characterization practice (groundwater infiltration, RDII, diurnal pattern separation at pump-station level). No prior works or external citations are named in the document.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) flow data at monitoring sites accurately represents infiltration attributable to upstream pipe segments; (2) per-mile normalization is meaningful despite unknown pipe age, diameter, and condition distribution; (3) the ~70% area-reduction claim follows logically from narrowing ~20 miles to ~6.4 miles, though the denominator of the reduction is not explicitly defined.</p>
+<p><strong>Contributions.</strong>
+- Spatial isolation of two high-priority sub-areas (Carrington/Site 9: ~1.4 miles; Brookwood/Site 6: ~5.0 miles) from a 20-mile catchment using flow monitoring data.
+- Per-mile infiltration intensity metric: Site 9 = 269.293 MG/mile; Site 6 = 67.206 MG/mile for the Feb 10 – Mar 4 event.
+- Near-real-time I&amp;I dashboard enabling ongoing detection and response.</p>
+<p><strong>Clarity.</strong> Document is a sparse slide deck with bullet points and figures; methodology steps are referenced but not described in sufficient detail for independent replication.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Flow monitoring at six sites within the 20-mile Tanglewood catchment during a 22-day wet-weather event identifies Site 9 (Carrington, ~1.4 miles) and Site 6 (Brookwood, ~5.0 miles) as the dominant infiltration sources, reducing the pipe length requiring physical investigation by approximately 70%.</p>
+<p><strong>Supporting evidence:</strong>
+- Infiltration volumes Feb 10 – Mar 4: Site 2 = 14.44 MG, Site 8 = 25.17 MG, Site 1 = 31.97 MG, Site 10 = 87.10 MG, Site 6 = 336.03 MG, Site 9 = 377.01 MG.
+- Per-mile intensity: Site 9 = 269.293 MG/mile; Site 6 = 67.206 MG/mile.
+- Investigation area narrowed from ~20 miles to ~6.4 miles (~1.4 + ~5.0 miles), claimed ~70% reduction.
+- Gwinnett network context: ~3,052 total miles; Tanglewood = ~20 miles (~0.66% of system).</p>
+<p><strong>Figures &amp; tables:</strong> Document references site-level event plots for Site 9 (Carrington) and Site 6 (Brookwood) and an I&amp;I dashboard; axis labels, units, error bars, confidence intervals, and statistical significance are not visible or described in the provided text. Visualization quality cannot be assessed from the text alone.</p>
+<p><strong>Follow-up references:</strong> Not stated. No external citations are provided in the document.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Monitoring sites form a clean, non-overlapping spatial hierarchy such that volumes can be attributed solely to the intervening pipe segment — not stated or validated.
+- Per-mile normalization assumes uniform pipe characteristics (diameter, age, material) within each sub-area; violations would invalidate relative intensity comparisons.
+- The 22-day event is treated as representative; a single wet-weather event may not capture dry-weather base infiltration or seasonal variability.
+- "~70% reduction" denominator is ambiguous — unclear whether it is 20 miles, total Gwinnett mileage, or some other baseline.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison to NASSCO, EPA, or industry-standard I&amp;I thresholds or benchmarks.
+- No description of the flow-monitoring instrumentation, sensor accuracy, or data-quality checks.
+- No engagement with alternative diagnostic methods (smoke testing, CCTV, dye testing) or how this workflow compares in cost or accuracy.
+- The analytical methodology for separating groundwater infiltration, RDII, and diurnal patterns is referenced but not described.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Single-event analysis: results may not generalize to other storm magnitudes, antecedent soil moisture conditions, or dry seasons.
+- No uncertainty quantification on volume estimates; meter accuracy and data gaps are not discussed.
+- The ~1.4-mile and ~5.0-mile sub-areas are identified as "pipes for analysis" but the selection criteria are not explained — potential for confirmation bias if sites were pre-selected.
+- No statistical significance or confidence intervals are reported for any estimate.
+- Dashboard described qualitatively; no validation of near-real-time detection accuracy is provided.</p>
+<p><strong>Ideas for future work:</strong>
+- Replicate analysis across multiple storm events of varying intensities to assess whether Site 9 and Site 6 consistently dominate or whether ranking shifts.
+- Integrate pipe-attribute data (age, material, diameter, depth) to build a regression model predicting infiltration intensity per segment, enabling network-wide prioritization without full metering.
+- Conduct field verification (CCTV, smoke testing) within the identified ~6.4-mile priority zone and report correlation between predicted and observed defect locations.
+- Extend the per-mile metric to the full Gwinnett 3,052-mile system to validate whether a similarly small fraction of pipe length accounts for a disproportionate share of total I&amp;I volume (Pareto distribution hypothesis).</p></div>
+
+    
+      <div class="figures-block">
+        <h3 class="figures-head">Figures from the paper</h3>
+        <div class="figures-grid">
+          
+            <figure class="figure-tile">
+              <a href="../figures/f17be70f93ba/figure-001.jpeg" target="_blank">
+                <img src="../figures/f17be70f93ba/figure-001.jpeg" alt="figure 1, page 2" loading="lazy">
+              </a>
+              <figcaption>Fig. 1 · page 2</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/f17be70f93ba/figure-002.jpeg" target="_blank">
+                <img src="../figures/f17be70f93ba/figure-002.jpeg" alt="figure 2, page 3" loading="lazy">
+              </a>
+              <figcaption>Fig. 2 · page 3</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/f17be70f93ba/figure-003.jpeg" target="_blank">
+                <img src="../figures/f17be70f93ba/figure-003.jpeg" alt="figure 3, page 4" loading="lazy">
+              </a>
+              <figcaption>Fig. 3 · page 4</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/f17be70f93ba/figure-004.png" target="_blank">
+                <img src="../figures/f17be70f93ba/figure-004.png" alt="figure 4, page 5" loading="lazy">
+              </a>
+              <figcaption>Fig. 4 · page 5</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/f17be70f93ba/figure-005.png" target="_blank">
+                <img src="../figures/f17be70f93ba/figure-005.png" alt="figure 5, page 7" loading="lazy">
+              </a>
+              <figcaption>Fig. 5 · page 7</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/f17be70f93ba/figure-006.png" target="_blank">
+                <img src="../figures/f17be70f93ba/figure-006.png" alt="figure 6, page 8" loading="lazy">
+              </a>
+              <figcaption>Fig. 6 · page 8</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/f17be70f93ba/figure-007.png" target="_blank">
+                <img src="../figures/f17be70f93ba/figure-007.png" alt="figure 7, page 9" loading="lazy">
+              </a>
+              <figcaption>Fig. 7 · page 9</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/f17be70f93ba/figure-008.png" target="_blank">
+                <img src="../figures/f17be70f93ba/figure-008.png" alt="figure 8, page 10" loading="lazy">
+              </a>
+              <figcaption>Fig. 8 · page 10</figcaption>
+            </figure>
+          
+        </div>
+      </div>
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>I&amp;I analysis workflow</li><li>infiltration volume estimation per mile</li><li>RDII isolation</li><li>diurnal pattern analysis</li><li>near-real-time dashboard monitoring</li><li>data-driven pipe segment prioritization</li></ul>
+        <h4>Datasets</h4><ul><li>Gwinnett County sewer network flow data (~3052 miles)</li><li>Tanglewood catchment flow monitoring data (~20 miles)</li><li>Site-level flow data (Sites 1, 2, 6, 8, 9, 10) for Feb 10 – Mar 4 event</li></ul>
+        <h4>Claims</h4><ul><li>The I&amp;I analysis workflow reduced the investigation area by approximately 70%, enabling faster and more focused field assessments.</li><li>The workflow successfully isolates groundwater infiltration, rainfall-derived inflow and infiltration (RDII), and diurnal patterns at the pump-station level.</li><li>Site 9 (Carrington) exhibited a disproportionately high infiltration rate of 269.293 MG/mile compared to Site 6 (Brookwood) at 67.206 MG/mile during the analysis period.</li><li>Applying this approach system-wide can identify high-priority pipe segments contributing disproportionate infiltration loads.</li><li>A near-real-time I&amp;I dashboard improves monitoring, supports decision-making, and enhances detection and response to I&amp;I events.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

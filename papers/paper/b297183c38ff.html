@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Inference Engineering</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Inference Engineering</h1>
+      <p class="paper-detail-meta">
+        Philip Kiely
+         · <em>Baseten Books</em>
+         · 2026
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        <a href="https://github.com/Dao-AILab/flash-attention" target="_blank">[github]</a><a href="https://github.com/NVIDIA/cutlass" target="_blank">[github]</a><a href="https://github.com/mit-han-lab/llm-awq" target="_blank">[github]</a><a href="https://github.com/vipshop/cache-" target="_blank">[github]</a><a href="https://github.com/NVIDIA/Megatron-LM" target="_blank">[github]</a><a href="https://github.com/openai/grade-" target="_blank">[github]</a><a href="https://github.com/openai/human-eval" target="_blank">[github]</a><a href="https://github.com/hendrycks/test" target="_blank">[github]</a>
+        
+        <span class="entry-tag">inference-engineering</span><span class="entry-tag">llm-inference</span><span class="entry-tag">generative-ai</span><span class="entry-tag">gpu-optimization</span><span class="entry-tag">model-serving</span><span class="entry-tag">production-ml</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Inference Engineering</h1>
+<p><strong>Authors:</strong> Philip Kiely
+<strong>Year:</strong> 2026
+<strong>Tags:</strong> llm-inference, gpu-hardware, inference-optimization, generative-ai, production-ml, transformer-architecture</p>
+<h2>TL;DR</h2>
+<p>A practitioner's guide to the full inference engineering stack—from GPU architecture and CUDA kernels through quantization, speculative decoding, and KV caching to multi-cloud production operations—aimed at engineers moving AI products off shared APIs onto dedicated open-model deployments. The book's central argument is that the December 2024 convergence of open and closed model quality (DeepSeek V3/R1) makes inference engineering a mandatory capability for any company building differentiated AI products. Knowledge cutoff is January 2026.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Practitioner textbook / industry guide. Not a research paper; no novel empirical results or proofs.</p>
+<p><strong>Context.</strong> Generative AI serving and MLSys subfields. Builds on: Vaswani et al. "Attention Is All You Need" (2017) as the architectural foundation; vLLM / SGLang / TensorRT-LLM as the inference engine layer; FlashAttention as a reference kernel optimization; NVIDIA CUDA/Hopper/Blackwell hardware generations.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) open models have closed the quality gap with closed models as of late 2024—stated but not benchmarked in the book; (2) dedicated deployments are ≥80% cheaper than per-token APIs at scale—asserted without methodology or citation; (3) closed-model APIs are capped at "two nines" of uptime—asserted without source. These claims drive the entire business case for the book's subject matter.</p>
+<p><strong>Contributions.</strong>
+- Synthesizes the complete inference stack (CUDA → frameworks → engines → production infra) into a single structured reference that did not previously exist as a book-length treatment.
+- Provides a taxonomy of AI-native application categories (agents, chat, voice, media, search, RecSys, completion, moderation) with inference-specific tradeoff guidance for each.
+- Extends inference engineering treatment beyond LLMs to embedding, ASR, TTS, image generation, and video generation modalities in a single volume.
+- Defines and distinguishes practitioner metrics (TTFT, perceived TPS, total TPS, ITL, latency percentiles P50–P99) with operational guidance on when each matters.</p>
+<p><strong>Clarity.</strong> Generally clear and well-paced with useful analogies (NFL athletes, sports coaches); stumbles in the preface with promotional framing for Baseten that recurs through Chapter 7.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Inference engineering spans three interdependent layers—runtime optimization (single-instance model performance), infrastructure (autoscaling, multi-cloud, reliability), and tooling (developer abstraction)—and mastering all three is required to serve generative AI models at production quality; no single layer compensates for weakness in another.</p>
+<p><strong>Supporting evidence:</strong>
+- Open models on Hugging Face: &gt;2 million at publication, 25× growth over five years (Figure P.1).
+- Claimed cost advantage of dedicated open-model inference vs. closed APIs: ≥80% reduction at scale (no methodology provided).
+- Closed-model API uptime ceiling stated as "two nines"; dedicated deployments claimed achievable at "four nines or better" (no source cited).
+- DeepSeek-R1 released January 2025 at 671B parameters; distilled versions released on Llama 3 and Qwen 2.5 architectures.
+- ITL of 10 ms equates to 100 tokens per second per user (definitional, not empirical).
+- Text-to-SQL fine-tuning example: general-purpose coding models run at hundreds of billions of parameters; a fine-tuned domain-specific model can reach equivalent SQL task performance at "just a few billion parameters" (no specific model names or eval scores cited).</p>
+<p><strong>Figures &amp; tables:</strong> Figures are conceptual diagrams (neural network layers, tokenization, logit generation, speculation flow, multi-cloud topology). No axes with numerical values, no error bars, no confidence intervals, no statistical significance—appropriate for a textbook but means no empirical claims are visually supported. Tables (e.g., shared vs. dedicated inference pros/cons, application category tradeoffs) are qualitative. Figure P.1 and P.2 show trend lines but no axis scales or data sources are given.</p>
+<p><strong>Follow-up references:</strong>
+- Vaswani et al., "Attention Is All You Need" (2017) — foundational transformer architecture underlying every model discussed.
+- vLLM project (mentioned prominently, §4.3.1) — primary open-source LLM inference engine; understanding its continuous batching and PagedAttention is prerequisite to Chapters 4–5.
+- DeepSeek-R1 technical report (January 2025) — motivating case study for distillation and open-vs-closed model convergence argument.
+- FlashAttention (referenced as a high-impact CUDA kernel, §2.5 / §4.1) — key inference optimization whose mechanics underpin attention optimization throughout the book.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- The "open models closed the gap" thesis rests entirely on DeepSeek V3/R1 as a single data point; if this is a temporary anomaly rather than a structural shift, the book's core business case weakens.
+- The ≥80% cost savings figure assumes a specific (unstated) traffic volume and model size; at low scale, dedicated deployments cost more, not less.
+- "Four nines" uptime for dedicated deployments assumes mature multi-cloud infrastructure that most teams do not have; the book presents this as achievable without quantifying the engineering cost.
+- The book assumes NVIDIA GPUs as the default accelerator; AMD, Google TPU, and custom silicon are treated as brief footnotes, which may not reflect workloads outside the Baseten customer base.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with academic MLSys literature (e.g., Orca continuous batching paper, PagedAttention paper, FlashAttention papers) despite describing these systems in detail—the absence of citations makes claims unverifiable.
+- No comparison of inference engine benchmarks (vLLM vs. SGLang vs. TensorRT-LLM on standardized workloads); readers are given qualitative descriptions only.
+- The "Goodhart's Law applies to benchmarks" point is made without citing any empirical work on benchmark gaming or saturation.
+- No treatment of inference cost modeling with actual pricing data from cloud providers, despite a section on cost estimation.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- All quantitative claims (80% cost savings, two-nines vs. four-nines uptime) are asserted without methodology, data, or citations; they cannot be verified or falsified from the book alone.
+- Chapter 7.6 ("Production Inference with Baseten") creates an unresolved conflict of interest: the author is a Baseten employee, the book is published by Baseten Books, and the final section markets Baseten's product—this context is disclosed but not separated from technical content.
+- The provided excerpt ends partway through Chapter 2; Chapters 3–7 and both appendices are listed in the TOC but not included in the text provided for this summary, so second- and third-pass analysis of those chapters is not possible.
+- Knowledge cutoff of January 2026 means rapidly evolving areas (Blackwell/Rubin GPU specs, Kimi K2, NVIDIA Dynamo) may already be outdated.</p>
+<p><strong>Ideas for future work:</strong>
+- Add reproducible benchmarks comparing vLLM, SGLang, and TensorRT-LLM on identical hardware and workloads (TTFT, TPS, cost per million tokens) to replace qualitative comparisons.
+- Provide a rigorous cost model with cloud pricing data and traffic volume breakeven analysis for the shared-vs-dedicated inference decision.
+- Extend the modality chapter with empirical latency and throughput numbers for ASR, TTS, and image generation under the described optimizations, using publicly available model checkpoints.
+- Revisit the open-vs-closed model convergence claim with a rolling benchmark methodology that tracks the gap over time, rather than treating a single model release as a structural inflection point.</p></div>
+
+    
+      <div class="figures-block">
+        <h3 class="figures-head">Figures from the paper</h3>
+        <div class="figures-grid">
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-001.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-001.png" alt="figure 1, page 1" loading="lazy">
+              </a>
+              <figcaption>Fig. 1 · page 1</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-002.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-002.jpeg" alt="figure 2, page 12" loading="lazy">
+              </a>
+              <figcaption>Fig. 2 · page 12</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-003.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-003.jpeg" alt="figure 3, page 12" loading="lazy">
+              </a>
+              <figcaption>Fig. 3 · page 12</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-004.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-004.jpeg" alt="figure 4, page 12" loading="lazy">
+              </a>
+              <figcaption>Fig. 4 · page 12</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-005.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-005.jpeg" alt="figure 5, page 12" loading="lazy">
+              </a>
+              <figcaption>Fig. 5 · page 12</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-006.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-006.jpeg" alt="figure 6, page 13" loading="lazy">
+              </a>
+              <figcaption>Fig. 6 · page 13</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-007.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-007.jpeg" alt="figure 7, page 13" loading="lazy">
+              </a>
+              <figcaption>Fig. 7 · page 13</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-008.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-008.jpeg" alt="figure 8, page 13" loading="lazy">
+              </a>
+              <figcaption>Fig. 8 · page 13</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-009.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-009.jpeg" alt="figure 9, page 14" loading="lazy">
+              </a>
+              <figcaption>Fig. 9 · page 14</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-010.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-010.jpeg" alt="figure 10, page 14" loading="lazy">
+              </a>
+              <figcaption>Fig. 10 · page 14</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-011.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-011.jpeg" alt="figure 11, page 14" loading="lazy">
+              </a>
+              <figcaption>Fig. 11 · page 14</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-012.jpeg" target="_blank">
+                <img src="../figures/b297183c38ff/figure-012.jpeg" alt="figure 12, page 14" loading="lazy">
+              </a>
+              <figcaption>Fig. 12 · page 14</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-013.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-013.png" alt="figure 13, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 13 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-014.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-014.png" alt="figure 14, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 14 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-015.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-015.png" alt="figure 15, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 15 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-016.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-016.png" alt="figure 16, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 16 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-017.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-017.png" alt="figure 17, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 17 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-018.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-018.png" alt="figure 18, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 18 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-019.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-019.png" alt="figure 19, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 19 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-020.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-020.png" alt="figure 20, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 20 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-021.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-021.png" alt="figure 21, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 21 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-022.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-022.png" alt="figure 22, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 22 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-023.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-023.png" alt="figure 23, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 23 · page 20</figcaption>
+            </figure>
+          
+            <figure class="figure-tile">
+              <a href="../figures/b297183c38ff/figure-024.png" target="_blank">
+                <img src="../figures/b297183c38ff/figure-024.png" alt="figure 24, page 20" loading="lazy">
+              </a>
+              <figcaption>Fig. 24 · page 20</figcaption>
+            </figure>
+          
+        </div>
+      </div>
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>quantization</li><li>speculative decoding</li><li>KV cache reuse</li><li>prefix caching</li><li>model parallelism</li><li>tensor parallelism</li><li>disaggregation</li><li>FlashAttention</li><li>fine-tuning</li><li>distillation</li><li>continuous batching</li><li>kernel fusion</li></ul>
+        
+        <h4>Claims</h4><ul><li>Inference engineering requires three cooperating layers — runtime optimization, infrastructure scaling, and developer tooling — to achieve mission-critical production serving of generative AI models.</li><li>The gap in intelligence between open and closed models effectively closed with the release of DeepSeek V3 and R1 in December 2024, making open-model inference engineering a viable strategy for all AI product builders.</li><li>Dedicated deployments of open models can be at least 80 percent less expensive than shared pay-per-token APIs at scale, while also enabling higher availability and lower latency.</li><li>Model selection is the single most impactful performance optimization decision, as a smaller fine-tuned model that passes domain-specific evals will always be faster and cheaper than a larger general-purpose model.</li><li>LLM inference consists of two distinct phases — compute-bound prefill and bandwidth-bound decode — whose different bottlenecks motivate techniques such as disaggregation, speculative decoding, and KV cache reuse.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

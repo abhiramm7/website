@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A data-driven method for estimating sewer inflow and infiltration based on temperature and conductivity monitoring</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>A data-driven method for estimating sewer inflow and infiltration based on temperature and conductivity monitoring</h1>
+      <p class="paper-detail-meta">
+        Jingyu Ge, Jiuling Li, Ruihong Qiu, Tao Shi, Chenming Zhang, Zi Huang, Zhiguo Yuan
+         · <em>Water Research</em>
+         · 2024
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.1016/j.watres.2024.122002" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">sewer-monitoring</span><span class="entry-tag">inflow-infiltration</span><span class="entry-tag">data-driven</span><span class="entry-tag">water-quality-sensing</span><span class="entry-tag">time-series-analysis</span><span class="entry-tag">urban-wastewater</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>A Data-Driven Method for Estimating Sewer Inflow and Infiltration Based on Temperature and Conductivity Monitoring</h1>
+<p><strong>Authors:</strong> Jingyu Ge, Jiuling Li, Ruihong Qiu, Tao Shi, Chenming Zhang, Zi Huang, Zhiguo Yuan
+<strong>Year:</strong> 2024
+<strong>Tags:</strong> sewer-inflow-infiltration, temperature-conductivity-sensing, prophet-time-series, mass-energy-balance, base-wastewater-flow-reconstruction, urban-drainage</p>
+<h2>TL;DR</h2>
+<p>Replaces costly, fouling-prone flow meters for sewer I/I quantification by using temperature and conductivity sensors: a Prophet-model algorithm reconstructs the base wastewater flow (BWF) signal, then mass/energy balances resolve inflow and infiltration ratios separately. Reconstruction KGE reaches 0.88–0.99 on real catchment data; simulated I/I quantification KGE reaches 0.76–0.97.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype — new methodology combining time-series modelling with first-principles mass/energy balance, demonstrated on real sensor data (reconstruction step) and simulation (quantification step).</p>
+<p><strong>Context.</strong> Sewer I/I quantification subfield. Builds on: Zhang et al. 2018a (conductivity-based unit hydrograph calibration, direct predecessor); Aumond &amp; Joannis 2008 (dilution model assuming constant conductivity, shown to be limited); Taylor &amp; Letham 2018 (Prophet time-series decomposition model, adopted as the reconstruction backbone); Guo et al. 2022 (experimental ranking of turbidity, T, and conductivity as I/I tracers, motivates the sensor choice).</p>
+<p><strong>Correctness.</strong> Core load-bearing assumptions: (1) conductivity obeys conservation like a dissolved-mass tracer; (2) surface water and groundwater are distinguishable from each other and from BWF in both T and conductivity; (3) permanent groundwater infiltration (GWI) can be folded into BWF without distortion; (4) BWF flow rate magnitude is independently known. Assumptions 1 and 2 are physically reasonable but site-dependent; 3 and 4 are acknowledged limitations, not fully resolved.</p>
+<p><strong>Contributions.</strong>
+- Prophet-based algorithm that reconstructs BWF temperature and conductivity from in-sewer time series, explicitly handling trends, multi-period Fourier terms, and special events.
+- Closed-form analytical solution (Eq. 7) for simultaneous inflow and infiltration ratios (α, β) from three paired mass/energy balance equations requiring no geophysical coefficients.
+- Demonstration that BWF reconstruction generalises across two real Australian catchments with average testing KGE 0.8842–0.9939.
+- Simulation-based validation of the full I/I pipeline on a real small sewer network under two groundwater scenarios, with total-I/I KGE of 0.9730 (Case 1) and 0.8894 (Case 2).</p>
+<p><strong>Clarity.</strong> Well-structured and readable; mathematical notation is consistent. Supplementary material carries critical model details (parameter values, simulation inputs, BIC tests) that are not self-contained in the main text, reducing reproducibility from the main paper alone.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Fit a Prophet time-series model to in-sewer T and conductivity during confirmed dry-weather periods to reconstruct the BWF baseline; then plug measured deviations and independently monitored surface-water/groundwater T and conductivity into mass/energy balance equations to yield inflow and infiltration as fractions of BWF flow—no flow meter needed.</p>
+<p><strong>Supporting evidence:</strong>
+- BWF reconstruction: average testing KGE across 10 random splits = 0.9332 (T_a1), 0.9630 (T_a2), 0.8842 (C_a2); all training KGE ≥ 0.94 (Table 2).
+- Case 1 I/I quantification (intermittent GWI): inflow KGE = 0.8873, infiltration KGE = 0.8622, total I/I KGE = 0.9730 (Table 3).
+- Case 2 (permanent GWI absorbed into BWF): inflow KGE = 0.8357, infiltration KGE = 0.7628, total I/I KGE = 0.8894 (Table 3); accuracy drop attributed to increased BWF profile complexity.
+- Simulated network: 0.549 km rising main + 2.098 km gravity pipes; 11 inflow locations, 10 infiltration points; sensor noise = 1% of mean (per HACH specs); 5-minute sampling; 3-month simulation windows.
+- Separation of inflow vs. infiltration fails (produces swapped attribution) when ΔT₂/ΔC₂ ≈ ΔT₃/ΔC₃, i.e., when surface-water and groundwater T–conductivity signatures converge; authors identify this analytically via Eq. 9.</p>
+<p><strong>Figures &amp; tables:</strong>
+- <strong>Fig. 2</strong> (frequency-amplitude bar charts): axes labeled, used to select Fourier periods; no uncertainty shown — purely deterministic selection criterion.
+- <strong>Fig. 3</strong> (BWF reconstruction panels A–D): time axes labeled with dates, y-axes labeled with units (°C); no confidence intervals on reconstruction; visual correspondence is qualitative.
+- <strong>Fig. 4</strong> (I/I quantification, Case 1, panels A-1/A-2/B-1/B-2/B-3): residuals plotted as green bars, units (m³/h) on flow panels; no statistical significance tests; error bars absent. Case 2 equivalent is in supplementary (Fig. S18), not in main paper.
+- <strong>Table 2</strong>: KGE mean and SD across 10 splits provided — this is the most statistically credible result in the paper.
+- <strong>Table 3</strong>: single KGE per scenario, no confidence interval, no sensitivity to simulation parameter choices.</p>
+<p><strong>Follow-up references:</strong>
+- Taylor &amp; Letham 2018 ("Forecasting at Scale") — Prophet model architecture, required to understand reconstruction parameterisation.
+- Zhang et al. 2018a (<em>J. Hydrol.</em>) — conductivity-only IUH calibration approach, the closest prior method for comparison.
+- Figueroa et al. 2021 &amp; 2023 (<em>Water Res.</em>) — in-sewer thermal-hydraulic model underpinning the simulation module's heat transfer equations.
+- Guo et al. 2022 (<em>Water Sci. Technol.</em>) — experimental basis for choosing T and conductivity over turbidity as I/I tracers.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Conductivity is treated as conserved like a dissolved mass (Eq. 6 third line), but conductivity is a non-linear function of ion composition and temperature; the approximation breaks down with mixing of waters having very different ionic compositions. This is not quantified.
+- BWF flow rate is assumed independently known (from dry-weather measurement or population estimates); errors in this quantity propagate directly into absolute inflow/infiltration estimates but are not analysed in the paper.
+- The Prophet model assumes BWF patterns are quasi-stationary over the reconstruction horizon; structural changes (e.g., new connections, industrial discharge changes) would invalidate the reconstruction without retraining.
+- Permanent GWI is defined as part of BWF and hence treated as zero infiltration — this is a definitional choice that obscures baseline leakage volumes and is noted only briefly.
+- Rainfall threshold parameters (η = 1, 3, 8 mm; w = 24, 48, 72 h) are stated but no sensitivity analysis is reported; the method's performance could be sensitive to these choices.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison against a flow-meter-based method on the same simulated network; KGE values for the proposed method cannot be contextualised without a baseline competitor.
+- Stable-isotope methods (Kracht et al. 2007, De Bondt et al. 2018) cited but not benchmarked against; their achievable accuracy at comparable cost is unaddressed.
+- No discussion of sensor drift or fouling for conductivity probes over multi-month deployments, despite this being a stated motivation for avoiding flow meters.
+- Uncertainty propagation from T/conductivity sensor noise (1% white noise added) through the algebraic Eq. 7 is not analytically characterised; the denominator of Eq. 7 can become near-zero, amplifying noise unpredictably.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The I/I quantification is validated <strong>entirely by simulation</strong>, not against real measured I/I volumes; the simulated network uses the same IUH and discharge model families that prior literature has criticised for parameter sensitivity — this is circular.
+- Only one small network (one Australian coastal city) is simulated; generalisability to larger, more complex networks with longer pipe travel times, multiple pumping stations, or different climates is undemonstrated.
+- The denominator of Eq. 7 approaches zero when surface-water and groundwater signatures are similar; no robust fallback or uncertainty flag is built into the algorithm beyond a qualitative observation in Section 4.3.
+- Ten random 70/30 splits are used for reconstruction validation, but splits are time-series data — random splitting can leak temporal structure, potentially inflating KGE on the test set.
+- Case 2 (permanent GWI) lumps GWI into BWF, so the reported infiltration KGE measures only <em>rainfall-driven</em> infiltration above the permanent baseline; the permanent component is never quantified or validated.
+- No ablation: it is unclear whether both temperature <em>and</em> conductivity are jointly necessary, or whether one alone would suffice; only the combined system is tested.</p>
+<p><strong>Ideas for future work:</strong>
+- Apply the method to real sewer networks with independent ground-truth I/I volumes (e.g., from dye-tracing or flow-difference campaigns) to replace the simulation-only validation.
+- Develop an automated calibration-sample selector directly from T/conductivity anomaly detection, removing dependence on external rainfall and borehole data.
+- Extend to multi-sensor spatial networks to localise I/I entry points, as sketched in Section 5.2, and assess the additional uncertainty introduced by propagating errors through multiple nodes.
+- Analyse error amplification in Eq. 7 as a function of the angle between the (ΔT₂, ΔC₂) and (ΔT₃, ΔC₃) vectors to define a site-suitability criterion before sensor deployment.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Prophet model</li><li>Fourier series decomposition</li><li>piecewise linear trend modeling</li><li>Bayesian information criterion</li><li>l-BFGS optimization</li><li>mass/energy balance equations</li><li>discrete Fourier transform</li><li>Kling-Gupta Efficiency</li><li>Saint-Venant equations</li><li>advection-diffusion equation</li><li>instantaneous unit hydrograph model</li></ul>
+        <h4>Datasets</h4><ul><li>in-sewer hourly temperature data from two Australian catchments (June–October 2019 and September 2022–February 2023)</li><li>Bureau of Meteorology rainfall and groundwater level data</li><li>simulated sewer network data for a coastal Australian city</li></ul>
+        <h4>Claims</h4><ul><li>A Prophet-model-based algorithm can accurately reconstruct base wastewater flow temperature and conductivity profiles with average KGE values ranging from 0.8842 to 0.9939.</li><li>Combining reconstructed BWF profiles with mass/energy balance equations enables quantification of both inflow and infiltration without flow meters, achieving KGE values of 0.7628 to 0.9730 in simulation studies.</li><li>Temperature and conductivity sensors are more cost-effective and reliable than flow meters for sewer I/I monitoring and can be deployed network-wide.</li><li>The method can distinguish between surface-runoff-driven inflow and groundwater infiltration as separate components, except when their temperature and conductivity signatures are nearly identical.</li><li>Permanent groundwater infiltration reduces quantification accuracy but the method remains feasible by treating permanent infiltration as part of the base wastewater flow.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

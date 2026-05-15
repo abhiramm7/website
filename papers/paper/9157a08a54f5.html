@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>acados – a modular open-source framework for fast embedded optimal control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>acados – a modular open-source framework for fast embedded optimal control</h1>
+      <p class="paper-detail-meta">
+        Robin Verschueren, Gianluca Frison, Dimitris Kouzoupis, Jonathan Frey, Niels van Duijkeren, Andrea Zanelli, Branimir Novoselnik, Thivaharan Albin, Rien Quirynen, Moritz Diehl
+        
+         · 2020
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/1910.13753" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">embedded-optimal-control</span><span class="entry-tag">model-predictive-control</span><span class="entry-tag">nonlinear-mpc</span><span class="entry-tag">open-source-software</span><span class="entry-tag">real-time-optimization</span><span class="entry-tag">sequential-quadratic-programming</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>acados – a modular open-source framework for fast embedded optimal control</h1>
+<p><strong>Authors:</strong> Robin Verschueren, Gianluca Frison, Dimitris Kouzoupis, Jonathan Frey, Niels van Duijkeren, Andrea Zanelli, Branimir Novoselnik, Thivaharan Albin, Rien Quirynen, Moritz Diehl
+<strong>Year:</strong> 2020
+<strong>Tags:</strong> embedded-optimal-control, nonlinear-mpc, sequential-quadratic-programming, open-source-software, real-time-iteration, linear-algebra</p>
+<h2>TL;DR</h2>
+<p>acados is a modular, open-source (BSD 2-Clause) C library for fast embedded NMPC and MHE that avoids problem-specific solver code generation by building on the BLASFEO small-matrix linear algebra library and the HPIPM QP solver. It exposes Python and Matlab interfaces with CasADi integration, allowing rapid prototyping while achieving ≈2× speedup over ACADO at identical solution quality on tested benchmarks.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / software paper describing a new framework with numerical benchmarks.</p>
+<p><strong>Context.</strong> Embedded optimal control / real-time NMPC subfield. Directly builds on: Frison et al. BLASFEO (small-matrix high-performance linear algebra); Frison et al. HPIPM (structured interior-point QP solver); Andersson et al. CasADi (expression-graph AD and code generation); Diehl et al. RTI scheme (single-iteration real-time SQP). Competes with ACADO Code Generation tool, GRAMPC, FalcOpt, VIATOC, and FORCES NLP.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) problem state/control dimensions fall in the 10–300 range where BLASFEO outperforms code-generated and standard BLAS routines; (2) RTI without globalization is adequate because initializations stay near the solution; (3) the benchmarked problems (chain of masses, cart-pole, engine DAE) are representative of typical embedded NMPC workloads. All three appear reasonable given established literature cited in the paper but are not re-derived here.</p>
+<p><strong>Contributions.</strong>
+- Modular C framework for embedded NMPC/MHE that swaps solvers, integrators, and QP back-ends without problem-specific code regeneration.
+- Novel implementation of Sequential Convex Quadratic Programming (SCQP) and a structure-exploiting Hessian convexification method within an NMPC solver (claimed first in any NMPC package).
+- Integration of GNSF-IRK structure-exploiting integrators with automatic transcription for CasADi models.
+- High-level Python/Matlab interfaces that auto-generate self-contained deployable C projects via CasADi.</p>
+<p><strong>Clarity.</strong> Well-organized and readable; the notation in Section 2 is dense but self-contained; the numerical results section is truncated in the available manuscript text, leaving the hardware-in-the-loop case study incomplete.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> acados achieves the same SQP solution quality as ACADO (RCSO = 1.01×10⁻⁴ on the chain-of-masses benchmark) at roughly half the computation time (1.05 ms vs. 1.97 ms median) by replacing problem-specific code generation with the BLASFEO-backed HPIPM stack, while a modular architecture enables solver components to be freely interchanged.</p>
+<p><strong>Supporting evidence:</strong>
+- Chain of masses (M=5 masses, N=40 horizon): acados median 1.05 ms, min 0.87 ms, max 2.23 ms per RTI iteration vs. ACADO median 1.97 ms, min 1.90 ms, max 3.45 ms; GRAMPC median 1.06 ms (similar speed but RCSO = 7.17×10⁻² vs. acados 1.01×10⁻⁴).
+- RCSO ranking: IPOPT 0 (reference), acados = ACADO = 1.01×10⁻⁴, VIATOC 4.74×10⁻³, GRAMPC 7.17×10⁻², FalcOpt 3.17×10⁻¹.
+- Convexification regularization (cart-pole swingup, open-loop): total solve time 66.034 ms vs. projection 103.65 ms vs. mirroring 174.32 ms; per-iteration cost similar (2.540 ms / 2.303 ms / 2.264 ms) — advantage is fewer iterations, not cheaper iterations.
+- BLASFEO reported (from [32]) to deliver up to 10× speedup over code-generated triple-loop linear algebra for medium matrix sizes, cited as primary driver of acados speed advantage over ACADO.
+- Hardware-in-the-loop experiment: dSPACE MicroAutoboxII (900 MHz IBM PPC 750GL, 16 MB RAM), Gauss-Legendre order-6 IRK, N=20, sampling time 0.05 s for a turbocharged engine DAE model — quantitative results not fully reproduced in the available text.</p>
+<p><strong>Figures &amp; tables:</strong>
+- <strong>Figure 2</strong> (computation time per RTI vs. closed-loop step): axes labeled (step index, time in ms); 10-run averages plotted; no error bars or confidence intervals.
+- <strong>Figure 3</strong> (Pareto plot: RCSO vs. worst-case compute time): both axes labeled; acados and GRAMPC identified as Pareto-optimal; no uncertainty shown.
+- <strong>Figure 4</strong> (SQP convergence with three regularizations, KKT residual vs. iteration, log scale): axes labeled; deterministic convergence so no error bars appropriate; convexification clearly fastest.
+- <strong>Tables 4–6</strong>: clean numerical summaries; Table 5 gives median/min/max but no standard deviation across 10 runs.
+- <strong>Table 1</strong>: comprehensive 40+ package reference table; useful context but no performance data.
+- No statistical significance tests anywhere; timing variance implied by min/max spread only.</p>
+<p><strong>Follow-up references:</strong>
+- [32] Frison et al. — BLASFEO: performance claims for all acados speed results rest on this.
+- [31] Frison et al. — HPIPM: the QP layer underpinning every acados NLP solve.
+- [4] Andersson et al. — CasADi: required to understand the AD/code-generation workflow.
+- [18] Diehl et al. — RTI scheme: theoretical basis for single-iteration real-time SQP without globalization.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Matrix sizes fall in the BLASFEO sweet spot (~10–300); for very small systems (&lt;4×4), code-generated kernels win per the paper's own text, so the speed advantage shrinks or reverses.
+- Warm-started RTI always starts near the solution; no analysis of cold-start or large-disturbance scenarios where globalization would be needed.
+- CasADi-generated C code is deployable as-is on embedded targets; no analysis of code size, stack usage, or heap allocation on memory-constrained MCUs.
+- The chain-of-masses problem is representative; scaling behavior with larger state dimensions or longer horizons is shown only implicitly.</p>
+<p><strong>Missing context or citations:</strong>
+- No direct comparison to FORCES NLP [91], the closest proprietary competitor in the same algorithmic class (interior-point + OCP structure), despite it appearing in Table 1.
+- No engagement with OpEn / PANOC [80] or ProxALM-type methods that were emerging simultaneously and target similar embedded applications.
+- Memory footprint analysis (RAM, flash) is entirely absent despite embedded suitability being a stated goal.
+- No comparison of generated C code size between acados templated approach and ACADO standalone generated approach.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Only 10 timing runs reported with min/max; no standard deviation or distribution shape; outliers could significantly affect embedded real-time guarantees.
+- RCSO uses IPOPT as ground truth, but IPOPT may converge to different local optima on nonconvex problems, making the metric ambiguous.
+- Solver tuning (Table 3) appears set to favor ACADO/acados (RTI, full/partial condensing); FalcOpt and GRAMPC parameters are described minimally and may not be at their best operating point.
+- Case Study 2 (Hessian regularization) is a single open-loop solve with one fixed initialization; closed-loop or multi-initialization statistics would better characterize robustness.
+- Hardware-in-the-loop results are truncated in the available text — the embedded-platform claims cannot be fully evaluated.
+- No ablation separating BLASFEO's contribution from HPIPM's contribution to the speedup over ACADO.</p>
+<p><strong>Ideas for future work:</strong>
+- Systematic scaling study varying nx, nu, and N independently to map where acados is faster or slower than ACADO and GRAMPC.
+- Formalize memory footprint benchmarks (stack + heap in bytes) on a representative Cortex-M or similar resource-constrained MCU to back the embedded deployment claim.
+- Add optional globalization (filter line search or trust region) as an opt-in module for offline/batch applications, as the paper itself identifies this as future work.
+- Evaluate the GNSF-IRK integrator speedup in isolation on a suite of stiff DAE systems to quantify when the structure-exploitation pays off versus standard IRK.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Sequential Quadratic Programming (SQP)</li><li>Real-Time Iteration (RTI) scheme</li><li>Gauss-Newton Hessian approximation</li><li>Sequential Convex Quadratic Programming (SCQP)</li><li>structure-preserving Hessian convexification</li><li>multiple shooting discretization</li><li>explicit Runge-Kutta integration</li><li>implicit Runge-Kutta integration</li><li>GNSF-IRK (Generalized Nonlinear Static Feedback IRK)</li><li>lifted collocation integrators</li><li>partial condensing</li><li>primal-dual interior-point QP solving</li><li>algorithmic differentiation via CasADi</li></ul>
+        <h4>Datasets</h4><ul><li>chain-of-masses benchmark</li><li>cart-pole swingup</li><li>engine control (dSPACE MicroAutoboxII hardware-in-the-loop)</li></ul>
+        <h4>Claims</h4><ul><li>acados achieves competitive computational performance compared to ACADO and GRAMPC while offering greater flexibility through a modular architecture without relying on automatic code generation for algorithmic logic.</li><li>The BLASFEO linear algebra library provides up to 10x speedup over code-generated linear algebra routines for matrix sizes typical in embedded optimization.</li><li>The structure-exploiting Hessian convexification method converges almost twice as fast as projection regularization and significantly faster than mirroring regularization in exact-Hessian SQP.</li><li>acados and GRAMPC lie on the Pareto-optimal front of sub-optimality versus computation time, with acados being a factor 1000 less suboptimal than GRAMPC at comparable median computation times.</li><li>acados supports deployment on multiple CPU architectures including x86, x86_64, ARMv7A, ARMv8A, and PowerPC without sacrificing performance.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>
