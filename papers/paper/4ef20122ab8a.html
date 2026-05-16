@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Learning to Reason in 13 Parameters</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Learning to Reason in 13 Parameters</h1>
+      <p class="paper-detail-meta">
+        John X. Morris, Niloofar Mireshghallah, Mark Ibrahim, Saeed Mahloujifar
+        
+         · 2026
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/2602.04118" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">parameter-efficient-fine-tuning</span><span class="entry-tag">reinforcement-learning</span><span class="entry-tag">reasoning</span><span class="entry-tag">low-rank-adaptation</span><span class="entry-tag">language-models</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Learning to Reason in 13 Parameters</h1>
+<p><strong>Authors:</strong> John X. Morris, Niloofar Mireshghallah, Mark Ibrahim, Saeed Mahloujifar
+<strong>Year:</strong> 2026
+<strong>Tags:</strong> parameter-efficient-fine-tuning, reinforcement-learning-from-verifiable-rewards, low-rank-adaptation, math-reasoning, lora, grpo</p>
+<h2>TL;DR</h2>
+<p>TinyLoRA extends LoRA-XS to arbitrarily small update sizes—down to a single trainable parameter—by replacing each module's trainable matrix with a low-dimensional vector projected through fixed random tensors and shared across layers. Using GRPO (RL), Qwen2.5-7B-Instruct reaches 91% GSM8K accuracy with only 13 trained parameters (26 bytes), recovering ≥90% of full-finetuning gains; SFT at the same parameter budget achieves only 83% and requires 100–1000× more parameters to match RL.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype with empirical analysis.</p>
+<p><strong>Context.</strong> Parameter-efficient fine-tuning subfield. Builds directly on LoRA (Hu et al., low-rank weight decomposition), LoRA-XS (Bałazy et al., SVD-based ultra-low-rank adaptation), intrinsic dimensionality of fine-tuning (Li et al. 2018; Aghajanyan et al. 2020), and GRPO as the RL algorithm (Shao et al., DeepSeekMath).</p>
+<p><strong>Correctness.</strong> Three load-bearing assumptions: (1) RL provides a sparser, cleaner gradient signal than SFT, allowing tiny adapters to suffice—argued informally via minimum-description-length framing, not proven. (2) GSM8K and MATH benchmarks are representative of "reasoning"; the authors explicitly disclaim this beyond math. (3) Qwen's dramatic efficiency advantage is architectural/pretraining, not data contamination—acknowledged as uncertain and cited as a confound.</p>
+<p><strong>Contributions.</strong>
+- TinyLoRA parameterization: replaces the r×r trainable matrix in LoRA-XS with a u-dimensional vector projected through fixed random tensors, plus cross-module weight tying, enabling O(nmu/n_tie) total parameters down to 1.
+- Empirical demonstration that 13 parameters yield 91% GSM8K pass@1 (vs. 76% base, 95% full-FT) under GRPO.
+- Systematic sweep showing RL vs. SFT gap widens to 100–1000× in the sub-1M parameter regime across GSM8K, MATH500, AIME, AMC, and four other benchmarks.
+- Scaling law: larger backbone models reach a fixed performance threshold (e.g., 95% of peak GSM8K) with strictly fewer absolute parameters updated.</p>
+<p><strong>Clarity.</strong> Generally well-organized; the informal information-theoretic argument in Section 3 is suggestive but imprecise, and the implementation detail of merging LoRA weights for vLLM inference is buried in a subsection rather than flagged as a key methodological caveat.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> TinyLoRA compresses the trainable adapter to as few as 1 parameter via random projection and weight sharing; this suffices for near-full-finetuning performance under RL (GRPO) because RL's reward signal is information-sparse, requiring the model to absorb very few bits—unlike SFT, which must store full demonstration content.</p>
+<p><strong>Supporting evidence:</strong>
+- Qwen2.5-7B-Instruct: 13 parameters → 91% GSM8K pass@1 (GRPO); 120 parameters → 95% (recovering 95% of net gain over 76% baseline); 13 parameters SFT → 83%, 120 parameters SFT → 84%.
+- Qwen2.5-7B-Instruct with 196 parameters on harder suite: 50.1 average across 6 benchmarks vs. 55.2 for full finetuning (87% of absolute improvement retained); Table 2 reports per-benchmark numbers including MATH500 74.6, OlympiadBench 36.3, AIME24 16.0, AMC23 54.5 at 13 parameters.
+- Qwen2.5-3B-Instruct with 16 parameters → 80.9% GSM8K (up from 76.0% base); full FT → 87.0%.
+- Ablation (Figure 7): frozen SVD rank r=2 optimal; higher r degrades performance, attributed to harder optimization landscape for the small v vector.
+- Precision ablation (Figure 4): fp32 outperforms bf16/fp16 bit-for-bit at parameter counts below ~1 KB.</p>
+<p><strong>Figures &amp; tables:</strong> Figure 1 (RL sweep) and Figure 2 (SFT sweep) are the core evidence; axes are labeled, dashed baselines shown, but no error bars or confidence intervals are plotted on the main sweep figures. Three random seeds are mentioned only for learning-rate selection, not for the headline results. Table 2 is comprehensive across models and benchmarks; values are point estimates with no variance reported. Figure 3 (update size vs. model size) is compelling but also shows only single runs. Figure 5 (training curves) shows reward and response length but not final test accuracy trajectories.</p>
+<p><strong>Follow-up references:</strong>
+- Bałazy et al. (LoRA-XS) — direct technical precursor; TinyLoRA extends its SVD structure.
+- Biderman et al. (LoRA Learns Less and Forgets Less) — establishes LoRA capacity baselines and forgetting analysis used as context throughout.
+- Mukherjee et al. (RL finetunes small subnetworks) — concurrent empirical finding that RL updates are sparse, directly relevant to the paper's central claim.
+- Zeng et al. (SimpleRL-Zoo) — the training framework and harder-benchmark baselines; full-FT numbers in Table 2 are taken from here.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- The information-theoretic argument (Section 3) is not a proof: it asserts RL signal is k·H(R) bits per prompt without showing this is sufficient for task-relevant gradient updates, nor that SFT cannot in principle separate signal from noise with a small adapter. If this framing is wrong, the RL vs. SFT capacity gap has no principled explanation.
+- The training/inference mismatch (merged weights for vLLM, TinyLoRA only for the backward pass) is handled by truncated importance sampling, but its adequacy is only validated by showing low KL divergence—not by comparing against a setting without the mismatch. If this approximation introduces systematic bias, reported accuracies could be inflated or deflated.
+- The 10× Qwen efficiency advantage over LLaMA is attributed loosely to architecture or pretraining, but Wu et al. (2025) is cited suggesting possible GSM8K data contamination in Qwen pretraining. This is never controlled for and directly undermines the "13 parameters learns to reason" narrative if the knowledge is already encoded.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison to prompt tuning (Li &amp; Liang, prefix-tuning) or BitFit (Zaken et al.) under GRPO; these are listed as baselines in related work but not benchmarked.
+- Concurrent Schulman &amp; Lab (2025) work is acknowledged to show LoRA at r=1 matches full FT, but no head-to-head numbers are provided.
+- No discussion of whether the extreme sparsity of the update induces gradient pathologies (e.g., vanishing/exploding gradients through the fixed random projection P).
+- The claim that trillion-parameter models might need "a handful of parameters" is extrapolated from a four-point scaling curve (0.5B–7B); no evidence beyond this range exists in the paper.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Headline results (e.g., 91% at 13 parameters) are single-point estimates; error bars across seeds are absent from the main figures. Given that AIME24 scores range 3.3–20.0 across parameter counts, variance could be substantial.
+- GSM8K is near-saturated for 7B instruction-tuned models (base already 88.2%); the reported 91% vs. 95% full-FT gap of 4 points is small and could fall within run-to-run variance.
+- All experiments use exact-match reward; format sensitivity (e.g., boxed vs. unboxed answers) could explain some of the gains rather than mathematical reasoning improvement.
+- Experiments span only math benchmarks, yet the discussion extrapolates to general reasoning; the authors acknowledge this but still frame conclusions broadly.
+- The MATH training experiments use baselines taken directly from Zeng et al. (SimpleRL-Zoo) rather than re-run under identical conditions, introducing potential confounds.</p>
+<p><strong>Ideas for future work:</strong>
+- Run TinyLoRA on code generation (HumanEval, LiveCodeBench) and structured science QA to test whether the RL/SFT efficiency gap is specific to math or holds for other verifiable-reward tasks.
+- Formally bound the information capacity of a u-dimensional TinyLoRA update and compare to the empirical bits-of-improvement observed, to validate or refute the Section 3 hypothesis.
+- Isolate the Qwen data-contamination confound by running identical experiments on a model with documented clean pretraining (e.g., a model trained on The Pile with published data cards) and comparing the parameter efficiency curves.
+- Measure wall-clock training time and GPU-memory savings at the 13-parameter regime, since SVD initialization cost and the merged-weight inference workaround may offset gains from smaller adapter storage.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>TinyLoRA</li><li>LoRA</li><li>LoRA-XS</li><li>GRPO</li><li>SVD-based weight decomposition</li><li>weight tying</li><li>truncated importance sampling</li><li>supervised fine-tuning</li></ul>
+        <h4>Datasets</h4><ul><li>GSM8K</li><li>MATH500</li><li>AIME24</li><li>AMC23</li><li>OlympiadBench</li><li>Minerva Math</li><li>GAOKAO</li><li>CollegeMath</li></ul>
+        <h4>Claims</h4><ul><li>TinyLoRA can train Qwen2.5-7B-Instruct to 91% accuracy on GSM8K using only 13 parameters (26 bytes in bf16).</li><li>Reinforcement learning with verifiable rewards is far more parameter-efficient than supervised fine-tuning in the low-parameter regime, requiring 100-1000x fewer parameters to reach equivalent performance.</li><li>TinyLoRA recovers 90% of performance improvements while training 1000x fewer parameters across AIME, AMC, and MATH500 benchmarks.</li><li>Larger models require fewer absolute parameters to reach a given fraction of full fine-tuning performance, suggesting trillion-scale models may be tunable with only a handful of parameters.</li><li>RL makes fundamentally more information-dense updates than SFT because reward signals cleanly separate task-relevant from irrelevant features, enabling effective learning with minimal model capacity.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bayesian Filtering and Smoothing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Bayesian Filtering and Smoothing</h1>
+      <p class="paper-detail-meta">
+        Simo Särkkä
+         · <em>Cambridge University Press (IMS Textbooks, volume 3)</em>
+         · 2013
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">bayesian-filtering</span><span class="entry-tag">kalman-filtering</span><span class="entry-tag">particle-filters</span><span class="entry-tag">state-space-models</span><span class="entry-tag">sequential-monte-carlo</span><span class="entry-tag">parameter-estimation</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Bayesian Filtering and Smoothing</h1>
+<p><strong>Authors:</strong> Simo Särkkä
+<strong>Year:</strong> 2013
+<strong>Tags:</strong> bayesian-inference, kalman-filtering, particle-filtering, state-space-models, sequential-monte-carlo, parameter-estimation</p>
+<h2>TL;DR</h2>
+<p>Concise graduate textbook unifying nonlinear Kalman filtering (EKF, UKF, GHKF, CKF), particle filtering and smoothing, and parameter estimation under a single Bayesian probabilistic framework. Intended for advanced undergraduates, graduate students, and practitioners needing enough depth to implement the methods. Published as volume 3 in the Cambridge IMS Textbooks series.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Pedagogical textbook / unified survey of algorithms for sequential Bayesian inference.</p>
+<p><strong>Context.</strong> Statistical signal processing and state estimation subfield. Directly builds on: Kalman (1960) — original discrete-time linear filter; Rauch, Tung &amp; Striebel (1965) — fixed-interval smoother; Jazwinski (1970) — Bayesian probabilistic treatment of nonlinear filtering; Stratonovich (1950s–60s) — earliest Bayesian formulation of nonlinear filtering, predating Kalman.</p>
+<p><strong>Correctness.</strong> Central load-bearing assumptions: (1) system admits a Markov state-space representation with known transition density p(x_k | x_{k−1}) and measurement density p(y_k | x_k); (2) Gaussian approximations are adequate for EKF/UKF-class methods; (3) Monte Carlo approximations converge as particle count grows. All three are explicitly stated by the book, though the second is an approximation the book acknowledges.</p>
+<p><strong>Contributions.</strong>
+- Derives all covered algorithms (KF, EKF, UKF, GHKF, CKF, RTS smoothers, particle filters/smoothers, EM/MCMC parameter estimation) from a single coherent Bayesian notation, making cross-method comparison explicit.
+- Introduces and unifies the general Gaussian filter/smoother framework from which GHKF, CKF, and sigma-point methods emerge as special cases.
+- Presents fixed-point and fixed-lag Gaussian smoother equations in the general Gaussian framework (Chapter 10).
+- Provides MATLAB exercises and companion code covering the full algorithm stack.</p>
+<p><strong>Clarity.</strong> Writing is deliberately terse and well-organized; the progressive generalization from batch linear regression to full nonlinear particle smoothing is a pedagogical strength, though the symbols table (xiii–xx) is unusually large and hints at notational overhead readers must manage.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Sequential Bayesian inference over hidden Markov state-space models is intractable in full joint form but tractable as marginal filtering/smoothing distributions; the book systematically derives the spectrum of algorithms — from exact linear (KF/RTS) through Gaussian-approximation (EKF, UKF, cubature) to Monte Carlo (particle filters/smoothers) — and shows how each serves parameter estimation via EM, ML, MAP, or MCMC.</p>
+<p><strong>Supporting evidence:</strong>
+- Resonator example (Figures 1.6, 1.8, 1.9): discrete-time resonator with 2D state (position, velocity); filtering and smoothing means shown with 95% quantile bands — the only quantitative illustration in the provided text; no numerical RMSE values reported.
+- Theoretical argument: marginalizing over individual time-step distributions (Equations 1.4–1.6) reduces per-step computation to O(1) rather than growing with T, making long time series tractable.
+- Chapter 12 derives likelihood p(θ | y_{1:T}) ∝ p(θ) ∏<em 1:k_1="1:k−1">k p(y_k | y</em>, θ) as a by-product of running the filter at fixed parameters (Equation 1.8).
+- Not stated: comparative benchmark numbers (e.g., RMSE, runtime) between EKF, UKF, CKF, or particle filter on any standard dataset.
+- Not stated: convergence rates or sample-complexity results for particle methods.</p>
+<p><strong>Figures &amp; tables:</strong> Chapter 1 contains Figures 1.1–1.9 (GPS schematic, radar tracking diagrams, brain imaging illustration, resonator signal/filter/smoother plots). Resonator figures (1.8, 1.9) have labeled axes and show 95% quantile bands; no statistical significance testing or error bars in an experimental sense — these are illustrative simulations, not benchmarks. No tables in the provided text. Visualization is functional but minimal.</p>
+<p><strong>Follow-up references:</strong>
+- Jazwinski (1970) — the classical probabilistic treatment this book explicitly extends; essential for theoretical depth.
+- Bar-Shalom, Li &amp; Kirubarajan (2001) — comprehensive reference on Kalman filtering and target tracking applications.
+- Rasmussen &amp; Williams (2006) — Gaussian Process Regression; the book notes connections between GP regression and optimal filtering.
+- Doucet &amp; Johansen (cited implicitly via SMC framework) — Not stated directly in provided text; Godsill &amp; Rayner (1998) and Andrieu et al. (2002) are cited for particle MCMC extensions.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Markov property of the state sequence is assumed throughout; violation (e.g., long-range dependencies, fractional Brownian dynamics) breaks recursive factorization and all derived algorithms.
+- For Gaussian approximation methods (EKF, UKF, GHKF, CKF): the posterior is assumed unimodal and well-approximated as Gaussian; multimodal posteriors will cause all Gaussian filters to fail silently with no diagnostic.
+- Particle filter convergence assumes independent, identically weighted particles after resampling; particle impoverishment in high-dimensional state spaces is noted but no solution is given in the provided text.
+- Process and measurement noise models are assumed known (or separately estimated); misspecified noise covariances degrade all algorithms but robustness is not analyzed.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with expectation propagation (EP) or variational Bayes as alternatives to assumed-density filtering, despite listing "EP" in the abbreviations.
+- Stein's method and Berry–Esseen bounds for Gaussian approximation quality: not cited.
+- Cubature rules beyond third-degree spherical: not discussed.
+- Continuous-discrete filtering (SDEs observed at discrete times) is mentioned briefly but not developed despite being common in engineering; connections to Itô calculus and Stratonovich integrals are deferred to "Further topics."</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- No quantitative comparison of EKF vs. UKF vs. GHKF vs. CKF on any test problem; a reader cannot use this book alone to select among them for a given problem — only qualitative guidance is given in the epilogue.
+- The resonator example used in Chapter 1 for illustration is linear-Gaussian; it therefore cannot demonstrate where approximate nonlinear methods differ from the exact solution.
+- MCMC and particle MCMC methods (Chapter 12) are introduced without discussing mixing diagnostics, convergence criteria, or computational cost scaling — critical for practical use.
+- MATLAB code is available on the publisher website but reproducibility depends on external URL persistence; no version pinning or archival repository is mentioned.</p>
+<p><strong>Ideas for future work:</strong>
+- Benchmark all covered filter/smoother variants (EKF, UKF, CKF, GHKF, PF with N particles) on common nonlinear problems (e.g., bearings-only tracking, Lorenz-63) with RMSE and wall-clock time to give practitioners a decision matrix.
+- Extend the general Gaussian smoother framework to continuous-time SDE models (Stratonovich/Itô) and show which discrete-time algorithms are consistent discretizations.
+- Develop adaptive particle count strategies within the particle EM algorithm to balance estimation accuracy against computational budget as a function of posterior complexity.
+- Analyze Gaussian filter approximation error as a function of nonlinearity degree and noise magnitude to provide theoretical guidance on when EKF vs. UKF vs. cubature is preferable.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Kalman filter</li><li>extended Kalman filter</li><li>unscented Kalman filter</li><li>Gauss-Hermite Kalman filter</li><li>cubature Kalman filter</li><li>Rauch-Tung-Striebel smoother</li><li>particle filter</li><li>sequential importance resampling</li><li>Rao-Blackwellized particle filter</li><li>expectation-maximization</li><li>Markov chain Monte Carlo</li><li>statistical linearization</li><li>unscented transform</li></ul>
+        
+        <h4>Claims</h4><ul><li>Bayesian filtering and smoothing can be formulated as computing marginal posterior distributions of states given measurements, requiring only a constant number of computations per time step.</li><li>The Kalman filter is a special case of the general Bayesian filtering equations under linear Gaussian assumptions, yielding an exact closed-form solution.</li><li>Non-linear extensions such as the EKF, UKF, and general Gaussian filters provide tractable Gaussian approximations to the optimal non-linear filtering distributions.</li><li>Particle filters and smoothers represent the posterior distribution as a weighted set of Monte Carlo samples and can approximate arbitrarily non-Gaussian distributions.</li><li>Parameter estimation in state space models can be addressed via EM algorithms, MCMC methods, or maximum likelihood using filter-produced likelihood side products.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

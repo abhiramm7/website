@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Zero-Shot Function Encoder-Based Differentiable Predictive Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Zero-Shot Function Encoder-Based Differentiable Predictive Control</h1>
+      <p class="paper-detail-meta">
+        Hassan Iqbal, Xingjian Li, Tyler Ingebrand, Adam Thorpe, Krishna Kumar, Ufuk Topcu, Ján Drgoňa
+         · <em>Proceedings of Machine Learning Research</em>
+         · 2026
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/2511.05757" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">zero-shot-control</span><span class="entry-tag">differentiable-predictive-control</span><span class="entry-tag">neural-odes</span><span class="entry-tag">system-identification</span><span class="entry-tag">adaptive-control</span><span class="entry-tag">nonlinear-dynamical-systems</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Zero-Shot Function Encoder-Based Differentiable Predictive Control</h1>
+<p><strong>Authors:</strong> Hassan Iqbal, Xingjian Li, Tyler Ingebrand, Adam Thorpe, Krishna Kumar, Ufuk Topcu, Ján Drgoňa
+<strong>Year:</strong> 2026
+<strong>Tags:</strong> differentiable-predictive-control, function-encoders, neural-odes, zero-shot-adaptation, nonlinear-control, system-identification</p>
+<h2>TL;DR</h2>
+<p>Combines function encoder-based neural ODEs (FE-NODE) for online system identification with differentiable predictive control (DPC) to train offline neural policies that adapt instantaneously to unseen parametric dynamics via closed-form least-squares coefficient inference. Demonstrated on four nonlinear benchmarks achieving 2.3–71.5× wall-clock speedup over white-box MPC at inference time while maintaining comparable tracking accuracy.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype: end-to-end learning-based control methodology.</p>
+<p><strong>Context.</strong> Nonlinear adaptive control + learning-based MPC. Builds directly on: Ingebrand et al. (2024a) — zero-shot neural ODE transfer via function encoders; Drgoňa et al. (2022, 2024) — self-supervised differentiable predictive control and parametric policy learning with guarantees; Chen et al. (2018a) — neural ODEs; Low et al. (2025) — Hilbert-space formalization and finite-sample error bounds O(R / λ√m) for function encoder approximation.</p>
+<p><strong>Correctness.</strong> Central assumptions: (1) the family of deployment dynamics lies within the Hilbert subspace spanned by B offline-learned basis functions — violated if test dynamics are out-of-distribution; (2) m = 100 online data points suffice for accurate coefficient estimation across all benchmarks — asserted, not analyzed; (3) the offline training distribution over coefficients c covers deployment scenarios; (4) FE-NODE differentiability is preserved well enough to produce useful DPC gradients. All four assumptions are plausible for the tested parametric families but are not stress-tested.</p>
+<p><strong>Contributions.</strong>
+- Zero-shot adaptive closed-loop control: parametric DPC policy conditioned on FE coefficients inferred online in closed form, requiring no retraining or online optimization at deployment.
+- Full differentiable pipeline: FE-NODE dynamics integrated with DPC enables end-to-end gradient-based policy learning over learned dynamics representations.
+- Empirical validation across four nonlinear benchmarks (Van der Pol, two-tank, 7D glycolytic oscillator, 12D quadrotor) including abrupt mid-simulation dynamics switching.
+- Open-source implementation in NeuroMANCER (code URL deferred to final version).</p>
+<p><strong>Clarity.</strong> Writing is well-organized and the three-algorithm structure maps cleanly to Figure 1; notation is consistent throughout, though the quadrotor control-input parameterization in Appendix A is dense and would benefit from a brief verbal gloss.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Offline, train B neural ODE basis functions (FE-NODE) on trajectories from a parametric system family, then train a DPC neural policy conditioned on the resulting FE coefficient vector c; at deployment, estimate c from 100 online observations via regularized least squares and immediately evaluate the policy — no solver call, no gradient step.</p>
+<p><strong>Supporting evidence:</strong>
+- Van der Pol stabilization: FE-DPC MSE 0.002683 vs. WB-MPC 0.002653; inference 0.53 s vs. 1.21 s (2.3× speedup).
+- Two-tank reference tracking (700 steps, multiple switches): FE-DPC MSE 0.008452 vs. WB-MPC 0.004164; 1.13 s vs. 6.75 s (6.0× speedup).
+- Glycolytic oscillator (7D, stiff, horizon = 50): FE-DPC MSE 0.180299 vs. WB-MPC 0.032320; 5.89 s vs. 136.07 s (23.1× speedup).
+- Quadrotor (12D, 20 random parameterizations with abrupt switches): FE-DPC MSE 0.022003 vs. WB-MPC 0.024208; 1.93 s vs. 155.85 s (~80.7× speedup by table arithmetic, though the paper text states a maximum of 71.5×—a discrepancy not explained).
+- Theoretical error bound from Low et al. (2025): approximation error ≤ O(R / λ√m) for fixed basis, providing asymptotic grounding for online coefficient estimation.</p>
+<p><strong>Figures &amp; tables:</strong>
+- <strong>Figure 1</strong> (pipeline diagram): qualitative only; effectively communicates the three-algorithm flow; no quantitative content.
+- <strong>Figure 2</strong> (Van der Pol): phase portraits and time-series for fixed and switching dynamics; axes labeled (x₁, x₂, time steps, u); no error bars or confidence intervals.
+- <strong>Figure 3</strong> (two-tank): state and control trajectories over 700 steps with multiple switches; axes labeled; no statistical intervals.
+- <strong>Figure 4</strong> (glycolytic oscillator, uncontrolled): 7-state trajectories over 1500 steps with log-scale y-axis for x₁; true vs. predicted overlaid; no error bars.
+- <strong>Figure 5</strong> (glycolytic oscillator, controlled): side-by-side WB-MPC vs. FE-DPC; axes labeled; no confidence intervals; tracking offset visible in FE-DPC but not quantified beyond Table 1.
+- <strong>Figure 6</strong> (quadrotor, 20 trajectories): all 20 runs overlaid; shows distributional robustness qualitatively; no error bands, no success-rate statistic.
+- <strong>Table 1</strong>: MSE and wall-clock time (seconds) for all four benchmarks; no standard deviations, no indication of how many runs were averaged.</p>
+<p><strong>Follow-up references:</strong>
+- Ingebrand et al. (2024a) — foundational zero-shot neural ODE transfer via function encoders; essential prerequisite for the dynamics modeling component.
+- Drgoňa et al. (2022, 2024) — DPC formulation and parametric policy learning with constraint guarantees; necessary for understanding the control half of the pipeline.
+- Low et al. (2025) — Hilbert-space structure and finite-sample error bounds for function encoders; supplies the theoretical backbone cited in Section 3.1.
+- Ingebrand et al. (2024b) — function encoders applied to zero-shot reinforcement learning; closest parallel application domain.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Offline training parameter distributions (ν ~ Pν, x₀ ~ Px₀, ξ ~ Pξ) exactly match or bound deployment distributions — if a new system lies outside these, the learned basis and policy may fail silently with no detection mechanism.
+- m = 100 online samples is universally sufficient regardless of system dimensionality or noise level — this is fixed for all four benchmarks without justification or sensitivity analysis.
+- Wall-clock speedup is meaningful: FE-DPC runs on an NVIDIA RTX 5090 GPU; CasADi-based WB-MPC hardware is not specified. If MPC runs on CPU, the reported speedups conflate algorithmic and hardware advantages.
+- Policy generalization during dynamics switching: the coefficient update is performed in a receding fashion using recent data, but whether and how quickly the 100-point window captures a new regime is not analyzed.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison to other adaptive or meta-learning control approaches (e.g., MAML-based policy adaptation, L1 adaptive control, GP-MPC with online model updates).
+- No comparison to SINDy-MPC or Koopman-based MPC, which are cited as related methods for system identification but never benchmarked.
+- Li et al. (2025b) — a closely related concurrent paper on zero-shot transferable parametric optimal control from overlapping authors — is cited but not compared experimentally.
+- No discussion of constraint satisfaction rates; figures show constraints are respected but no quantitative feasibility statistics are reported.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Table 1 reports single MSE values with no standard deviation, confidence intervals, or statement of how many evaluation episodes were averaged; reproducibility of the numbers is unclear.
+- The stated speedup range of "2.3 to 71.5×" in the text is inconsistent with Table 1: 155.85 s / 1.93 s ≈ 80.7× for the quadrotor, not ≤ 71.5×. This arithmetic discrepancy is unexplained.
+- Glycolytic oscillator MSE gap is 5.6× worse for FE-DPC (0.180 vs. 0.032); the paper characterizes this as acceptable due to speedup but does not analyze whether this error level meets any practical control tolerance.
+- No ablation on B (number of basis functions) or m (online sample count) is included in this paper; authors defer entirely to Ingebrand et al. (2025) ablations performed on different problems.
+- No formal closed-loop stability or constraint satisfaction guarantees are derived for the combined FE-DPC system; stability is demonstrated only empirically and only for the tested parameter ranges.
+- DPC training samples c from Pc (distribution over coefficients) rather than directly from ν ~ Pν; the relationship between these distributions and whether Pc truly covers all reachable c values is not verified.</p>
+<p><strong>Ideas for future work:</strong>
+- Derive formal closed-loop stability or safety guarantees (e.g., control Lyapunov functions or barrier certificates) for the FE-DPC combination, given that DPC alone admits some guarantees (Drgoňa et al., 2024).
+- Ablate sensitivity to m (online sample count) and B (basis size) on the benchmarks in this paper, and characterize the tradeoff between identification accuracy and inference latency.
+- Incorporate PCA-based dimensionality reduction of the dynamics space (mentioned as future work citing Low et al., 2025) to test whether compact representations maintain zero-shot accuracy at higher B without policy network blowup.
+- Benchmark on a hardware-normalized platform (e.g., both FE-DPC and MPC on CPU, or both on GPU) to isolate algorithmic speedup from hardware effects.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>function encoder (FE)</li><li>neural ordinary differential equations (NODE)</li><li>differentiable predictive control (DPC)</li><li>regularized least squares coefficient inference</li><li>Tikhonov regularization</li><li>RK4 integration</li><li>automatic differentiation</li><li>adjoint method</li><li>multi-layer perceptron (MLP) policy network</li><li>Adam optimizer</li></ul>
+        <h4>Datasets</h4><ul><li>Van der Pol oscillator</li><li>two-tank level regulation system</li><li>glycolytic oscillator (yeast glycolysis model)</li><li>12-dimensional quadrotor model</li></ul>
+        <h4>Claims</h4><ul><li>The proposed FE-DPC framework achieves zero-shot adaptation to unseen dynamical systems without retraining or online reoptimization by conditioning control policies on function encoder coefficients.</li><li>FE-DPC achieves inference speedups of 2.3 to 71.5 times over classical MPC across tested benchmarks while maintaining competitive tracking accuracy.</li><li>Function encoder-based neural ODE basis functions can represent diverse nonlinear system dynamics as a linear combination, enabling closed-form online coefficient estimation from limited observations.</li><li>The learned parametric control policies remain stable under abrupt online dynamics switches across all tested nonlinear benchmarks, including a 12-dimensional quadrotor model.</li><li>The FE-NODE approximation is theoretically grounded, with approximation error bounded asymptotically at rate O(R / (lambda * sqrt(m))) given a fixed basis.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

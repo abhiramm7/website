@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>RivRetrieve-Python: A Python package for facilitating and unifying access to global streamflow data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>RivRetrieve-Python: A Python package for facilitating and unifying access to global streamflow data</h1>
+      <p class="paper-detail-meta">
+        Simon Moulds, Thiago Nascimento, Ryan Riggs, George Allen, Frederik Kratzert
+         · <em>EGU General Assembly 2026</em>
+         · 2026
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.5194/egusphere-egu26-9793" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">streamflow-data</span><span class="entry-tag">hydrology</span><span class="entry-tag">open-source-software</span><span class="entry-tag">large-sample-hydrology</span><span class="entry-tag">river-monitoring</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>RivRetrieve-Python: A Python package for facilitating and unifying access to global streamflow data</h1>
+<p><strong>Authors:</strong> Simon Moulds, Thiago Nascimento, Ryan Riggs, George Allen, Frederik Kratzert
+<strong>Year:</strong> 2026
+<strong>Tags:</strong> streamflow-data, hydrometric-apis, large-sample-hydrology, open-source-python, river-monitoring, data-unification</p>
+<h2>TL;DR</h2>
+<p>RivRetrieve-Python is an open-source Python library that wraps more than 18 hydrometric APIs—covering more than 60,000 gauge stations globally—behind a single object-oriented interface for retrieving streamflow, stage, and river temperature. It targets known shortcomings of static large-sample datasets (CAMELS and kin): difficulty updating, missing variables, absent sub-daily data, inconsistent naming conventions, and stripped quality flags.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / software tool description (conference abstract, not a full methods paper).</p>
+<p><strong>Context.</strong> Large-sample hydrology subfield; explicitly builds on CAMELS-style datasets as the motivating prior art. No other specific prior works or authors are named in the abstract.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) fragmented, inconsistent API access is a genuine bottleneck for global hydrological research; (2) a single abstraction layer can faithfully preserve enough metadata (quality flags, variable definitions) to make unified retrieval scientifically useful. Both are plausible but undemonstrated in this abstract.</p>
+<p><strong>Contributions.</strong>
+- Unified Python interface abstracting ≥18 hydrometric APIs with a consistent object-oriented design.
+- Coverage of &gt;60,000 gauge stations globally for streamflow, stage, and river temperature as of January 2026.
+- Helper functions for bulk retrieval across multiple catchments.
+- Preservation and exposure of quality flags assigned by measuring authorities—absent in existing large-sample datasets.</p>
+<p><strong>Clarity.</strong> Clear and well-structured for a 300-word abstract; necessarily light on implementation detail, evaluation, and design trade-offs.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> A Python package hides the heterogeneity of 18+ national/international hydrometric APIs behind one interface, enabling researchers to pull comparable streamflow time series (including sub-daily and quality-flagged records) at continental to global scale without custom API wrappers.</p>
+<p><strong>Supporting evidence:</strong>
+- ≥18 hydrometric APIs supported at time of writing (January 2026).
+- ≥60,000 gauge stations in total coverage.
+- Variables retrieved: streamflow, stage, river temperature.
+- Sub-daily temporal resolution explicitly supported (not stated whether all APIs provide it).
+- Quality flags from measuring authorities retained (mechanism not described).</p>
+<p><strong>Figures &amp; tables:</strong> None — this is a conference abstract only. No figures, axes, error bars, or statistical reporting are present.</p>
+<p><strong>Follow-up references:</strong> Only CAMELS is named (no author, year, or venue given in the abstract). No other cited works appear. Not stated which specific APIs are wrapped.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- That abstracting API differences does not silently discard or homogenize scientifically important metadata (unit conventions, datum references, missing-data encodings). If this assumption fails, the "unified" interface introduces hidden errors.
+- That API stability and terms-of-service across 18+ providers will not degrade the package's reliability over time—a significant maintenance burden not discussed.
+- That 60,000 stations constitute meaningful global coverage without spatial or temporal bias assessment.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with existing Python hydrology retrieval tools (e.g., dataretrieval, hydrofunctions, pynwis) or comparable R packages; it is unclear how RivRetrieve-Python differs from or improves on these.
+- No citation of specific CAMELS variants (CAMELS-US, CAMELS-GB, CAMELS-BR, etc.) that motivate the problem statement.
+- No discussion of data licensing heterogeneity across the 18 APIs.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- No benchmark or validation: retrieval correctness, completeness, or latency against raw API calls is not tested or reported.
+- No reproducibility information beyond a GitHub URL; version, license, dependency stack, and CI status are not stated.
+- The claim of "more than 60,000 gauge stations" has no breakdown by region, variable availability, or temporal coverage, making it impossible to assess effective usability.
+- No ablation or comparison demonstrating that the unified interface adds value over calling individual APIs directly.</p>
+<p><strong>Ideas for future work:</strong>
+- Systematic spatial and temporal coverage audit: map which of the 60,000+ stations have sub-daily records, quality flags, and multi-variable overlap to identify true usable sample for large-sample studies.
+- Benchmark retrieval fidelity by cross-checking package output against manually downloaded raw API responses for a stratified sample of stations.
+- Publish a versioned, DOI-stamped dataset snapshot generated via the package to enable reproducible large-sample studies that reference a fixed data state.
+- Evaluate robustness to API deprecation or breaking changes across providers to quantify long-term maintenance risk.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>object-oriented API abstraction</li><li>hydrometric API integration</li><li>helper functions for batch data retrieval</li></ul>
+        <h4>Datasets</h4><ul><li>CAMELS</li><li>18+ hydrometric APIs with 60000+ gauge stations</li></ul>
+        <h4>Claims</h4><ul><li>RivRetrieve-Python provides a unified interface to streamflow, stage, and river temperature data from more than 18 hydrometric APIs covering over 60,000 gauge stations.</li><li>An object-oriented design abstracts implementation details of hydrometric APIs, offering a consistent interface regardless of data source or variable.</li><li>The library addresses shortcomings of existing large-sample hydrology datasets, including difficulty of updates, limited variable coverage, and inconsistent naming conventions.</li><li>RivRetrieve-Python is expected to enable future research on real-time river monitoring, digital twins, hydrological prediction, and sub-daily hydrological variability and extremes.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

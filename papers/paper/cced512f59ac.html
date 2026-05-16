@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Probabilistic Machine Learning: Advanced Topics (Supplementary Material)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Probabilistic Machine Learning: Advanced Topics (Supplementary Material)</h1>
+      <p class="paper-detail-meta">
+        Kevin Murphy
+        
+         · 2025
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">probabilistic-machine-learning</span><span class="entry-tag">bayesian-inference</span><span class="entry-tag">graphical-models</span><span class="entry-tag">variational-inference</span><span class="entry-tag">generative-models</span><span class="entry-tag">non-parametric-bayes</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Supplementary Material for "Probabilistic Machine Learning: Advanced Topics"</h1>
+<p><strong>Authors:</strong> Kevin Murphy
+<strong>Year:</strong> 2025
+<strong>Tags:</strong> probabilistic-machine-learning, bayesian-inference, graphical-models, variational-inference, concept-learning, textbook-reference</p>
+<h2>TL;DR</h2>
+<p>Extended appendix material for Murphy's <em>Probabilistic Machine Learning: Advanced Topics</em> [Mur23], providing worked derivations, additional examples, and deeper treatments of topics omitted from the main text due to space. Spans fundamentals through decision-making across 36 chapters. Author explicitly flags reduced quality control relative to the main book.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Supplementary textbook material (worked examples, extended derivations, and application vignettes); not a research paper.</p>
+<p><strong>Context.</strong> Companion to Murphy [Mur23]. The portion provided builds on Tenenbaum [Ten99] for Bayesian concept learning, Griffiths &amp; Tenenbaum [GT06] for cognitive prediction experiments with domain-appropriate priors, and Brin &amp; Page [BL06] for PageRank as a Markov-chain application.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions in the visible content: (1) strong sampling assumption — examples drawn uniformly at random from concept extension; (2) Jeffreys uninformative priors for sensor-precision integration; (3) independence of x and y sensor measurements given z. All three are explicitly named. Assumption (1) is the most contestable in realistic settings.</p>
+<p><strong>Contributions.</strong>
+- Closed-form derivation of a bimodal posterior for sensor fusion when measurement precisions are unknown and integrated out (rather than estimated by MLE plug-in).
+- Numerical worked example of the number game illustrating that the likelihood ratio of h_two vs. h_even reaches ~5000:1 after four examples, formalizing Occam's razor via the size principle.
+- Closed-form posterior predictive p(y|D) for the healthy-levels rectangle game and analytic posterior median T_M = 2^(1/γ)·t under a power-law prior.
+- Compact unified treatment of PageRank as stationary-distribution computation, including the rank-1 sparse decomposition M = pGD + 1z^T and convergence (13 iterations on a 500-node harvard.edu subgraph).</p>
+<p><strong>Clarity.</strong> Generally clear and pedagogically sequenced; the author's own caveat ("caveat lector — some sections have not been checked as carefully as the main book") is the most important quality warning.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> In each worked example, a fully Bayesian treatment that integrates over uncertainty produces qualitatively different (less overconfident, sometimes multimodal) results compared to plug-in MLE/MAP approximations, particularly in small-data regimes; the supplement provides the derivations and numerics that the main text omits.</p>
+<p><strong>Supporting evidence:</strong>
+- Sensor fusion (N=2 per sensor): plug-in posterior is unimodal N(z|1.5788, 0.0798); exact Bayesian posterior is bimodal with modes near x̄=1.5 and ȳ=3.5, reflecting irreducible ambiguity about which sensor is reliable.
+- Number game: p(D|h_two) = (1/6)^4 = 7.7×10⁻⁴ vs. p(D|h_even) = (1/50)^4 = 1.6×10⁻⁷, a likelihood ratio of ~5000:1 favoring powers-of-two after D={16,8,2,64}.
+- PageRank on 6-node toy graph: π = (0.3209, 0.1706, 0.1065, 0.1368, 0.0643, 0.2008); power method converges in 13 iterations on 500-node harvard.edu subgraph from a uniform initialization.
+- Power-law prior: posterior median T_M = 2^(1/γ)·t analytically; at the empirically fitted γ for movie grosses, predicts total gross ≈ 1.5× observed-to-date.
+- Healthy-levels predictive: p(y|D) = [1/((1+d(y₁)/r₁)(1+d(y₂)/r₂))]^(N−1); undefined at N=1 without a stronger prior.</p>
+<p><strong>Figures &amp; tables:</strong> Figures 2.1–3.8 carry the argument in the visible content. Axes are labeled with values in the text but axis labels on the actual figure images cannot be confirmed from the provided text alone. No error bars or confidence intervals appear in any figure in the provided excerpt (results are either analytical or exact posteriors). No statistical significance testing is reported, nor is it needed given the analytic/pedagogical nature. Figure 3.7 reproduces empirical human-subject median predictions as dots against Bayesian model predictions as solid lines — no uncertainty on the human data is shown.</p>
+<p><strong>Follow-up references:</strong>
+- [Ten99] Tenenbaum thesis — foundational source for the number game and healthy-levels game models.
+- [GT06] Griffiths &amp; Tenenbaum — cognitive science experiments underlying the domain-prior section; source of Figure 3.7 and 3.8.
+- [BL06] Brin &amp; Page — detailed PageRank exposition.
+- [Mur23] Murphy main book — required context; this supplement is not self-contained.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Strong sampling assumption (teacher samples uniformly at random from the concept's extension) is central to the size principle and the number game results; this assumption breaks if teachers are informative or adversarial, which is the norm in real pedagogy.
+- Jeffreys prior p(λ|z) ∝ 1/λ for sensor precision is presented without justification of why it is appropriate here; the result (bimodal posterior) is sensitive to this choice.
+- Independence of x and y sensors given z is assumed without discussion; correlated sensor errors would change the posterior shape.
+- The rectangle hypothesis space in the healthy-levels game is asserted as "reasonable from prior domain knowledge" without validation.</p>
+<p><strong>Missing context or citations:</strong>
+- The supplement does not engage with the frequentist critique of Jeffreys priors in the sensor-fusion section.
+- The number game is attributed entirely to Tenenbaum [Ten99]; no mention of subsequent critiques or replications of the human-subject data.
+- PageRank section omits discussion of HITS (Kleinberg) as an alternative authority-ranking algorithm and does not cite work on convergence rates or spectral gaps.
+- The discussion of MLE overfitting in concept learning does not cite PAC-learning or VC-dimension literature, which formalizes the same intuition.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Sensor fusion example uses only N=2 measurements per sensor; the multimodal behavior may resolve quickly with slightly larger N, but this is not analyzed.
+- Human behavioral data in Figures 3.1 and 3.7 are reproduced from 1999 and 2006 studies; sample sizes, experimental controls, and demographic details are not stated in this text.
+- The posterior predictive formula (Eq. 3.12) for the healthy-levels game is stated without derivation; "one can show" is the only justification given.
+- Figure 3.2 notes that predictions are "only plotted for those values for which human data is available," which limits direct visual comparison to the model's full predictive distribution.</p>
+<p><strong>Ideas for future work:</strong>
+- Relax the strong sampling assumption to a cooperative or pedagogically optimal sampling model (e.g., a teacher who picks maximally informative examples) and examine how the posterior and size principle change.
+- Extend the sensor-fusion bimodal posterior analysis to N &gt; 2 to characterize how quickly the bimodality collapses and at what sample size the plug-in approximation becomes adequate.
+- Apply the domain-prior framework from Section 3.2 to modern LLM calibration: do fine-tuned models implicitly encode power-law vs. Gaussian priors for different prediction domains?
+- For the healthy-levels game, derive the posterior predictive for the 2D case without the conditional independence assumption (Eq. 3.10) and assess sensitivity to feature correlation.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Bayesian inference</li><li>variational inference</li><li>MCMC</li><li>sequential Monte Carlo</li><li>belief propagation</li><li>junction tree algorithm</li><li>Kalman filtering</li><li>extended Kalman filtering</li><li>PageRank</li><li>proximal gradient methods</li><li>ADMM</li><li>Gaussian processes</li><li>normalizing flows</li><li>denoising diffusion models</li><li>Dirichlet process mixture models</li><li>collapsed Gibbs sampling</li><li>expectation propagation</li><li>natural gradient descent</li></ul>
+        
+        <h4>Claims</h4><ul><li>Bayesian model averaging over hypotheses provides better-calibrated predictions than plug-in (MLE/MAP) approximations, especially in the small-data regime.</li><li>The size principle (Occam&#39;s razor) naturally emerges from the strong sampling assumption in Bayesian concept learning, favoring the smallest hypothesis consistent with the data.</li><li>Sensor fusion with unknown measurement noise can yield a multimodal posterior, unlike the unimodal Gaussian posterior obtained when noise is known.</li><li>Informative, domain-appropriate priors allow Bayesian models to match human predictive judgments across diverse durational quantities such as life spans, movie runtimes, and poem lengths.</li><li>The exponential-family EKF performs online natural gradient descent, connecting filtering algorithms to optimization methods.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

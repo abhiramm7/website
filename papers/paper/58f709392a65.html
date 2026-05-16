@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MegaTrain: Full Precision Training of 100B+ Parameter Large Language Models on a Single GPU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>MegaTrain: Full Precision Training of 100B+ Parameter Large Language Models on a Single GPU</h1>
+      <p class="paper-detail-meta">
+        Zhengqing Yuan, Hanchi Sun, Lichao Sun, Yanfang Ye
+        
+         · 2026
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/2604.05091" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">large-language-models</span><span class="entry-tag">memory-efficient-training</span><span class="entry-tag">cpu-offloading</span><span class="entry-tag">single-gpu-training</span><span class="entry-tag">llm-fine-tuning</span><span class="entry-tag">systems</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>MegaTrain: Full Precision Training of 100B+ Parameter Large Language Models on a Single GPU</h1>
+<p><strong>Authors:</strong> Zhengqing Yuan, Hanchi Sun, Lichao Sun, Yanfang Ye
+<strong>Year:</strong> 2026
+<strong>Tags:</strong> llm-training, memory-offloading, cpu-gpu-streaming, systems-ml, single-gpu-training, pipeline-parallelism</p>
+<h2>TL;DR</h2>
+<p>MegaTrain inverts the conventional GPU-centric training paradigm by treating host (CPU) memory as the authoritative parameter store and the GPU as a transient compute cache, streaming model weights layer-by-layer through the GPU during forward and backward passes. Using pipelined double-buffering and stateless layer templates, it trains 100B+ parameter models at full precision on a single GPU, achieving 1.84× throughput over DeepSpeed ZeRO-3 Offload at 14B scale on a GH200.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype (systems paper with empirical evaluation).</p>
+<p><strong>Context.</strong> Memory-efficient LLM training systems subfield. Directly extends and competes with: Rajbhandari et al. 2020 (ZeRO / ZeRO-Offload — CPU offloading of optimizer states); Rajbhandari et al. 2021 (ZeRO-Infinity — NVMe spill); Zhao et al. 2023 (PyTorch FSDP — fully sharded data parallel); Fang &amp; You 2022 (ColossalAI Gemini — heterogeneous memory manager). Also situates against Liao et al. 2025 (Ratel — SSD-based offloading for consumer GPUs), reproduced only in an appendix.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) per-layer compute time ≥ per-layer parameter transfer time, so double-buffering fully hides latency — holds for large layers but is not guaranteed for shallow/wide configs; (2) CPU Adam throughput matches or exceeds GPU Adam for this bandwidth-bound workload — asserted but not directly benchmarked; (3) block-wise recomputation does not introduce numerical drift — validated only on one dataset and at ≤14B scale. Assumptions appear plausible within the stated hardware configurations.</p>
+<p><strong>Contributions.</strong>
+- Memory-centric training architecture that stores all parameters, gradients, and optimizer states in host memory and limits GPU device memory to a constant per-layer footprint, decoupling model scale from HBM capacity.
+- Pipelined double-buffered execution engine coordinating three CUDA streams (compute, H2D weight transfer, D2H gradient offload) with event-driven synchronization to overlap all three phases continuously.
+- Stateless layer template model that dynamically binds streamed weights to kernel templates, eliminating persistent autograd graph metadata and enabling deterministic GPU memory bounds.
+- Demonstrated full-precision training of a 120B MoE model on a single H200 GPU (1.5 TB host memory) and 512K-token context training of a 7B model on a single GH200.</p>
+<p><strong>Clarity.</strong> Well-structured with a clear algorithm and pipeline diagram; some figures suffered rendering corruption in the PDF-to-text extraction (axis labels illegible), and Ratel is relegated to an appendix rather than addressed as a fair baseline in the main evaluation.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> By making host DRAM the primary parameter store and streaming weights through a small, fixed GPU buffer one layer at a time, MegaTrain removes the tight coupling between model parameter count and GPU HBM capacity, recovering throughput losses via a three-stream pipeline that keeps compute, H2D prefetch, and D2H gradient evacuation permanently overlapped.</p>
+<p><strong>Supporting evidence:</strong>
+- GH200 single-GPU: 284 TFLOPS at 7B, 264 TFLOPS at 14B (1.84× over ZeRO-3 Offload), &gt;250 TFLOPS at 32B; competing offloading systems hit OOM beyond 32B on GH200.
+- H200 with 1.5 TB host memory: successfully trains GPT-OSS-120B (MoE, 120B params); all baselines (ZeRO-3, ZeRO-Infinity, PyTorch Native) report OOM at this scale.
+- Ablation on GH200 at 14B: removing double buffering reduces throughput from 266.3 to 182.9 TFLOPS (−31.3%); removing gradient slab pool reduces it to 257.6 TFLOPS (−3.3%).
+- Depth scalability (fixed hidden size, variable layers 28→180, device allocation fixed at 3.83 GB): MegaTrain drops from 284 to 227 TFLOPS (−20.1%) while FSDP OOMs at 84 layers and ZeRO-3 degrades to 43 TFLOPS at 84 layers (MegaTrain 5.93× faster at that point).
+- A100 PCIe system: 128 TFLOPS at 7B vs. 53 (ColossalAI-Gemini) and 36 (ZeRO-3); 122 TFLOPS at 14B vs. 15 (Gemini) and 10 (ZeRO-3), i.e., 8.13× and 12.20× speedups; baselines OOM at 32B.
+- RTX 3090 (24 GB GDDR6X): trains Qwen2.5-14B at 30.19 TFLOPS, batch size 3; ZeRO-3 OOM at 14B on the same hardware.
+- Long-context on GH200: 407.4 TFLOPS at 512K tokens, 81.9 GB device memory, using chunked MLP execution.
+- Accuracy on MetaMathQA (exact match): 88.99% at 7B and 92.52% at 14B, matching ZeRO-3 (88.93%, 92.41%) and PyTorch Native (88.91%, N/A at 14B) within &lt;0.2 pp.</p>
+<p><strong>Figures &amp; tables:</strong> Figure 3 (pipeline timing diagram) is the central explanatory figure and is clearly described in text. Figure 1 (TFLOPS vs. model scale across architectures) and Figures 5–6 (depth/width scalability) carry the main performance argument. No error bars or confidence intervals appear anywhere in the paper. Statistical significance is never reported. Axis labels in several figures were partially unreadable in the provided text (PDF rendering artifacts). Table 4 (ablation) is compact and informative. Table 7 (long-context) includes TFLOPS formula but does not clarify batch-size normalization across rows.</p>
+<p><strong>Follow-up references:</strong>
+- Rajbhandari et al. 2020 (ZeRO/ZeRO-Offload) — primary baseline; understanding its synchronization model is necessary to appreciate MegaTrain's improvements.
+- Rajbhandari et al. 2021 (ZeRO-Infinity) — extends offloading to NVMe; the comparison at 120B scale is the key differentiator.
+- Zhao et al. 2023 (PyTorch FSDP) — baseline that collapses early in depth-scaling experiments; useful for understanding sharding vs. streaming tradeoffs.
+- Liao et al. 2025 (Ratel) — alternative single-consumer-GPU approach using SSD tiering; reproduced at only 2.03 TFLOPS at 7B on GH200 by the authors, suggesting either a fundamental architectural difference or a reproduction failure worth investigating independently.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- <em>Compute-time ≥ transfer-time per layer:</em> Double-buffering hides latency only when this holds. For very wide, shallow models or very fast interconnects (NVLink-C2C at 900 GB/s on GH200), the transfer may complete before compute finishes, leaving the pipeline underutilized in the other direction. No analysis of this condition is provided.
+- <em>1.5 TB host DRAM is accessible:</em> The 120B-scale result requires an H200 node with 1.5 TB DDR5. This is a specialized server configuration, not commodity hardware, undermining the democratization framing.
+- <em>CPU Adam matches GPU Adam throughput:</em> Asserted with reference to ZeRO-Offload observations; no direct benchmark of CPU vs. GPU optimizer throughput is provided for MegaTrain's workloads.
+- <em>Block-wise recomputation is numerically equivalent to standard backprop:</em> Validated only at 7B and 14B on MetaMathQA; no verification at 72B or 120B scale.
+- <em>BF16 weights + FP32 optimizer states (mixed precision) is the right comparison point:</em> No discussion of quantized training (e.g., QLoRA) as an alternative memory-reduction strategy.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison to quantization-based training approaches (QLoRA, GPTQ-train, LoftQ) which reduce memory without offloading and are widely used in exactly the post-training regime the paper targets.
+- Ratel [Liao et al. 2025] is excluded from main results and only appears in Appendix B with a note attributing poor numbers to "SSD bottlenecks." This is not a fair ablation — no attempt is made to isolate MegaTrain's architectural advantages from hardware configuration differences.
+- No discussion of LOMO or other optimizer-state-free training methods that could further compress the persistent state footprint.
+- No discussion of flash-attention or ring-attention for long-context, which are standard baselines for the 512K-token claim.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- <em>No replicated runs, no variance reported:</em> All TFLOPS numbers are single measurements. Reported differences as small as 1.84× at 14B could be within measurement noise on shared or NUMA-sensitive systems.
+- <em>120B model is MoE, not dense:</em> GPT-OSS-120B uses a mixture-of-experts architecture with 128 experts. MoE has fundamentally different activation sparsity and per-layer compute characteristics versus dense models; presenting it alongside dense 72B results without caveats conflates two distinct scaling regimes.
+- <em>TFLOPS metric is self-computed:</em> The formula 6ND + 12LHT² used for long-context experiments is stated without derivation or validation against hardware profilers, and its applicability to MoE blocks is not addressed.
+- <em>Width scalability shows MegaTrain lower than baselines at small widths:</em> At 1.0× width, FSDP achieves 501 TFLOPS and ZeRO-3 achieves 455 TFLOPS vs. MegaTrain's 406 TFLOPS. The paper attributes this to streaming overhead but does not quantify it or propose mitigation.
+- <em>Consumer GPU baselines use ZeRO-3 with batch size 1 only:</em> ZeRO-3 is not tuned for consumer GPUs in Table 9 (BS=1, BS=2 noted as OOM); gradient accumulation or other memory-saving techniques for ZeRO-3 are not explored, making the comparison potentially uncharitable.
+- <em>No end-to-end wall-clock training comparison:</em> Only TFLOPS is reported. Batch size selection differs between systems, making token/s comparisons in Table 9 the only proxy for real training speed, and those are only for consumer GPUs.
+- <em>Accuracy validation is narrow:</em> MetaMathQA is a single domain-specific benchmark; numerical correctness for general instruction-tuning tasks is not assessed.</p>
+<p><strong>Ideas for future work:</strong>
+- Formally characterize the overlap condition (compute time vs. transfer time per layer) and implement adaptive scheduling that falls back to partial overlap or batch-level pipelining when layers are too thin.
+- Extend to NVMe SSD tiering as a third memory tier, potentially enabling trillion-parameter fine-tuning on nodes with limited DRAM, and compare fairly against Ratel on identical hardware.
+- Combine MegaTrain's streaming engine with quantized optimizer states (e.g., 8-bit Adam) to reduce host memory bandwidth requirements and test whether the overlap condition holds at reduced precision.
+- Evaluate convergence and accuracy across diverse post-training tasks (RLHF, DPO, instruction tuning on general benchmarks) at 70B+ scale to validate that block-wise recomputation and CPU-master gradient accumulation do not introduce subtle numerical issues under longer training runs.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>pipelined double-buffered execution engine</li><li>stateless layer template binding</li><li>block-wise activation recomputation</li><li>CPU-side Adam optimizer update</li><li>layer-contiguous memory tiling</li><li>pinned slab recycling</li><li>multi-stream CUDA pipeline</li><li>asynchronous gradient evacuation</li><li>flat-buffer streaming</li><li>batched parameter binding</li><li>K-slab gradient offloading</li></ul>
+        <h4>Datasets</h4><ul><li>MetaMathQA</li></ul>
+        <h4>Claims</h4><ul><li>MegaTrain trains models up to 120B parameters on a single H200 GPU with 1.5TB host memory, a regime where existing offloading-based systems fail.</li><li>MegaTrain achieves 1.84x the training throughput of DeepSpeed ZeRO-3 with CPU offloading when training 14B models on a single GH200.</li><li>By storing all persistent training state in host memory and using GPUs only as transient compute engines, MegaTrain decouples model scale from GPU memory capacity.</li><li>MegaTrain supports ultra-long context training up to 512K tokens on a single GH200 as a byproduct of its layer-wise memory design.</li><li>MegaTrain maintains host memory growth strictly proportional to the theoretical parameter footprint, without auxiliary duplication seen in competing systems.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

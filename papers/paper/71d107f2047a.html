@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Zero-Shot Transferable Solution Method for Parametric Optimal Control Problems</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Zero-Shot Transferable Solution Method for Parametric Optimal Control Problems</h1>
+      <p class="paper-detail-meta">
+        Xinjian Li, Kelvin Kan, Deepanshu Verma, Krishna Kumar, Stanley Osher, Ján Drgoňa
+        
+         · 2025
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/2509.18404" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">optimal-control</span><span class="entry-tag">zero-shot-transfer</span><span class="entry-tag">imitation-learning</span><span class="entry-tag">function-encoders</span><span class="entry-tag">parametric-control</span><span class="entry-tag">neural-basis-functions</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Zero-Shot Transferable Solution Method for Parametric Optimal Control Problems</h1>
+<p><strong>Authors:</strong> Xinjian Li, Kelvin Kan, Deepanshu Verma, Krishna Kumar, Stanley Osher, Ján Drgoňa
+<strong>Year:</strong> 2025
+<strong>Tags:</strong> optimal-control, transfer-learning, function-encoders, imitation-learning, zero-shot-generalization, neural-basis-functions</p>
+<h2>TL;DR</h2>
+<p>Learns a fixed set of neural network basis functions offline via imitation learning, then adapts to new parametric optimal control tasks zero-shot by estimating task-specific linear coefficients — either via least-squares projection onto a few trajectory samples or via a pre-trained operator network. This offline–online decomposition avoids re-solving the optimization problem for each new task while maintaining near-optimal performance across diverse dynamics and cost structures.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype — algorithmic framework with numerical validation.</p>
+<p><strong>Context.</strong> Parametric optimal control / transfer learning subfield. Builds directly on Ingebrand et al. (2025) function encoder (FE) theory for Hilbert-space transfer; extends Onken et al. (2022) neural network approach for high-dimensional OC applied to quadcopter; uses Li et al. (2024) stochastic OC neural network as a benchmark problem setting; draws on Ingebrand et al. (2025) basis-to-basis operator learning for the operator network variant.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) the true policy family lies approximately in a finite-dimensional Hilbert subspace spanned by learnable neural basis functions; (2) training tasks sufficiently cover the task distribution so basis functions generalize; (3) fixed dynamics across tasks — method does not address dynamics variability; (4) availability of solver-generated trajectory data for offline training. Assumption (1) is supported by Theorem 1 (universal approximation in Hilbert spaces), but the required number of bases for a given accuracy is not bounded empirically or theoretically in this paper.</p>
+<p><strong>Contributions.</strong>
+- Offline–online decomposition for parametric OC: basis functions learned once; online adaptation is a lightweight least-squares solve or a single forward pass through an operator network.
+- Two zero-shot inference modes (LS projection from data; operator network from task specification) with a principled trade-off analysis.
+- Statistical convergence guarantee (Theorem 2) bounding LS coefficient error as O(M^{−1/2}) in the number of trajectory samples.
+- Empirical validation spanning 2D linear, 12D nonlinear (quadcopter), and 4D nonlinear (bicycle) problems with varying terminal and running costs including obstacle avoidance.</p>
+<p><strong>Clarity.</strong> Generally well-structured with clear algorithm boxes and an explicit offline–online framing; notation is consistent, though the operator network training (Algorithm 2) receives less exposition than the LS path, and reproducibility details (exact basis count for bicycle, hyperparameter sensitivity) are scattered or absent.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Learn p neural basis functions offline via imitation on N training tasks; at test time, express the new task's policy as a linear combination of those bases with coefficients found by least squares over ≤M new trajectory samples (or by evaluating a pre-trained operator network), achieving &lt;4% objective error with no retraining.</p>
+<p><strong>Supporting evidence:</strong>
+- 2D path planning (linear dynamics, terminal cost variability): LS achieves &lt;4% error in objective functional across seen targets, interpolation, and extrapolation; operator method shows up to ~9% error on extrapolation.
+- 12D quadcopter (nonlinear dynamics, terminal cost variability, 27 unseen test tasks): LS incurs 0.4% objective error on new targets; operator method incurs ~7.4% error on new targets (true objective 274.3089 vs. predicted 294.5627).
+- 4D bicycle, single obstacle (nonlinear dynamics, running cost variability, 36 unseen configurations): predicted terminal state deviation 0.0012 vs. ground truth 0.00005; predicted obstacle cost 0.0463 vs. ground truth 0.0385.
+- 4D bicycle, double obstacle (544/32 train/test split, 576 total configurations): predicted terminal state deviation 0.0046 vs. ground truth 0.00004; obstacle cost prediction 0.5750 vs. ground truth 0.5286 (~8.8% overestimate).
+- All experiments use 100 basis functions and 4-layer MLP with hidden size 256; 2D trained for 20K steps, quadcopter for 100K steps.</p>
+<p><strong>Figures &amp; tables:</strong> Figure 1 (pipeline schematic) conveys the offline–online split clearly. Figures 2–4 show trajectory visualizations; axes are labeled with spatial coordinates. Figures 5–6 deliberately show worst-performing cases, which is commendable, though no error bars or confidence intervals appear anywhere. Tables I–II report mean objective losses but without variance, standard deviation, or statistical tests. Table III reports control cost, obstacle cost, and terminal deviation aggregated across new scenarios without distributional spread. No wall-clock timing comparisons against baselines appear in any figure or table.</p>
+<p><strong>Follow-up references:</strong>
+- Ingebrand, Thorpe &amp; Topcu (2025) arXiv:2501.18373 — foundational function encoder theory this method directly extends.
+- Onken et al. (2022) IEEE TCST — neural network OC for high-dimensional problems; provides the quadcopter benchmark used here.
+- Verma et al. (2025) Foundations of Data Science — neural network approaches for parameterized OC; closest direct competitor cited.
+- Ingebrand et al. (2025) CMAME — basis-to-basis operator learning, motivates the operator network variant.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Fixed dynamics: the method is framed as handling varying objectives only; varying dynamics would invalidate the shared basis functions, but this is never discussed.
+- The task distribution is known and covered during offline training; out-of-distribution generalization beyond the convex hull is noted as less reliable (consistent with Figure 2c extrapolation results) but not characterized quantitatively.
+- The policy function space is a separable Hilbert space that can be adequately spanned by p=100 bases; no ablation on p is presented to show sensitivity or saturation.
+- Solver-generated open-loop trajectories are assumed to be near-optimal ground truth; any suboptimality in the data propagates directly into the learned bases.
+- Sub-Gaussian noise and full-rank Gram matrix are required by Theorem 2 but never verified empirically.</p>
+<p><strong>Missing context or citations:</strong>
+- No direct quantitative comparison to Verma et al. (2025) (cited as [45]), the closest stated competitor for parameterized OC, despite being cited in the related work.
+- No comparison to meta-learning or fine-tuning approaches (e.g., MAML-style) that also target fast adaptation to new tasks.
+- No comparison to explicit MPC / multi-parametric programming [2],[6] on the low-dimensional cases where those methods are tractable.
+- Online computation time per query is never reported; the claim of "real-time deployment" suitability is not numerically supported.
+- No discussion of constraint-satisfying control (input/state constraints beyond box bounds on U), which is critical in real robotics.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- No error bars or statistical significance on any reported number; each table reports a single mean across tasks without variance, making it impossible to assess reliability.
+- Terminal state deviation for bicycle model: predicted 0.0012/0.0046 vs. ground truth ~0.00005 represents 24×/92× overshoot relative to the solver, yet this is presented without concern — its practical consequence (does the bicycle actually reach the target?) is not discussed.
+- Training and test task sets are generated from the same parameterized distributions (grids, Gaussian parameters); true out-of-distribution generalization to qualitatively different cost structures is not tested.
+- The "worst-case" framing in Figures 5–6 lacks context: worst out of how many? The overall failure rate (e.g., fraction of cases exceeding some threshold) is not reported.
+- Quadcopter operator method error (~7.4%) is substantially larger than LS (0.4%) but no analysis explains why or when the operator method would be preferred for this system.
+- Code is promised "upon publication" but not yet available, limiting reproducibility at time of preprint.</p>
+<p><strong>Ideas for future work:</strong>
+- Ablate number of basis functions p and number of training tasks N to characterize the accuracy–compute trade-off and guide practitioners on minimum data requirements.
+- Report online inference wall-clock times and compare to CasADi/SciPy re-solve times to substantiate real-time deployment claims quantitatively.
+- Extend to varying dynamics (e.g., parametric mass, friction) by conditioning basis functions on dynamics parameters, testing whether the linear combination structure still suffices.
+- Incorporate safety/constraint satisfaction (e.g., control barrier functions or projected LS) and test whether the zero-shot coefficient estimates preserve constraint feasibility under distribution shift.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>function encoder (FE)</li><li>imitation learning</li><li>least-squares projection</li><li>operator network</li><li>multi-layer perceptron (MLP)</li><li>direct transcription</li><li>Tikhonov regularization</li><li>offline-online decomposition</li></ul>
+        <h4>Datasets</h4><ul><li>2D trajectory planning (synthetic)</li><li>12D quadcopter path planning (synthetic)</li><li>bicycle model single-obstacle (synthetic)</li><li>bicycle model double-obstacle (synthetic)</li></ul>
+        <h4>Claims</h4><ul><li>A function encoder framework can learn reusable neural basis functions that span the control policy space, enabling zero-shot adaptation to new optimal control tasks without retraining.</li><li>The offline-online decomposition confines intensive computation to the offline phase, making online adaptation lightweight and suitable for real-time deployment.</li><li>The proposed method achieves near-optimal performance with less than 4% error in objective value across 2D, 12D, and nonlinear benchmark problems.</li><li>Task-specific coefficients can be inferred either via least-squares projection from limited trajectory data or via a data-free operator network mapping from problem specifications.</li><li>The approach generalizes to unseen task parameters including interpolation and extrapolation of target locations and obstacle configurations.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

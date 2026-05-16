@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Implementation of a Real-Time decision support system to reduce pollutant load-discharges in Madrid combined sewer system based on off-line and real time modelling</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Implementation of a Real-Time decision support system to reduce pollutant load-discharges in Madrid combined sewer system based on off-line and real time modelling</h1>
+      <p class="paper-detail-meta">
+        A. Lastra, A. Carrasco, A. Villanueva, D. Sunyer, Jordi Meseguer, B. Joseph-Duran, G. Cembrano, L. Romero, V. Puig, J. Suárez, A. Jácome, A. Martínez
+         · <em>13th Urban Drainage Modelling Conference, Innsbruck, Austria</em>
+         · 2025
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.71573/c01vn333" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">combined-sewer-overflow</span><span class="entry-tag">real-time-control</span><span class="entry-tag">urban-drainage</span><span class="entry-tag">water-quality</span><span class="entry-tag">model-predictive-control</span><span class="entry-tag">decision-support-system</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Implementation of a Real-Time Decision Support System to Reduce Pollutant Load-Discharges in Madrid Combined Sewer System Based on Off-line and Real-Time Modelling</h1>
+<p><strong>Authors:</strong> A. Lastra, A. Carrasco, A. Villanueva, D. Sunyer, J. Meseguer, B. Joseph-Duran, G. Cembrano, L. Romero, V. Puig, J. Suárez, A. Jácome, A. Martínez
+<strong>Year:</strong> 2025
+<strong>Tags:</strong> combined-sewer-overflow, model-predictive-control, real-time-control, urban-drainage, water-quality, decision-support-system</p>
+<h2>TL;DR</h2>
+<p>The LIFE RUBIES project deployed a quality-based, MPC-driven decision support system in Madrid's combined sewer network (two stormwater tanks totalling 600,000 m³, two WWTPs) to reduce pollutant loads discharged to the Manzanares River during rain events. Model-based comparisons across 24 rain events show an average 28.5% reduction in CSO volume under MPC setpoints versus the baseline operational protocol.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype deployment / operational case study (conference proceedings).</p>
+<p><strong>Context.</strong> Urban drainage real-time control; builds directly on Sun et al. (2021) — control-oriented quality modelling of sewer networks developed in LIFE Effidrain — and on Lastra et al. (2018), a prior Madrid smart-sanitation study that provides baseline MEC values and system characterisation.</p>
+<p><strong>Correctness.</strong> Three load-bearing assumptions: (1) the SWMM model produces forecasts reliable enough to drive MPC setpoints — the paper itself refutes this after months of operation; (2) Mean Event Concentrations from three sampling locations are representative of all CSO points; (3) model-to-model KPI comparisons (MPC scenario vs. rules-based scenario) are valid proxies for real-world improvement despite acknowledged model error of up to 271%.</p>
+<p><strong>Contributions.</strong>
+- Field deployment and 18-month operation of a quality-based RTC system integrating SWMM, MPC, and SCADA for a large combined sewer network.
+- Water quality characterisation (turbidity/conductivity correlations and MEC values) at six CSO locations under both dry-weather and rain conditions, based on &gt;200 laboratory analyses.
+- Integration of X-Band radar 2-hour rainfall forecasts (24% daily error vs. 90% for AEMET national radar) as the operational rainfall input.
+- Identification and implementation of three concrete operational protocol improvements (tank filling acceleration, weir crest lowering, night-time emptying) that pre-date full MPC closure.</p>
+<p><strong>Clarity.</strong> Readable and well-structured for a 9-page conference paper, but the MPC formulation and control-oriented quality model are not described here — readers are redirected entirely to Sun et al. (2021).</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> A coupled SWMM-forecast / MPC system was integrated into the AQUADVANCED URBAN DRAINAGE platform and operated in Madrid since October 2023; model simulations comparing MPC-derived setpoints against prior operational rules across 24 rain events yield an average 28.5% CSO volume reduction, with larger gains for smaller events.</p>
+<p><strong>Supporting evidence:</strong>
+- 28.5% average CSO volume reduction (MPC vs. baseline), derived from model simulations of 24 rain events (March 2024–September 2025); similar or higher percentage gains reported for SS, BOD, and Ammonia loads (no specific figures given).
+- SWMM hydraulic model calibrated on 24 events; average CSO volume error 34%, ranging from 1% (1/3/2025) to 271% (8/6/2024).
+- X-Band radar underestimates actual rainfall by an average of 23% (range: 5–62% per event); AEMET national radar error was 90% (validated against gauges over 6 events).
+- MEC values at six CSO locations: SS 120–411 mg/l, COD 308–706 mg/l, BOD5 163–336 mg/l, Ammonia 8.6–40.6 mg/l, Total Nitrogen 11.8–36.2 mg/l, Total Phosphorus 2.6–6.1 mg/l (Table 1).
+- &gt;25 rain events monitored in real-time; &gt;200 water quality analyses at 3 locations with 12 samples per campaign (1-hour resolution in dry weather, 20-minute resolution during rain).</p>
+<p><strong>Figures &amp; tables:</strong> Figure 1 shows conductivity–ammonia scatter plots (dry vs. wet weather) but reports no R², RMSE, or p-values. Figure 2 shows a calibration hydrograph/level time series for one event (36% CSO error) — axes appear labelled but no uncertainty bands. Figures 3–6 are system architecture and UI screenshots, informative but qualitative. Table 1 (MEC values) is clear and units are present. Table 2 (per-event KPIs) is referenced as the central results table but its full numerical content is not reproduced in the provided text; only summary conclusions are narrated. No confidence intervals or statistical significance tests are reported anywhere.</p>
+<p><strong>Follow-up references:</strong>
+- Sun et al. (2021), <em>Journal of Environmental Management</em> — the control-oriented quality modelling framework underpinning the MPC module; essential for understanding the optimisation formulation.
+- Lastra et al. (2018), UDM Palermo — prior Madrid system characterisation that provides baseline MEC data incorporated in this study.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- The SWMM model is assumed to provide useful short-term forecasts to the MPC, yet the paper documents that model outputs diverge substantially from measurements due to missing geometry, radar underestimation, and unknown upstream operations. If these errors are systematic, MPC setpoints may be poorly optimised.
+- MEC values from three sampling points are assumed to represent all six CSO discharge locations, including locations with no direct campaign data.
+- The model-to-model KPI comparison assumes the baseline SWMM run with rule-based protocols faithfully replicates what the system would have done historically — unverifiable given the acknowledged model limitations.
+- Turbidity/conductivity–pollutant correlations are assumed stable across seasons and flow regimes; this is not tested.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with other operational RTC deployments in similarly scaled European combined sewer systems for benchmarking the 28.5% figure.
+- The river quality model (IBER) is incomplete; no ecological or regulatory impact assessment is presented despite the stated goal of improving the Manzanares River's ecological status.
+- No discussion of the MPC's computational latency or whether 15-minute update cycles are sufficient given catchment response times.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The headline 28.5% KPI is a model-versus-model result. Given the same SWMM model has up to 271% error in CSO volume for individual events, this improvement figure carries unknown and unreported uncertainty. The actual real-world gain could be substantially different in either direction.
+- Radar rainfall input systematically underestimates by 23% (and up to 62%); this bias flows directly into the forecasting model used to compute KPIs, potentially inflating apparent MPC benefit for events where storage was under-utilised in the baseline.
+- No ablation distinguishing how much improvement stems from the three protocol changes (tank filling, weir lowering, emptying schedule) versus the MPC optimisation itself.
+- Only 3 water quality monitoring locations for a 16,000 km network; spatial extrapolation of MEC values is unvalidated.
+- Statistical analysis is absent: no confidence intervals, no significance tests, no distribution of improvements across event sizes beyond qualitative narrative.
+- Operational improvements implemented progressively from 2023 onward may confound before/after comparisons because the physical system (e.g., altered weir crest) differs from what the baseline SWMM model represents.</p>
+<p><strong>Ideas for future work:</strong>
+- Once sufficient paired events accumulate, perform real-measurement-based before/after comparison (not model-to-model) to validate or refute the 28.5% modelled improvement.
+- Quantify sensitivity of MPC setpoints to radar rainfall underestimation bias to determine whether bias correction is needed before operational use.
+- Complete the IBER river quality model and close the loop between CSO pollutant load reductions and measurable downstream ecological indicators (DO, ammonia exceedances).
+- Extend the MPC upstream across the full Manzanares sanitation system (planned under NextGeneration EU) and assess whether inter-catchment coordination yields non-linear storage benefits beyond what the pilot zone analysis predicts.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Model Predictive Control (MPC)</li><li>SWMM hydraulic modelling</li><li>turbidity and conductivity sensor monitoring</li><li>X-Band radar rainfall forecasting</li><li>AQUADVANCED URBAN DRAINAGE (AQDV) software</li><li>pollutograph and hydrograph analysis</li><li>Mean Event Concentration (MEC) computation</li><li>IBER river quality modelling</li><li>KPI-based scenario comparison</li></ul>
+        <h4>Datasets</h4><ul><li>24 calibration rainfall events (March 2024 to March 2025)</li><li>25+ rain events analyzed in real-time (March 2024 to July 2025)</li><li>water quality campaigns at 3 CSO locations (200+ analyses)</li><li>Canal de Isabel II radar monitoring data</li></ul>
+        <h4>Claims</h4><ul><li>The MPC-based operational scenario achieves an average 28.5% reduction in total CSO volume discharged to the Manzanares River compared to the baseline operational protocol.</li><li>Smaller rain events yield proportionally greater CSO reduction benefits from MPC control than larger events that exceed total storage capacity.</li><li>Turbidity and conductivity sensors enable real-time estimation of CSO pollutant loads, with correlations established for suspended solids, COD, BOD5, ammonia, total phosphorus, and total nitrogen.</li><li>Canal de Isabel II&#39;s X-Band radar system provides rainfall estimates with an average error of 24%, significantly outperforming AEMET radar data which showed a 90% daily rain average error.</li><li>Integrated centralized decision-making via AQDV markedly improved coordination among operators and enhanced tank filling and emptying strategies, reducing CSO occurrences.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

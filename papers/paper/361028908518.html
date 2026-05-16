@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A Tutorial on Principal Component Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>A Tutorial on Principal Component Analysis</h1>
+      <p class="paper-detail-meta">
+        Jonathon Shlens
+        
+         · 2014
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/1404.1100" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">dimensionality-reduction</span><span class="entry-tag">principal-component-analysis</span><span class="entry-tag">linear-algebra</span><span class="entry-tag">tutorial</span><span class="entry-tag">singular-value-decomposition</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>A Tutorial on Principal Component Analysis</h1>
+<p><strong>Authors:</strong> Jonathon Shlens
+<strong>Year:</strong> 2014
+<strong>Tags:</strong> principal-component-analysis, dimensionality-reduction, linear-algebra, singular-value-decomposition, tutorial, data-analysis</p>
+<h2>TL;DR</h2>
+<p>Pedagogical derivation of PCA from first principles — change of basis, variance maximization, and covariance diagonalization — culminating in two algebraic solutions via eigenvector decomposition and SVD. Targets readers with linear algebra backgrounds who want to understand <em>why</em> PCA works, not just how to call a function.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Tutorial / expository paper; no novel results or experiments.</p>
+<p><strong>Context.</strong> General applied linear algebra subfield. Builds on standard matrix decomposition theory (spectral theorem for symmetric matrices, SVD); mentions ICA and kernel PCA as alternatives in the Discussion but cites no specific prior works by name — all framing is self-contained.</p>
+<p><strong>Correctness.</strong> Central assumptions are stated explicitly: (1) linearity of the change of basis, (2) high-variance directions ≈ high SNR / interesting structure, (3) orthonormality of principal components. All three are load-bearing; the paper itself flags that assumptions 1 and 2 can fail (ferris-wheel example, non-Gaussian data). The mathematical derivations within those assumptions appear internally consistent.</p>
+<p><strong>Contributions.</strong>
+- Unified intuitive + algebraic derivation of PCA from covariance diagonalization goals.
+- Explicit proof that eigenvectors of the covariance matrix CX = (1/n)XX^T are the principal components.
+- Demonstration that PCA via eigenvector decomposition and PCA via SVD are equivalent, with the SVD approach recovering PCs as columns of V from the decomposition of Y = (1/√n)X^T.
+- Two reference MATLAB implementations (covariance-based and SVD-based) in Appendix B.</p>
+<p><strong>Clarity.</strong> Writing is consistently clear and well-paced for a tutorial; the mid-paper footnote reversing row/column conventions (Section 6.1) is a genuine readability stumble that the author flags but does not fully resolve before it causes confusion.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> PCA finds the orthonormal basis that diagonalizes the data covariance matrix, equivalently the basis of rank-ordered variance-maximizing directions; this is solved analytically either by eigendecomposition of CX or by SVD of the mean-centered data matrix.</p>
+<p><strong>Supporting evidence:</strong>
+- Toy spring example: 6-dimensional recordings (3 cameras × 2D position each, 120 Hz) used to motivate recovery of a single underlying degree of freedom.
+- SNR formalized as σ²_signal / σ²_noise; high-variance directions assumed to carry signal.
+- Covariance matrix CX = (1/n)XX^T shown to be square, symmetric m×m; off-diagonal zeros in CY encode full decorrelation.
+- Algebraic proof that choosing P = E^T (eigenvectors of CX as rows) yields CY = D (diagonal), i.e., PCA diagonalizes the covariance exactly.
+- SVD equivalence: principal components are columns of V in SVD of Y ≡ (1/√n)X^T, since Y^T Y = CX by construction.
+- PCA shown to optimally minimize mean squared error (L2) among linear dimensionality-reduction methods — stated without proof.</p>
+<p><strong>Figures &amp; tables:</strong> Figure 1 (spring + camera schematic) and Figure 2 (2D data cloud with σ²_signal / σ²_noise annotated) carry the intuition; Figure 3 (redundancy spectrum) motivates covariance; Figure 4 (SVD matrix construction) is the key technical diagram; Figure 5 (3-step PCA recipe) and Figure 6 (failure modes) round out the paper. Axes in Figures 2–3 are labeled. No error bars, confidence intervals, or statistical significance — none are relevant to a purely expository paper. Figure 4's checkerboard notation for the sparse Σ matrix is non-standard and may confuse readers unfamiliar with the convention.</p>
+<p><strong>Follow-up references:</strong> Not stated (no bibliography is provided in the paper; ICA and kernel PCA are mentioned by name only, with no citations).</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Gaussian (or at least second-order-sufficient) data distribution is implicitly required for decorrelation to imply independence; the paper mentions this only in a footnote.
+- Zero-mean data after per-dimension mean subtraction is assumed throughout; unequal measurement scales (i.e., whether to standardize to unit variance before PCA) are never discussed, which can materially change results when variables have different units.
+- The assumption that "large variance = interesting structure" is stated as an assumption but presented as nearly axiomatic; if this is violated (e.g., artifact-dominated dimensions), PCA silently produces wrong results.
+- Orthonormality of principal components is assumed from the outset as the "easiest" choice; the paper does not prove it is the <em>only</em> valid choice for diagonalization.</p>
+<p><strong>Missing context or citations:</strong>
+- No bibliography whatsoever; ICA and kernel PCA are invoked without citations, making follow-up impossible from the paper alone.
+- No discussion of numerical stability differences between the eigenvector and SVD approaches (SVD is generally preferred in practice for rank-deficient or nearly singular covariance matrices).
+- Whitening / sphering as a preprocessing step and its relationship to PCA is not mentioned.
+- Probabilistic PCA (Tipping &amp; Bishop) is absent despite being a direct statistical extension of the framework discussed.
+- No mention of computational cost scaling (O(m³) for eigendecomposition, O(min(m,n)·mn) for SVD) relevant to practitioners.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The L2-optimality claim ("PCA provides the optimal reduced representation under MSE") is stated without proof or citation; a reader cannot verify it from this paper.
+- The reverse direction of Theorem 3 (symmetric iff orthogonally diagonalizable) is explicitly left unproven and handed to the reader, leaving a gap in the mathematical completeness the paper advertises.
+- MATLAB code uses <code>1/(N-1)</code> normalization in the covariance computation but the main text derives everything with <code>1/n</code>; this inconsistency is unacknowledged and will produce numerically different results for small n.
+- The toy spring example is never numerically demonstrated; it is purely illustrative, so the claim that PCA "recovers x" from the 6D recordings is asserted but not shown.</p>
+<p><strong>Ideas for future work:</strong>
+- Extend the tutorial with a worked numerical example on the spring dataset (simulated or real), showing the recovered principal component quantitatively aligning with the true axis of motion.
+- Add a section on choosing the number of components to retain (scree plots, explained variance thresholds, cross-validation), which is the most common practical question PCA users face but is entirely absent.
+- Derive or cite the L2-optimality result formally, connecting it to the Eckart–Young theorem for low-rank matrix approximation.
+- Contrast the covariance-based and SVD-based implementations numerically on ill-conditioned data to demonstrate when the SVD route is preferable for numerical stability.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>principal component analysis</li><li>singular value decomposition</li><li>eigenvector decomposition</li><li>covariance matrix diagonalization</li><li>change of basis</li></ul>
+        
+        <h4>Claims</h4><ul><li>PCA finds the orthonormal basis that maximizes variance and minimizes redundancy in a dataset by diagonalizing the covariance matrix.</li><li>The principal components of a data matrix X are the eigenvectors of the covariance matrix CX = (1/n) XX^T.</li><li>PCA and SVD are intimately related: the principal components of X correspond to the columns of V in the SVD of the normalized transpose of X.</li><li>Under mean squared error loss, PCA provides the optimal reduced representation of data, but it only removes second-order dependencies and fails when higher-order structure is present.</li><li>PCA assumes linearity, that large variances correspond to important structure, and that principal components are orthogonal.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

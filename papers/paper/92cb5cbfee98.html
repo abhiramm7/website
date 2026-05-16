@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Flooding and Overflow Mitigation Using Deep Reinforcement Learning Based on Koopman Operator of Urban Drainage Systems</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Flooding and Overflow Mitigation Using Deep Reinforcement Learning Based on Koopman Operator of Urban Drainage Systems</h1>
+      <p class="paper-detail-meta">
+        Wenchong Tian, Zhenliang Liao, Zhiyu Zhang, Hao Wu, Kunlun Xin
+         · <em>Water Resources Research</em>
+         · 2022
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.1029/2021WR030939" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">urban-drainage</span><span class="entry-tag">reinforcement-learning</span><span class="entry-tag">koopman-operator</span><span class="entry-tag">flood-mitigation</span><span class="entry-tag">real-time-control</span><span class="entry-tag">surrogate-modeling</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Flooding and Overflow Mitigation Using Deep Reinforcement Learning Based on Koopman Operator of Urban Drainage Systems</h1>
+<p><strong>Authors:</strong> Wenchong Tian, Zhenliang Liao, Zhiyu Zhang, Hao Wu, Kunlun Xin
+<strong>Year:</strong> 2022
+<strong>Tags:</strong> urban-drainage-systems, reinforcement-learning, koopman-operator, surrogate-emulator, real-time-control, combined-sewer-overflow</p>
+<h2>TL;DR</h2>
+<p>A Koopman-operator-based emulator (DLEDMD) is trained on SWMM simulations and used as a drop-in replacement for SWMM during RL agent training for pump control in a combined sewer system. The approach achieves 79.67× higher data usage efficiency and faster training than SWMM-based RL, with similar flooding and CSO mitigation outcomes. Interpretability of the Koopman emulator is claimed to surpass black-box MLP emulators via its explicit linear structure.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype — new methodology applied to a single real-world case study.</p>
+<p><strong>Context.</strong> Urban drainage real-time control (RTC) subfield. Builds on: Mullapudi et al. (2020) and Saliba et al. (2020) — SWMM-based RL for UDS control (primary baseline); Li et al. (2017) — DLEDMD algorithm for Koopman approximation via deep learning; Lund et al. (2020) — linear surrogate model inside MPC for CSO mitigation; Korda &amp; Mezić (2018) — Koopman operator theory applied to system control.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (a) a 4-variable aggregated state (CSO+flooding volume, stored volume, inflow, outflow) captures sufficient system dynamics for a 139-node network; (b) an emulator trained on Chicago-histogram synthetic rainfalls generalizes to real rainfall and to the RL sampling distribution; (c) on/off binary pump control is adequate for the operational task. All three are plausible but not formally verified in the paper.</p>
+<p><strong>Contributions.</strong>
+- Koopman emulator (DLEDMD) for nonlinear UDS dynamics, achieving higher recursive-prediction NSE (0.931–0.994) than linear regression (0.072–0.961) and comparable to MLP, with an explicit linear structure enabling interpretability.
+- Emulator-based RL framework substituting SWMM with the Koopman emulator during training, yielding 79.67× higher data usage rate (DUR).
+- New DUR metric quantifying ratio of control-relevant state data to total environment output data during RL sampling.
+- Uncertainty analysis evaluating robustness to 50 Monte Carlo rainfall events and ±5% state input noise.</p>
+<p><strong>Clarity.</strong> Well-structured with a clear route-map figure; mathematical notation is dense but consistently defined; the "interpretability" discussion in Section 6.1.2 is qualitative rather than demonstrating quantitative physical insight from the eigenfunctions.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Replacing SWMM with a Koopman emulator (DLEDMD) during RL training for pump scheduling reduces training cost and data waste while achieving flood/CSO mitigation performance comparable to SWMM-trained agents, and outperforms linear and MLP baseline emulators on recursive prediction accuracy.</p>
+<p><strong>Supporting evidence:</strong>
+- DLEDMD recursive-prediction NSE: 0.931–0.994 across 4 test rainfalls; Linear NSE: 0.072–0.961; MLP NSE: 0.817–0.963 (Table 5, unitless).
+- DUR of emulator-based RL is 79.67× higher than SWMM-based RL (Tables 10–11; absolute DUR values not reproduced in the extracted text but ratio stated).
+- Training run on a single office laptop (Intel Core i7-9750 @ 2.60 GHz, 16 GB RAM); emulator-based RL training with n = 1,000 steps completes faster than SWMM-based RL at n = 200 steps (specific wall-clock times in Tables 10–11, not fully extracted here).
+- CSO + flooding volumes (10³ m³) at n = 20: DLEDMD-DQN 20.4–61.3 vs. SWMM-DQN 16.3–55.4 vs. water-level system 19.8–59.1 across Rain1–8 (Table 6); emulator-based agents approach SWMM-based performance by n = 1,000.
+- Uncertainty analysis: 50 rainfall Monte Carlo runs yielding RSI distributions; 20 noisy-input trajectories per test event using U(0.95, 1.05) multiplicative noise.</p>
+<p><strong>Figures &amp; tables:</strong> Figures 9–10 show recursive and one-step prediction trajectories — axes appear labeled, but no uncertainty bands on predictions. Figure 11 shows Koopman eigenvalue/singular-value spectra and 2D-projected eigenfunctions — axes labeled (s1, s2); interpretation is visual only with no quantitative link to physical UDS states. Tables 5–9 carry the core quantitative argument; no confidence intervals or statistical significance tests are reported anywhere in the paper. Visualization of eigenfunction projections (Figures 11c–11d) is illustrative but not connected to physical meaning.</p>
+<p><strong>Follow-up references:</strong>
+- Mullapudi et al. (2020) — primary SWMM-RL baseline this work extends; essential context for computational burden claim.
+- Li et al. (2017) — DLEDMD algorithm; needed to understand the emulator's approximation machinery.
+- Lund et al. (2020) — linear surrogate in MPC for CSO mitigation; natural direct comparison the paper references but does not benchmark against.
+- Saliba et al. (2020) — source of the input-noise uncertainty methodology and another SWMM-RL baseline.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- The 4-variable aggregated emulator state is sufficient to characterize a 139-node, 140-pipe network — spatial information is entirely lost; if inter-node dynamics matter for pump scheduling this could break control performance.
+- Emulator and RL training rainfalls must be drawn from the same Chicago-histogram distribution — explicitly acknowledged in Section 3.3, but left as a hard design constraint with no solution; limits deployment flexibility.
+- Real rainfall events (Rain5–8) were scaled by a factor of 20 in intensity — this is physically extreme and unmotivated; results under these events may not reflect realistic performance.
+- On/off binary pump control covers the full operational space — throttling or variable-speed pumps are not considered.</p>
+<p><strong>Missing context or citations:</strong>
+- No benchmark against MPC with the same linear or DLEDMD surrogate (Lund et al., 2020 does this for a different system); a direct same-system MPC comparison is absent.
+- Model-based RL methods that integrate surrogate models with online uncertainty (e.g., MBPO, PETS frameworks cited by Chua et al., 2018) are mentioned but not tested.
+- The interpretability claim is not compared against post-hoc explanation methods for neural networks (e.g., SHAP, LIME), so whether the Koopman linear structure adds practical interpretability over explainable MLP approaches is undemonstrated.
+- No engagement with transfer-learning or domain-randomization literature for generalizing RL agents across different UDS configurations.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- SWMM-based RL is tested only up to n = 200 steps (resource constraint stated), while emulator-based RL runs to n = 3,000; the comparison is therefore unequal — SWMM agents might improve further with more steps.
+- Emulator training cost (18 SWMM simulations) is excluded from the DUR and training-time comparisons; the 79.67× data efficiency advantage does not account for this overhead.
+- Single case study (one Eastern China combined sewer system) precludes generalizability claims; no sensitivity analysis on network topology or size.
+- 50 Monte Carlo runs for the rainfall uncertainty analysis may undersample tail events; no convergence test for the Monte Carlo estimator is reported.
+- No statistical significance testing (e.g., t-tests, confidence intervals) on CSO/flooding volume differences between methods; numerical differences in Tables 6–9 are reported without uncertainty quantification.
+- Error accumulation in recursive prediction over the 2 hr simulation horizon is not systematically analyzed (only final NSE reported); long-horizon drift could corrupt RL reward signals in a way not captured by aggregate MSE/NSE.</p>
+<p><strong>Ideas for future work:</strong>
+- Test the framework on multiple UDS topologies and climatic regions to establish generalizability; include a case where emulator training distribution differs from RL sampling distribution to stress-test the distribution-matching constraint.
+- Provide a same-system head-to-head comparison against MPC using the DLEDMD surrogate as the internal model, controlling for the same rainfall events.
+- Develop an online emulator update scheme (e.g., Dyna-style) that refines the Koopman emulator during RL training when the agent encounters out-of-distribution states, relaxing the distribution-matching requirement.
+- Quantitatively link Koopman eigenfunctions (Figure 11c–11d) to physical UDS states (e.g., pump-station water levels, sub-catchment storage) to substantiate the interpretability claim beyond mathematical existence of a linear structure.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Koopman operator approximation</li><li>dictionary learning extended dynamic mode decomposition (DLEDMD)</li><li>deep Q-network (DQN)</li><li>proximal policy optimization (PPO)</li><li>multilayer perceptron (MLP)</li><li>linear regression</li><li>SWMM simulation</li><li>Monte Carlo uncertainty analysis</li><li>Chicago histogram rainfall generation</li></ul>
+        <h4>Datasets</h4><ul><li>Eastern China combined sewer system SWMM model (139 nodes, 140 pipelines, 3 pump stations)</li><li>Chicago histogram designed rainfall events</li><li>real rainfall monitoring data from surrounding city</li></ul>
+        <h4>Claims</h4><ul><li>The Koopman emulator achieves better recursive prediction accuracy than linear regression and MLP baseline emulators for urban drainage system dynamics.</li><li>RL agents trained with the Koopman emulator achieve similar flooding and overflow mitigation control effects as SWMM-based RL agents while requiring fewer training steps.</li><li>The emulator-based RL framework achieves a data usage rate 79.67 times higher and faster training speed compared with SWMM-based RL.</li><li>RL agents based on the Koopman emulator exhibit acceptable robustness under diverse rainfall events and imperfect state inputs as shown by Monte Carlo uncertainty analysis.</li><li>The linear structure of the Koopman emulator provides interpretability via eigenfunction and singular function analysis, unlike black-box neural network emulators.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

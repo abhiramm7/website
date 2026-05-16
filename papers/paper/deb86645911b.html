@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The Linux Command Line, Fifth Internet Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>The Linux Command Line, Fifth Internet Edition</h1>
+      <p class="paper-detail-meta">
+        William Shotts
+         · <em>LinuxCommand.org / No Starch Press</em>
+         · 2019
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">linux</span><span class="entry-tag">command-line</span><span class="entry-tag">shell-scripting</span><span class="entry-tag">system-administration</span><span class="entry-tag">open-source-education</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>The Linux Command Line (Fifth Internet Edition)</h1>
+<p><strong>Authors:</strong> William E. Shotts, Jr.
+<strong>Year:</strong> 2019
+<strong>Tags:</strong> linux, shell-scripting, command-line, unix-tools, system-administration, tutorial</p>
+<h2>TL;DR</h2>
+<p>A self-contained tutorial book teaching the Linux Bash shell and shell scripting from first principles, structured in four progressively deeper parts: shell basics, environment configuration, essential CLI tools, and scripting. Targets users migrating from graphical environments who want practical command-line fluency.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Tutorial/instructional book; not a research paper. No hypothesis, no experiments, no citations in the academic sense.</p>
+<p><strong>Context.</strong> Practical Linux/Unix pedagogy; implicitly builds on POSIX standards, GNU Coreutils documentation, and Bash reference manual. No specific prior academic works are cited; the book positions itself against GUI-centric computing workflows.</p>
+<p><strong>Correctness.</strong> Central assumption: Bash on a Linux system is the reader's environment. The book assumes command availability consistent with a mainstream GNU/Linux distribution (Debian/Ubuntu family implied by <code>sudo</code>/<code>apt</code> examples). These assumptions are explicit and largely valid for the stated audience.</p>
+<p><strong>Contributions.</strong>
+- Unified, progressive curriculum moving from interactive shell use through full scripting in a single volume.
+- Hands-on "playground" exercises woven into navigation and file-manipulation chapters to reinforce concepts immediately.
+- Coverage of both low-level tools (fdisk, mkfs, tr, sed, groff) and high-level workflows (rsync, SSH tunneling, package management) in one accessible text.
+- Freely licensed (CC BY-NC-ND 3.0) Internet Edition, lowering access barriers relative to commercial alternatives.</p>
+<p><strong>Clarity.</strong> Writing is plain and well-organized with consistent chapter structure (exposition → examples → "Summing Up" → "Further Reading"); the table of contents alone conveys the pedagogical sequence clearly.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> A linear, project-driven tutorial that takes a novice from opening a terminal through writing robust, multi-function Bash scripts, using the GNU/Linux toolchain as both subject and medium.</p>
+<p><strong>Supporting evidence:</strong>
+- 32 chapters organized into 4 parts; scope spans ~450+ pages (exact page count not stated in provided text).
+- Part 1 (Chapters 1–10): core shell interaction — navigation, redirection, pipelines, permissions, process control.
+- Part 2 (Chapters 11–13): environment, vi editor, prompt customization.
+- Part 3 (Chapters 14–23): package management, storage, networking, find/locate, archiving, regex, text processing (sed, tr, sort, cut, paste, diff), formatting, printing, compiling from source.
+- Part 4 (Chapters 24–32): shell scripting — variables, here-documents, functions, conditionals (if/case), loops (while/until), positional parameters, keyboard input, troubleshooting/debugging.
+- No benchmark numbers, performance claims, or quantitative comparisons present anywhere in the provided text.</p>
+<p><strong>Figures &amp; tables:</strong> Not assessable from the provided text (only front matter and ToC supplied). The book reportedly includes command-output listings and structured tables (e.g., Chapter 3's <code>ls</code> options table, Chapter 9's octal permissions, Chapter 19's POSIX character classes), but axis labels, error bars, and statistical significance are not applicable to this genre.</p>
+<p><strong>Follow-up references:</strong>
+- GNU Bash Reference Manual — authoritative specification for every Bash feature introduced here.
+- POSIX.1-2017 standard — underpins portability discussions (Chapter 30).
+- <code>man</code> pages for individual utilities (grep, sed, find, tar, rsync) — cited implicitly throughout as primary documentation.
+- <em>The Art of Unix Programming</em> (Raymond) — philosophical complement; not cited by name in provided text but relevant to the Unix-design ethos threaded through the book.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Reader has a working GNU/Linux installation; no coverage of setup, dual-boot, or WSL edge cases.
+- Bash version ≥4 assumed silently; some syntax (e.g., <code>[[ ]]</code>, <code>(( ))</code>) is not portable to POSIX <code>sh</code> or older Bash, which the "portability" sidebar in Chapter 27 partly acknowledges but does not resolve systematically.
+- Examples assume a Debian/Ubuntu-family system (apt, sudo model); RPM-based systems are mentioned in the package management chapter but receive secondary treatment.
+- Network examples (ftp, ssh, wget) assume open internet access and available servers, which may not hold in locked-down enterprise environments — the target domain of many sysadmins.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with competing introductory texts (e.g., Sobell's <em>Practical Guide to Linux</em>) or rationale for pedagogical sequencing choices.
+- Security implications of shell scripting (injection, unsafe variable expansion) are not systematically treated despite a troubleshooting chapter.
+- No mention of modern shell alternatives (zsh, fish) or why Bash is specifically chosen beyond ubiquity.
+- <code>systemd</code> and journald are absent despite replacing SysV init on virtually all current distributions; process management chapter covers only traditional signals/kill.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- This is a tutorial, not an empirical study; standard research-validity criteria (baselines, statistical tests, reproducibility) do not apply. However, some command examples may silently fail on systems with different default configurations (locale, filesystem layout, kernel version) without warning to the reader.
+- The <code>fdisk</code>/<code>mkfs</code> chapter could cause data loss if followed on a wrong device; caution language is present but not prominently flagged at chapter entry.
+- Chapter currency: the Fifth Edition (2019) predates widespread adoption of tools like <code>ip</code> replacing <code>ifconfig</code> — the book does cover <code>ip</code>, but <code>netstat</code> is also included despite being deprecated in many distributions.</p>
+<p><strong>Ideas for future work:</strong>
+- Add a chapter on <code>systemd</code>/<code>journalctl</code>/<code>systemctl</code> to reflect current init-system reality.
+- Introduce a security-focused section on safe scripting practices (quoting rules, avoiding eval, input sanitization).
+- Extend networking chapter to cover <code>ss</code> as the modern replacement for <code>netstat</code>, and curl alongside wget.
+- A companion set of automated exercises (with expected output validation) would allow self-assessment beyond the current open-ended playground tasks.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>bash shell usage</li><li>shell scripting</li><li>file system navigation</li><li>process management</li><li>regular expressions</li><li>text processing</li><li>package management</li><li>SSH secure communication</li></ul>
+        
+        <h4>Claims</h4><ul><li>The command line provides a powerful and expressive interface for interacting with Linux systems that graphical interfaces cannot fully replicate.</li><li>Shell scripting enables users to automate tasks by combining commands into reusable programs.</li><li>Understanding file permissions, process control, and the environment is essential for effective Linux system administration.</li><li>Regular expressions and text-processing tools such as grep, sed, and awk provide flexible mechanisms for searching and transforming data.</li><li>Compiling programs from source and managing packages are fundamental skills for Linux users.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

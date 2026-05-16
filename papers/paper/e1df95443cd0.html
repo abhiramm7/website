@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>1-s2.0-S0043135424009023-mmc1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>1-s2.0-S0043135424009023-mmc1</h1>
+      <p class="paper-detail-meta">
+        
+        
+        
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">sewer-systems</span><span class="entry-tag">inflow-infiltration</span><span class="entry-tag">groundwater-monitoring</span><span class="entry-tag">bayesian-inference</span><span class="entry-tag">hydrological-modeling</span><span class="entry-tag">water-quality-sensing</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Quantifying Inflow and Infiltration (I/I) in Sewer Systems Using Temperature and Conductivity Sensors — Supplementary Information</h1>
+<p><strong>Authors:</strong> Unknown
+<strong>Year:</strong> Unknown (data collection spans 2015, 2019, 2022–2023; journal identifier suggests 2024)
+<strong>Tags:</strong> inflow-infiltration, sewer-monitoring, water-quality-sensors, bayesian-calibration, hydraulic-simulation, groundwater-infiltration</p>
+<h2>TL;DR</h2>
+<p>This supplementary material documents the mathematical, computational, and empirical detail behind a method that uses in-sewer temperature and conductivity measurements to reconstruct base wastewater flow (BWF) and quantify inflow and infiltration (I/I) in real sewer catchments. It provides the simulation model equations, MAP calibration formulation, GWI threshold logic, and validation KGE scores that underpin the main paper's claims.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Supplementary information to a research prototype / applied modelling paper; contains mathematical derivations, simulation model specification, and empirical validation data.</p>
+<p><strong>Context.</strong> Urban drainage / sewer systems subfield. Builds directly on Zhang et al. (2018) conductivity-based I/I quantification; uses Nash (1959) instantaneous unit hydrograph for rainfall-to-inflow; Manning et al. (1891) for gravity pipe hydraulics; Li et al. (2023) for sewer pipe–soil heat transfer boundary conditions.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) residuals of the likelihood are normally distributed (Eq. S6); (2) α parameter follows a Laplace prior enabling sparsity (Eq. S7); (3) groundwater level variation from rainfall and from tidal/seawater effects can be linearly superposed (Eq. S11); (4) low-frequency atmospheric temperature linearly predicts groundwater, headspace air, and soil temperatures (Eq. S27). Assumptions (3) and (4) are plausible for shallow coastal systems but are stated without independent validation.</p>
+<p><strong>Contributions.</strong>
+- Boxplot-based threshold method (Qu4 = Qu3 + p·IQR) to identify valid calibration windows when permanent GWI keeps groundwater persistently above pipe invert.
+- MAP estimation via L-BFGS with mixed priors (Laplace on α, Gaussian on β and γ) formulated as negative log-posterior minimization.
+- Full physics-based sewer simulation coupling Saint-Venant hydraulics, advection-diffusion of temperature and conductivity, and a three-term groundwater discharge model (Eq. S12) for validation of I/I quantification.
+- Demonstration that average BWF (rather than a full BWF time series) still recovers total I/I reliably, broadening practical applicability.</p>
+<p><strong>Clarity.</strong> Equations are consistently numbered and symbols defined locally; however, as supplementary material it assumes familiarity with the main paper's notation and goals, making standalone reading difficult. Several figure captions are informative; Figure S2 and S6 schematics aid comprehension.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> A physics-informed simulation model is used to generate synthetic sewer temperature and conductivity data under two I/I scenarios (intermittent and permanent GWI), and a MAP-calibrated reconstruction algorithm recovers BWF with KGE &gt; 0.85 in all tested cases, enabling mass-balance-based I/I quantification.</p>
+<p><strong>Supporting evidence:</strong>
+- BWF reconstruction on real data: Ta1 KGE = 0.9627 (train) / 0.9543 (test); Ta2 KGE = 0.9927 / 0.9620; Ca2 KGE = 0.9524 / 0.8716.
+- Simulation validation (Case1, intermittent GWI): temperature KGE = 0.8637, conductivity KGE = 0.9833.
+- Simulation validation (Case2, permanent GWI): temperature KGE = 0.8556, conductivity KGE = 0.9280.
+- Using average BWF instead of actual BWF time series reduces dynamic profile accuracy but total inflow and infiltration volumes remain reliably estimated (Figure S21; no numeric KGE reported for this sensitivity test).
+- Rainfall exclusion windows selected as w = 36 h (η = 0 mm), 48 h (η &gt; 2 mm), 60 h (η &gt; 5 mm).</p>
+<p><strong>Figures &amp; tables:</strong> S10 (reconstruction Ta1 with KGE labels) and S17 (Case1/2 BWF comparisons) carry the validation argument; axes appear labeled in described figures. Error bars and confidence intervals are not shown on any figures. Statistical significance is not formally reported — KGE is the sole scalar metric. BIC results (Figure S9) select model structure but raw BIC values are not tabulated. Table S6 is the key quantitative summary.</p>
+<p><strong>Follow-up references:</strong>
+- Zhang et al. (2018) — foundational conductivity-based I/I quantification this work extends.
+- Li et al. (2023) — sewer pipe/soil heat transfer boundary condition modelling, directly reused here.
+- Nash (1959) — instantaneous unit hydrograph formalism used for rainfall-to-inflow and rainfall-to-groundwater modules.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Superposition of tidal and rainfall groundwater signals (Eq. S11) assumes independence and linearity; violated if tidal fluctuations modulate soil permeability or if rainfall occurs during tidal surge.
+- Linear low-pass filter model (Eq. S27) for groundwater/soil/air temperature from atmospheric data assumes stationarity of the thermal transfer function — could break during unusual weather or changes in soil moisture.
+- Groundwater conductivity treated as near-constant (based on 2011–2017 BOM data); any land-use change, drought, or contamination event would invalidate this.
+- Normal residuals assumed for likelihood (Eq. S6); in-sewer data with pump-induced hydraulic transients (acknowledged in S9) and sensor dropouts likely produce heavy-tailed or bimodal residuals.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison to RTK models (SWMM standard), despite the text claiming instantaneous UH "captures more dynamic information" — this claim is unquantified.
+- No engagement with other sensor-fusion or data-driven I/I approaches (e.g., machine learning surrogates) that would contextualize the MAP approach's advantage.
+- The p = 1.5 IQR multiplier for GWI threshold (S1) is borrowed from standard boxplot convention without justification for this specific hydrological application.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Validation is conducted on only three real datasets (Ta1, Ta2, Ca2) from a single catchment in coastal Queensland; generalization to inland, combined sewer, or larger catchments is undemonstrated.
+- Outlier removal by linear interpolation (S9, Figure S19) for pump transients is ad hoc; the fraction of data affected and the sensitivity of I/I estimates to this choice are not reported.
+- KGE is reported for BWF reconstruction but not directly for the final I/I flow estimates on real (non-simulated) data, where ground truth is unavailable — the core claim of I/I quantification accuracy rests entirely on synthetic simulation cases.
+- BIC model selection results (Figure S9) are displayed but not discussed quantitatively in the SI; it is unclear how sensitive results are to the chosen periodic structure (Nl values in Table S5).
+- No uncertainty quantification is propagated from MAP estimates through the I/I calculation to final flow estimates; MAP point estimates suppress posterior uncertainty.</p>
+<p><strong>Ideas for future work:</strong>
+- Replace MAP point estimation with full MCMC or variational inference to propagate parameter uncertainty into I/I quantification and report credible intervals.
+- Test the boxplot GWI threshold (S1) against physically derived thresholds or alternative anomaly-detection methods across diverse catchment types to assess robustness of the p = 1.5 choice.
+- Validate I/I estimates on a catchment with independent tracer or dye testing to provide ground truth beyond synthetic simulation.
+- Extend the tidal–rainfall groundwater superposition (Eq. S11) to a nonlinear interaction model and assess whether the simplification materially biases inferred infiltration volumes during storm–tide coincidence events.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Maximum a posteriori (MAP) estimation with L-BFGS optimization</li><li>Boxplot-based threshold determination for groundwater infiltration</li><li>Instantaneous unit hydrograph (IUH) models for rainfall-to-inflow and rainfall-to-groundwater processes</li><li>Saint-Venant equations for gravity-pipe hydraulics</li><li>Advection-diffusion modeling of temperature and conductivity</li><li>Groundwater discharge model with nonlinear exponent terms</li><li>Kling-Gupta Efficiency (KGE) for reconstruction accuracy assessment</li><li>Bayesian Information Criterion (BIC) for model selection</li><li>Low-pass filtering for boundary temperature conditions</li><li>Linear interpolation for outlier removal</li></ul>
+        <h4>Datasets</h4><ul><li>Ta1 – sewer temperature dataset (Queensland, June–October 2019)</li><li>Ta2 – sewer temperature dataset (Queensland, September 2022–February 2023)</li><li>Ca2 – sewer conductivity dataset (Queensland, September 2022–February 2023)</li><li>Simulated dataset Case1 and Case2 (April–July 2015 period)</li></ul>
+        <h4>Claims</h4><ul><li>Boxplot statistics on groundwater level data can replace pipe elevation as a calibration threshold when permanent groundwater infiltration is present.</li><li>MAP estimation with L-BFGS effectively identifies model parameters that maximize posterior probability given temperature and conductivity observations.</li><li>The reconstruction algorithm achieves high KGE values (above 0.85 for temperature and above 0.87 for conductivity) across multiple real-world datasets.</li><li>Instantaneous unit hydrograph models capture more dynamic inflow and infiltration information than standard RTK models used in SWMM.</li><li>Using an average base wastewater flow rate instead of the actual time series still permits reliable estimation of total inflow and infiltration volumes.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

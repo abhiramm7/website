@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Drinking Water Distribution System Network Clustering Using Self-Organizing Map for Real-Time Demand Estimation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Drinking Water Distribution System Network Clustering Using Self-Organizing Map for Real-Time Demand Estimation</h1>
+      <p class="paper-detail-meta">
+        S. M. Masud Rana, Dominic L. Boccelli, Angela Marchi, Graeme C. Dandy
+         · <em>Journal of Water Resources Planning and Management</em>
+         · 2020
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.1061/(ASCE)WR.1943-5452.0001289" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">water-distribution-systems</span><span class="entry-tag">demand-estimation</span><span class="entry-tag">network-clustering</span><span class="entry-tag">self-organizing-maps</span><span class="entry-tag">hydraulic-modeling</span><span class="entry-tag">real-time-systems</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Drinking Water Distribution System Network Clustering Using Self-Organizing Map for Real-Time Demand Estimation</h1>
+<p><strong>Authors:</strong> S. M. Masud Rana, Dominic L. Boccelli, Angela Marchi, Graeme C. Dandy
+<strong>Year:</strong> 2020
+<strong>Tags:</strong> water-distribution-systems, demand-estimation, self-organizing-map, node-clustering, demand-observability, bayesian-inference</p>
+<h2>TL;DR</h2>
+<p>Groups consumer nodes in a drinking water network using a self-organizing map (SOM) trained on nodal measurement-sensitivity vectors and optional binary-encoded exogenous data (e.g., land-use zones), so that real-time demand multipliers can be estimated via MCMC from sparse flow sensors. Applied to the synthetic KY2 network, sensitivity-only SOM clusters reduce demand-multiplier uncertainty relative to true clusters but degrade systemwide hydraulic accuracy; adding exogenous spatial information partially recovers hydraulic fidelity.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / methodology demonstration on a synthetic case study.</p>
+<p><strong>Context.</strong> Water distribution system (DWS) inverse demand modeling; builds on Sanz &amp; Pérez (2015) SVD-based observability clustering (direct predecessor), Marchi et al. (2018) sensitivity/observability analysis, Kohonen et al. (1996) SOM theory, and Vrugt (2016) DREAM-MCMC parameter estimation.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) all nodes in a cluster share one scalar demand multiplier; (2) long-term averaged global demand pattern adequately approximates instantaneous demands for sensitivity calculation; (3) flow-only measurements suffice for demand estimation; (4) measurement errors are Gaussian with known 2%-of-reading standard deviation. All are plausible but none are validated against real-world data in this paper.</p>
+<p><strong>Contributions.</strong>
+- First application of SOM to DWS demand-cluster formation using measurement-sensitivity vectors, yielding observable clusters without requiring true consumer distributions.
+- Framework for augmenting the sensitivity matrix with binary-encoded nonnumeric exogenous data (land use, zoning) to bias clusters toward actual consumer geography.
+- U-matrix visualization of the sensitivity space as a practical heuristic for choosing the number of clusters and identifying natural breaks.
+- Quantitative demonstration of the bias–variance trade-off: fewer clusters → lower demand-multiplier uncertainty but higher systemwide flow RMSE.</p>
+<p><strong>Clarity.</strong> Methods are thorough and well-notated; the paper stumbles by relegating four of eight case-study cluster maps to supplemental figures and by not stating units for any RMSE values in Table 2.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> SOM trained on per-node sensitivity vectors (∂flow-measurement/∂nodal-demand, averaged over 24 h) produces observable demand clusters for sparse-sensor DWS; adding binary exogenous zone membership to the feature matrix trades some observability for improved systemwide hydraulic fidelity.</p>
+<p><strong>Supporting evidence:</strong>
+- Case A (true clusters, 5 clusters): measurement RMSE = 1.23, all-pipe RMSE = 8.88, average demand-multiplier SD = 0.198, cluster-demand RMSE = 73.12.
+- Case B (sensitivity-only SOM, 5 clusters): measurement RMSE = 0.97, all-pipe RMSE = 22.58, avg SD = 0.127, cluster-demand RMSE = 75.85 — better observability, worse systemwide hydraulics than true clusters.
+- Case D (sensitivity + AC-2 exogenous): measurement RMSE = 0.19, all-pipe RMSE = 6.10 — best all-pipe RMSE among sensitivity-augmented cases, confirming exogenous data improves hydraulic fidelity.
+- Reducing sensitivity-only clusters from 5 → 4 → 3: avg SD drops from 0.127 → 0.054 → 0.038, but all-pipe RMSE rises to 14.96 → 160.83 (Case G, 3 clusters is worst overall).
+- Case H (2 clusters): all-pipe RMSE = 27.00, measurement RMSE = 32.67 — anomalously better than Case G on both metrics; noted but not explained.</p>
+<p><strong>Figures &amp; tables:</strong>
+- Fig. 2 (KY2 map with actual clusters and monitor locations) and Fig. 3 (U-matrix for Case B) carry the core argument; both are clearly labeled with color bars and spatial context.
+- Fig. 6 (demand-multiplier posterior histograms for all eight cases) is information-dense and clearly scaled, but no error bars or credible intervals are explicitly reported beyond the histogram shape.
+- Table 2 presents all four performance metrics side by side; no confidence intervals, no statistical significance tests, and units are unspecified.
+- Figs. S1–S6 (supplemental cluster maps and U-matrices for Cases C–E and F–H) are essential for replication but inaccessible within the main paper.</p>
+<p><strong>Follow-up references:</strong>
+- Sanz &amp; Pérez (2015) — SVD-based demand-observability clustering; direct methodological predecessor to compare against.
+- Marchi et al. (2018) — full mathematical treatment of sensitivity/observability for DWS demand estimation; provides the theoretical substrate.
+- Vrugt (2016) — DREAM MCMC; the demand-estimation engine whose assumptions propagate into all results.
+- Qin &amp; Boccelli (2019) — flow-path similarity clustering with MCMC demand estimation; closest alternative methodology.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Proportional demand multiplier (one scalar per cluster per time step) forces all nodes in a cluster to scale identically — violated whenever a cluster contains mixed consumer types; this assumption is structural and would nullify results if badly broken.
+- Global demand pattern as proxy for instantaneous demands during sensitivity calculation — if true demands deviate substantially from the global multiplier, sensitivity vectors (and thus cluster memberships) are miscalculated.
+- Five monitoring locations fixed by engineering judgment; results are sensitive to this choice but the paper does not vary it.
+- Binary, mutually exclusive zone encoding for exogenous data — mixed-use areas cannot be represented; acknowledged but not tested.
+- Single time-step analysis implicitly assumes clusters and multipliers are time-stationary.</p>
+<p><strong>Missing context or citations:</strong>
+- No quantitative comparison to Sanz &amp; Pérez (2015) SVD method or Jung et al. (2016) genetic-algorithm approach on the same network and metrics, despite these being direct competitors.
+- Brentan et al. (2018) SOM + k-means DMA method is cited but not benchmarked.
+- No discussion of joint optimization of sensor placement and cluster formation, which is the natural next problem and has a literature (e.g., Kang &amp; Lansey 2009 is cited only briefly).
+- Pressure measurements are excluded by assumption (citing prior work) without testing whether including them changes cluster quality.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Single synthetic network (KY2, 814 nodes): generalizability to networks with different topology, size, or measurement density is asserted but undemonstrated.
+- Actual clusters (AC-1 through AC-5) are arbitrarily drawn polygons; their spatial configuration and assumed multipliers (0.71–1.5) are not motivated by real consumer data, so the benchmark (Case A) may not reflect meaningful ground truth.
+- Case H (2 clusters) outperforms Case G (3 clusters) on measurement and all-pipe RMSE — this non-monotonic result likely reflects the hierarchical-clustering step merging poorly separated neurons, but the paper offers no mechanistic explanation and does not investigate.
+- Case C achieves lowest avg SD (0.119) but the AC-3 cluster posterior is visibly truncated at zero by the uniform prior, indicating a boundary-constraint bias; this is flagged but neither corrected nor quantified.
+- SOM grid (7×10, 70 neurons) and epoch count (12,000) chosen by trial and error ("a larger grid size did not improve…"); no sensitivity analysis or heuristic justification is provided.
+- RMSE values in Table 2 carry no units and no confidence bounds; differences between cases cannot be assessed for statistical significance.
+- Only one noise realization is used per case; Monte Carlo over noise samples would distinguish method variance from noise variance.</p>
+<p><strong>Ideas for future work:</strong>
+1. Apply to a real network with approximately known land-use data and multiple sensor deployments to validate that sensitivity-SOM clusters improve demand estimates over ad hoc clustering.
+2. Co-optimize sensor placement and SOM cluster formation (e.g., iterating placement → sensitivity → clusters → placement) to quantify the mutual information gain.
+3. Extend the single-time-step analysis to a rolling 24-h window to evaluate whether SOM clusters remain stable across diurnal demand variations and whether multiplier estimates converge over time.
+4. Benchmark SOM clusters head-to-head with SVD (Sanz &amp; Pérez 2015) and genetic-algorithm (Jung et al. 2016) approaches on KY2 using the same MCMC estimator, measurement locations, and performance metrics.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>self-organizing map (SOM)</li><li>nodal sensitivity analysis</li><li>augmented sensitivity matrix with exogenous information</li><li>hierarchical clustering</li><li>differential evolution adaptive metropolis (DREAM) algorithm</li><li>Markov chain Monte Carlo (MCMC)</li><li>U-matrix visualization</li><li>EPANET 2.0 hydraulic simulation</li></ul>
+        <h4>Datasets</h4><ul><li>Kentucky 2 (KY2) synthetic water distribution network</li></ul>
+        <h4>Claims</h4><ul><li>SOM-based sensitivity clustering improves demand observability and reduces demand multiplier uncertainty compared to actual cluster boundaries.</li><li>Sensitivity-based SOM clusters improve measurement representation but reduce overall network hydraulic accuracy relative to true consumer clusters.</li><li>Incorporating exogenous spatial information (e.g., socioeconomic or land-use data) into the SOM augments clustering to better approximate actual consumer distributions and improve all-pipe flow representation.</li><li>Decreasing the number of SOM clusters reduces demand multiplier variance but degrades systemwide hydraulic accuracy, illustrating a bias-variance trade-off.</li><li>Minimizing measurement RMSE alone is insufficient to identify the true underlying consumer clusters in a drinking water system.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

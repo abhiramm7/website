@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Probabilistic Machine Learning: Advanced Topics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Probabilistic Machine Learning: Advanced Topics</h1>
+      <p class="paper-detail-meta">
+        Kevin P. Murphy
+         · <em>MIT Press</em>
+         · 2023
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">probabilistic-machine-learning</span><span class="entry-tag">bayesian-inference</span><span class="entry-tag">generative-models</span><span class="entry-tag">deep-learning</span><span class="entry-tag">reinforcement-learning</span><span class="entry-tag">causality</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Probabilistic Machine Learning: Advanced Topics</h1>
+<p><strong>Authors:</strong> Kevin P. Murphy (primary), with chapter/section co-authors including G. Papamakarios, B. Lakshminarayanan, S. Mohamed, D. Kingma, Y. Song, A. Wilson, V. Veitch, A. D'Amour, F. Doshi-Velez, B. Kim, S. Kornblith, B. Poole, L. Li, J. Bilmes, M. Cuturi, R. Frostig, R. Rao, and others
+<strong>Year:</strong> 2023 (first printing August 2023; online version updated December 2025)
+<strong>Tags:</strong> probabilistic-ml, bayesian-inference, generative-models, variational-inference, reinforcement-learning, causality</p>
+<h2>TL;DR</h2>
+<p>Graduate-level textbook treating ML broadly as probabilistic model-based reasoning, organized around four task types—prediction, generation, discovery, and action—with unifying probabilistic and Bayesian machinery. Sequel to Murphy (2022); intended for readers who already know introductory ML and want depth in inference algorithms, deep generative models, latent-variable methods, and causal/decision-theoretic reasoning. Python/JAX code reproducing nearly all figures is provided online via Google Colab.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Graduate textbook / comprehensive survey with multi-author specialist chapters.</p>
+<p><strong>Context.</strong> Probabilistic ML subfield. Explicitly positions itself as a sequel to Murphy (2022) [Mur22]. Draws on Jaynes (Bayesian probability as logic), Pearl (causality, do-calculus, structural causal models), Goodfellow et al. (deep learning), and Sutton &amp; Barto (reinforcement learning) as theoretical frames, among dozens of others cited throughout.</p>
+<p><strong>Correctness.</strong> Central assumption: a model-based, Bayesian probabilistic approach provides a principled unifying framework for prediction, generation, discovery, and control. This is a philosophical and methodological stance rather than an empirically falsifiable claim within the book itself. Individual chapter assumptions (e.g., Gaussianity in Kalman filters, mean-field factorization in VI) are stated locally but not always stress-tested.</p>
+<p><strong>Contributions.</strong>
+- Unified single-volume treatment spanning fundamentals (probability, stats, graphical models, information theory, optimization), inference algorithms, predictive models, six families of deep generative models, latent-variable discovery, RL, and causality.
+- Reproducible JAX/Python code for nearly all figures, linked per-figure to runnable Google Colab notebooks.
+- Specialist chapters co-authored by practitioners from Google, DeepMind, Apple, and leading universities, providing practitioner-level depth in normalizing flows, GANs, energy-based models, optimal transport, submodular optimization, representation learning, interpretability, and causality.
+- Explicit coverage of post-iid topics (distribution shift, adversarial examples, continual learning, conformal prediction) that are absent or scattered in older texts.</p>
+<p><strong>Clarity.</strong> Writing is dense but consistently structured; each chapter follows a definition-then-application pattern. The preface honestly acknowledges uneven depth: some sections are stated to be brief overviews while others claim research-frontier depth "as of 2022."</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Treats ML as probabilistic model-building and Bayesian inference; organizes ≈1,200 pages across six parts (Fundamentals → Inference → Prediction → Generation → Discovery → Action), arguing that moving beyond function approximation to latent-structure modeling is necessary for robustness, data efficiency, and scientific understanding.</p>
+<p><strong>Supporting evidence:</strong>
+- Part II covers exact and approximate inference: Kalman filtering/smoothing, belief propagation (exact on trees, loopy on graphs), variational inference (CAVI, gradient-based, amortized), MCMC (MH, Gibbs, HMC, SGLD), and SMC/particle filtering — each with derivations and complexity analyses (e.g., treewidth governs VE complexity; RTS smoother time complexity stated as O(T) after forward pass).
+- Part IV covers VAEs, autoregressive models (GPT, PixelCNN, DALL-E), normalizing flows (affine, coupling, autoregressive, continuous-time), energy-based models (score matching, NCE, contrastive divergence), DDPMs/score-based generative models (SDE/ODE formulations, DDIM sampler), and GANs — with derivations of training objectives and loss functions.
+- Part III covers conformal prediction (coverage guarantee without distributional assumptions), calibration, proper scoring rules, Bayesian neural networks (MC dropout, Laplace, deep ensembles, cold posteriors), and GPs (sparse/inducing-point methods, deep kernel learning, NTK connection).
+- Part VI covers MDPs, RL (value-based, policy-gradient, model-based), contextual bandits (UCB, Thompson sampling), and causality (do-calculus, ATE estimation, IV strategies, DiD, sensitivity analysis to hidden confounding via Rosenbaum bounds).
+- All figures are linked to reproducible JAX notebooks; the preface states code covers "nearly all" figures.</p>
+<p><strong>Figures &amp; tables:</strong> Cannot be assessed from the provided text (only the table of contents, preface, and opening pages of Chapters 1–2 were supplied). The preface describes figures as generated by named Jupyter notebooks; whether axes, error bars, or statistical significance are shown cannot be determined from the excerpt.</p>
+<p><strong>Follow-up references:</strong>
+- Murphy (2022) [Mur22] — prerequisite introductory volume covering basic ML and math background.
+- Gut (2022) [Gut22] — companion exercises and solutions for this book.
+- Jaynes (2003) [Jay03] — foundational text on Bayesian probability as extended logic, cited as a core theoretical frame.
+- Pearl's structural causal model literature (cited as [Har18] and throughout Chapter 36) — for the causality chapter's formal grounding.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- A Bayesian/probabilistic framing is assumed to be superior to purely frequentist or non-probabilistic approaches; this is asserted but not empirically justified within the book.
+- Code reproducibility assumes Google Colab availability and that linked notebooks remain maintained — an infrastructure dependency not under the author's control.
+- "Research frontier as of 2022" framing: the book explicitly notes this cutoff, meaning Chapters 22 (LLMs, treated in a single section §22.5 with no substantive detail), 25 (diffusion), and 35 (RL) may be significantly outdated relative to post-2022 developments.
+- Chapter authorship by industry researchers (Google, DeepMind, Apple) may introduce selection bias toward methods developed or favored at those institutions.</p>
+<p><strong>Missing context or citations:</strong>
+- Chapter 30 (Graph learning) and Chapter 31 (Nonparametric Bayesian models) are skeletal stubs: Chapter 30 lists three subsections none of which contain visible content, and Chapter 31 contains only an introduction; the preface does not explain this omission.
+- Section 22.5 (Large Language Models) spans a single page in a 1,200-page book, with no substantive coverage of RLHF, instruction tuning, in-context learning, or scaling laws.
+- Diffusion models (Chapter 25) postdate much of the manuscript preparation; the chapter covers DDPMs and score-based models but the rapidly evolving literature (e.g., consistency models, flow matching beyond §25.4.7) is acknowledged only cursorily.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- As a textbook, it presents no original empirical results; claims about method quality (e.g., deep ensembles outperforming other BNN approximations, §17.3.9) cite external papers without independent verification.
+- The book does not provide unified benchmarks comparing the many inference or generative modeling methods against each other; readers must consult original papers for quantitative comparisons.
+- Chapters co-written by different authors have noticeably inconsistent notation and depth (e.g., the submodularity chapter §6.9 is extremely detailed at 20+ subsections, while causality chapter §36 is also long but written in a different style); no editorial unification of notation is documented.
+- The "nearly all figures" reproducibility claim is qualified; it is unclear which figures are excluded and why.</p>
+<p><strong>Ideas for future work:</strong>
+- A companion benchmarking repository systematically comparing the inference algorithms in Part II (VI vs. MCMC vs. SMC) on common test posteriors would significantly increase the book's empirical usefulness.
+- Chapter 30 and Chapter 31 are stated stubs; completing them (graph learning, Dirichlet processes, CRPs, IBPs) would fill a clear gap.
+- An updated second edition with a substantive LLM chapter covering scaling laws, RLHF, and emergent capabilities would address the most significant post-2022 omission.
+- A unified notation guide across co-authored chapters, possibly as a supplementary appendix, would reduce cognitive load for readers moving between parts.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>variational inference</li><li>MCMC</li><li>Kalman filtering</li><li>Gaussian processes</li><li>normalizing flows</li><li>diffusion models</li><li>variational autoencoders</li><li>generative adversarial networks</li><li>message passing</li><li>sequential Monte Carlo</li><li>expectation propagation</li><li>natural gradient descent</li><li>Hamiltonian Monte Carlo</li><li>score matching</li><li>energy-based models</li></ul>
+        
+        <h4>Claims</h4><ul><li>The book expands ML scope beyond supervised function approximation to include generation, discovery, and decision making under uncertainty.</li><li>A model-based probabilistic approach enables robust and data-efficient learning by capturing latent structure in the data generating process.</li><li>Bayesian inference applied to probabilistic models provides a unifying framework for prediction, generation, discovery, and control tasks.</li><li>Generative models including VAEs, normalizing flows, diffusion models, and GANs can generate high-dimensional outputs such as images and text.</li><li>Causal inference and decision making under uncertainty require going beyond standard iid predictive modeling.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

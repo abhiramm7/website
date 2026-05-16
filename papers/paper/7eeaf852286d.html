@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>One script to solve it all – an open-source-based framework for a digital workflow based on WWTP data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>One script to solve it all – an open-source-based framework for a digital workflow based on WWTP data</h1>
+      <p class="paper-detail-meta">
+        Markus Ahnert, Stefan Hurzlmeier
+         · <em>Water Practice &amp; Technology</em>
+         · 2022
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.2166/wpt.2022.113" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">wastewater-treatment</span><span class="entry-tag">digital-workflow</span><span class="entry-tag">environmental-data-science</span><span class="entry-tag">open-source</span><span class="entry-tag">activated-sludge-modelling</span><span class="entry-tag">data-quality</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>One script to solve it all – an open-source-based framework for a digital workflow based on WWTP data</h1>
+<p><strong>Authors:</strong> Markus Ahnert, Stefan Hurzlmeier
+<strong>Year:</strong> 2022
+<strong>Tags:</strong> wastewater-treatment, digital-workflow, open-source, environmental-data-science, activated-sludge-modelling, wwtp-design</p>
+<h2>TL;DR</h2>
+<p>An R/RMarkdown-based open-source workflow automates import, plausibility checking, and German DWA-standard design calculations (A198 + A131) for routine WWTP operational data, then feeds parameterization of an activated sludge model (Simba#). The paper argues this replaces largely manual, project-by-project engineering practice with a reproducible, auto-documented pipeline applicable to ~9,100 German WWTPs.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / methodology paper with a position-paper component.</p>
+<p><strong>Context.</strong> Environmental data science (EDS) subfield. Builds on Gibert et al. (2018) for the EDS challenge taxonomy that structures the paper's framing; Blair et al. (2019) for characterizing heterogeneous environmental data complexity; German standards DWA-A131 (2016) and ATV-DVWK-A198E (2003) as the encoded design rules; Newhart et al. (2019) for context on WWTP data quality and exploratory analysis gaps.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) DWA regulations are sufficiently algorithmic to encode in scripts — the paper itself notes ambiguities (e.g., sliding-window boundary treatment) that require design choices not resolved by the standard; (2) daily mean values from operating journals are adequate resolution for all design tasks; (3) open-source R packages remain stable across project lifetimes. These appear broadly defensible but are not tested.</p>
+<p><strong>Contributions.</strong>
+- First described end-to-end digital workflow covering WWTP data import through activated sludge model parameterization within a single scripting environment.
+- Explicit mapping of WWTP routine data challenges onto the Gibert et al. (2018) EDS taxonomy.
+- Open-source R/RMarkdown implementation coupling calculation and report generation, with a public GitHub repository.
+- Modular architecture enabling API-based control of commercial simulation software (Simba#) from within the R workflow.</p>
+<p><strong>Clarity.</strong> Generally readable, but the paper doubles as an advocacy piece for open-source and reproducibility, causing the methodology and the argument to blur; quantitative evidence is absent where assertions of benefit are strongest.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Replacing ad-hoc, spreadsheet-based WWTP design practice with a modular R pipeline that encodes DWA regulations, enforces plausibility checks, auto-generates standardized reports, and initializes activated sludge models — saving engineering time and improving reproducibility.</p>
+<p><strong>Supporting evidence:</strong>
+- Applied to operating journals from WWTPs of "various sizes" covering "several years" as daily mean values; specific plant count, sizes, and validation metrics are not stated.
+- German regulatory scope: DWA design rules cover approximately 9,100 WWTPs in Germany (Federal Statistical Office, as of 2016).
+- Three dry-weather-day classification methods implemented (weather key, precipitation records, 21-day moving minimum); results differ across methods, requiring manual selection — a noted limit on full automation.
+- A131 module outputs: denitrification and nitrification tank volumes, secondary sedimentation sizing, required oxygen input, and internal recirculation rates.
+- Data density context: German self-monitoring sampling occurs only on a few days per week, creating large gaps; up to 100 data points per daily record; 365 records per year.</p>
+<p><strong>Figures &amp; tables:</strong> Figure 3 (workflow scheme) is the central architectural figure — not quantitative, no axes. Figure 4 (A–H: scatterplots, histograms, time series for plausibility checks) is purely illustrative; axes are labeled but no statistical significance, confidence intervals, or error bars are shown, and no ground-truth comparison is provided. Figure 2 (German WWTP size distribution) is descriptive with labeled axes, no uncertainty. Table 1 lists workflow advantages as bullet categories without supporting numbers. Table 2 compares usual vs. digital workflow steps qualitatively. No figure carries a quantitative result.</p>
+<p><strong>Follow-up references:</strong>
+- Newhart et al. (2019) — most directly relevant review of data-driven WWTP performance analysis and data-quality practice.
+- Gibert et al. (2018) — foundational EDS challenge taxonomy the paper's argument is structured around.
+- Corominas et al. (2018) — critical review of methods for transforming WWTP data into operational knowledge; context for why descriptive statistics are underused.
+- Blischak et al. (2019) — open-source framework for reproducible research that motivated the workflow design philosophy here.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- DWA regulations are unambiguous enough to encode algorithmically — contradicted by the paper's own admission that boundary conditions in moving-window calculations are underspecified; if regulations change, the entire encoded workflow must be re-validated.
+- Manual intervention at multiple decision points (dry-weather method choice, data cleaning) preserves rather than degrades reproducibility — this is asserted but not demonstrated; different engineers making different manual choices could produce divergent outputs from the same data.
+- Daily mean values contain sufficient information for all downstream design and modelling steps; higher-frequency data gaps are handled by interpolation or exclusion, but the sensitivity of design outputs to these choices is not evaluated.
+- R package ecosystem stability over multi-year project timelines; the paper's own "keep it simple" heuristic acknowledges this risk without quantifying it.</p>
+<p><strong>Missing context or citations:</strong>
+- DATAR (Gabaldón et al. 1998) and DESASS (Ferrer et al. 2008) are mentioned but never systematically compared against the proposed workflow in terms of capability, time, or accuracy.
+- No engagement with international equivalents (US EPA-based design workflows, ISO standards beyond BIM) to assess transferability outside DACH countries.
+- Cybersecurity and data governance for web deployment receive a single citation (Ooms 2013) with no substantive analysis despite the paper raising web-based use as a target application.
+- The claim of being the "first description of a complete digital workflow" is unverified; the literature search method and scope are not described.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Zero quantitative validation: no measured time savings, no error-rate comparison against manual calculation, no design-output accuracy check against an independent reference.
+- Case study plants are entirely anonymous (size class, country, data period vaguely described); results cannot be reproduced from the paper alone.
+- Figure 4 plausibility check plots are cherry-picked illustrations, not a systematic performance evaluation; false-positive and false-negative rates for automated anomaly detection are not reported.
+- The GitHub repository is referenced but the paper does not describe code version, test coverage, completeness, or whether the example data are real or synthetic.
+- Rejecting full automation on engineering-judgment grounds is reasonable but introduces uncontrolled inter-analyst variability that undermines the reproducibility argument — this tension is not resolved.</p>
+<p><strong>Ideas for future work:</strong>
+- Conduct a controlled time-and-accuracy study: have multiple engineers process the same dataset with the old manual workflow and the new pipeline, measuring wall-clock time, inter-analyst variance in design outputs, and error incidence.
+- Extend and test the regulatory encoding for non-DWA standards (e.g., US EPA 10-states standards, EU-aligned national regulations) to determine how much of the framework generalizes versus is Germany-specific.
+- Replace the spreadsheet import interface with a direct SCADA/database connector and evaluate whether higher-resolution input (hourly or sub-hourly) improves design parameter stability or activated sludge model calibration quality.
+- Formalize the manual intervention points into structured decision logs within the workflow so that inter-analyst reproducibility can be audited and the sensitivity of final design outputs to each manual choice can be quantified.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>exploratory data analysis</li><li>plausibility checks</li><li>time series analysis</li><li>percentile calculation</li><li>21-day moving minimum</li><li>activated sludge modelling</li><li>dynamic simulation</li><li>RMarkdown automated documentation</li><li>API interface to Simba#</li></ul>
+        <h4>Datasets</h4><ul><li>WWTP operating journal routine data</li><li>daily mean influent flow and concentration records from multiple German wastewater treatment plants</li></ul>
+        <h4>Claims</h4><ul><li>A modular open-source R-based digital workflow can automate data import, plausibility checking, design parameter calculation, and WWTP design according to DWA regulations A198 and A131, saving significant engineering time.</li><li>Complete automation of the WWTP design workflow is computationally feasible but not advisable, as manual engineering judgement remains essential at key decision points.</li><li>Coupling R scripting with RMarkdown enables transparent, reproducible, and automatically generated documentation of calculations and results.</li><li>Routine WWTP operational data can serve as a sufficient basis for both static design and dynamic activated sludge model parameterisation without requiring additional data collection.</li><li>The described workflow addresses key environmental data science challenges including data quality, reproducibility, and cross-disciplinary integration in the wastewater sector.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

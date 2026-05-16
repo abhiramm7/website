@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Anomaly Detection in Sewer Systems Using Gaussian Process Regression</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Anomaly Detection in Sewer Systems Using Gaussian Process Regression</h1>
+      <p class="paper-detail-meta">
+        Mohsen Rezaee, Peter Melville-Shreeve, Hussein Rappel
+         · <em>CCWI 2025 - 21st Computing &amp; Control for the Water Industry Conference</em>
+         · 2025
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">anomaly-detection</span><span class="entry-tag">gaussian-process-regression</span><span class="entry-tag">sewer-systems</span><span class="entry-tag">probabilistic-forecasting</span><span class="entry-tag">blockage-detection</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Anomaly Detection in Sewer Systems Using Gaussian Process Regression</h1>
+<p><strong>Authors:</strong> Mohsen Rezaee, Peter Melville-Shreeve, Hussein Rappel
+<strong>Year:</strong> 2025
+<strong>Tags:</strong> gaussian-process-regression, anomaly-detection, sewer-systems, blockage-detection, probabilistic-forecasting, urban-drainage</p>
+<h2>TL;DR</h2>
+<p>A GPR model is trained on hydraulic simulator output to probabilistically forecast manhole water depth in a combined sewer; deviations outside a 95% credible interval sustained for ≥3 consecutive hours trigger a blockage alarm. The approach is demonstrated on a single simulated blockage scenario, providing an alarm with roughly 8 hours of lead time before manhole overflow.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / proof-of-concept (conference short paper).</p>
+<p><strong>Context.</strong> Urban hydroinformatics / smart sewer monitoring. Builds on: Rezaee et al. (2025) preprint — same sewer network and emulator; Rosin et al. (2022) — ANN + statistical process control for near-real-time blockage detection; Glyn-Davies &amp; Girolami (2022) — GP-based anomaly detection in streaming data; Williams &amp; Rasmussen (2006) — foundational GP textbook.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) the hydraulic simulator faithfully represents real sensor observations so that training on simulator output transfers to field deployment; (2) blockages manifest as sustained, directional depth deviations detectable within the 95% credible interval; (3) a fixed 3-hour persistence threshold is operationally meaningful. Assumption (1) is never validated against real sensor data in this paper.</p>
+<p><strong>Contributions.</strong>
+- Frames sewer anomaly detection as a credible-interval exceedance problem under full probabilistic GPR output.
+- Shows directional signatures differ upstream (depth rise) and downstream (depth drop) of a blockage, enabling localization.
+- Establishes a 3-hour consecutive-exceedance trigger that provides lead time before overflow in the tested scenario.
+- Notes explicitly that gradual blockages embedded in training data constitute a systematic miss-detection failure mode.</p>
+<p><strong>Clarity.</strong> Writing is concise and accessible; however, quantitative model performance metrics are withheld ("model checking metrics indicate a satisfactory fit"), weakening reproducibility for a methods paper.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> GPR is fitted on one month of simulator-generated data (15-minute intervals, inputs: time and rainfall depth) to produce 95% credible intervals for manhole water depth; sustained exceedance triggers a blockage alarm roughly 8 hours before overflow occurs.</p>
+<p><strong>Supporting evidence:</strong>
+- Training set: 1 month of data, 15-minute resolution (≈2,880 points); no separate validation set size reported.
+- Blockage inserted between nodes J2 (upstream) and J3 (downstream); downstream depth falls below the 95% credible interval, upstream depth rises above it.
+- Alarm triggered after 3 consecutive hours of exceedance.
+- Manhole overflow occurs approximately 11 hours after blockage initiation, leaving ≈8 hours of operational lead time.
+- No precision, recall, F1, or RMSE values are reported anywhere in the paper.</p>
+<p><strong>Figures &amp; tables:</strong> Two figures (Figures 1 and 2) show time-series plots of predicted mean (red line) and observed values (blue bullets) at downstream and upstream manholes respectively. The 95% credible interval appears as shading (described as "shaded red"). Axis units and labels are referenced in captions but not described in detail in the text; statistical significance is not reported; no error bars on predictions beyond the credible interval itself; no tables of metrics.</p>
+<p><strong>Follow-up references:</strong>
+- Rezaee et al. (2025) preprint — the extended version of this work with full methodology and likely more results.
+- Rosin et al. (2022) — nearest competing method (ANN + SPC for blockage detection) that should serve as a direct baseline.
+- Glyn-Davies &amp; Girolami (2022) — GP-based anomaly detection framework directly relevant to the probabilistic approach used here.
+- Williams &amp; Rasmussen (2006) — essential background for GPR kernel selection and inference.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Simulator-to-reality transfer: the GPR is trained entirely on PySWMM/SWMM hydraulic model output, not real sensor data. If the simulator does not capture real sensor noise, drift, or diurnal patterns accurately, the credible intervals may be miscalibrated in deployment — this assumption is untested and would break the anomaly detection logic.
+- Stationarity of the GP prior: the kernel choice and its hyperparameters are not described; non-stationarity in real sewer flow (storm events, seasonal infiltration) could inflate false positive rates.
+- The 3-hour threshold is treated as a tunable parameter but no sensitivity analysis is provided; its optimality is asserted, not demonstrated.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison to the Rosin et al. (2022) ANN + SPC method, which is cited but not benchmarked against.
+- No engagement with threshold-free or scoring-based anomaly detection approaches (e.g., isolation forests, autoencoders) that are common in this domain.
+- Real-world sensor noise, missing data, and data drift are acknowledged in passing but no citation or method addresses them.
+- Only a single blockage type and location tested; pump failure and structural collapse (mentioned in the introduction as target anomalies) are not evaluated.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Single synthetic scenario: one blockage event in one network; no cross-validation, no multiple blockage severities, no partial/gradual blockage experiments beyond acknowledging they are a limitation.
+- No quantitative metrics reported (precision, recall, false positive rate, detection latency distribution); "satisfactory fit" is unverifiable.
+- Training and test data are both from the same simulator run; there is no out-of-distribution test.
+- Kernel specification entirely omitted — readers cannot assess or reproduce the GPR fit.
+- The claim that GPR "performs well with limited data" is invoked as motivation but 2,880 training points is not limited for a scalar regression task; this framing is unsupported.</p>
+<p><strong>Ideas for future work:</strong>
+- Validate on real sensor data from operational sewer networks, including sensor faults and missing observations, to test the simulator-to-reality gap.
+- Systematic sensitivity analysis of the persistence threshold (3 hours) across blockage severities and network topologies to derive principled threshold selection.
+- Benchmark against Rosin et al. (2022) and at least one non-probabilistic baseline (e.g., LSTM, ARIMA) using standard detection metrics on a shared test set.
+- Incorporate physics-informed kernel design (e.g., encoding hydraulic residence time or pipe capacity constraints) to improve robustness to gradual blockages — consistent with the stated future direction.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Gaussian Process Regression</li><li>probabilistic forecasting</li><li>95% credible interval construction</li><li>hydraulic simulation via PySWMM</li><li>data-driven surrogate modelling</li></ul>
+        <h4>Datasets</h4><ul><li>combined sewer system sensor data (water depth at manholes, 15-minute intervals, one month of training data)</li><li>hydraulic simulator-generated data</li></ul>
+        <h4>Claims</h4><ul><li>GPR enables probabilistic forecasting of water depth in combined sewer systems with quantified uncertainty.</li><li>Deviations from 95% credible intervals derived from GPR predictions can be used to flag potential sewer anomalies such as blockages.</li><li>A 3-hour consecutive-deviation threshold provides sufficient lead time for operational response before manhole overflow occurs.</li><li>Probabilistic approaches outperform deterministic methods for anomaly detection in sewer systems due to inherent uncertainties in inputs.</li><li>Gradual blockages that develop slowly may evade detection because their effects become embedded in training data.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DeepBase: a Deep Learning-based Daily Baseflow Dataset across the United States</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>DeepBase: a Deep Learning-based Daily Baseflow Dataset across the United States</h1>
+      <p class="paper-detail-meta">
+        Parnian Ghaneei, Hamid Moradkhani
+         · <em>Scientific Data</em>
+         · 2025
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.1038/s41597-025-04389-y" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">baseflow-estimation</span><span class="entry-tag">deep-learning-hydrology</span><span class="entry-tag">ungauged-basins</span><span class="entry-tag">streamflow-separation</span><span class="entry-tag">water-resources</span><span class="entry-tag">continental-scale-dataset</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>DeepBase: A Deep Learning-based Daily Baseflow Dataset across the United States</h1>
+<p><strong>Authors:</strong> Parnian Ghaneei, Hamid Moradkhani
+<strong>Year:</strong> 2025
+<strong>Tags:</strong> baseflow-estimation, lstm, ungauged-basins, conus-hydrology, transfer-learning, data-descriptor</p>
+<h2>TL;DR</h2>
+<p>DeepBase generates daily baseflow estimates for 1,661 CONUS basins from 1981–2022 using a pipeline of UMAP dimensionality reduction, Growing Neural Gas clustering, and transfer-learning-finetuned LSTM models. It addresses the shortage of high-quality, spatially broad baseflow data by explicitly supporting ungauged basin prediction without using any streamflow or baseflow attributes as inputs.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Data descriptor / research prototype — primary output is a publicly released dataset; methodology is novel but the paper's purpose is dataset generation and validation.</p>
+<p><strong>Context.</strong> Hydrology / machine learning for hydrological estimation. Builds on: Kratzert et al. 2019 (large-sample LSTM hydrology); Xie et al. 2022 (LSTM-based monthly gridded baseflow for CONUS); Beck et al. 2013 (global BFI mapping via ANN); NLDAS-2 Noah/VIC as the comparison baseline.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) digital-filter-derived baseflow from USGS streamflow is a valid training target; (2) 12 separation methods evaluated against strict baseflow points provide a defensible "observed" baseflow; (3) UMAP-GNG clusters on static hydroclimatic attributes adequately characterize ungauged basin similarity; (4) excluding all flow-related attributes truly prevents information leakage in the ungauged scenario. Assumptions (1) and (2) are partially contested in the literature but not challenged within the paper.</p>
+<p><strong>Contributions.</strong>
+- Daily baseflow dataset for 1,661 CONUS basins (1981–2022), freely available on Figshare.
+- UMAP-GNG clustering pipeline applied to 21 static hydroclimatic/physical attributes to identify 14 homogeneous basin groups for guiding transfer learning.
+- Transfer learning framework (general LSTM → cluster-finetuned LSTM) enabling baseflow estimation in fully ungauged basins without any streamflow input.
+- Systematic comparison of LSTM-generated baseflow against NLDAS-2 Noah and VIC products across all 14 clusters.</p>
+<p><strong>Clarity.</strong> Writing is generally understandable but repetitive across the Background and Methods sections; the description of hyperparameter tuning relies heavily on "trial-and-error" without reporting the search space outcomes.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> A UMAP-GNG clustering + fine-tuned LSTM pipeline trained on 530 gauged basins produces daily baseflow estimates for 1,661 CONUS basins that outperform NLDAS-2 Noah and VIC on both NSE and LTRMSE, and the dataset is released for 1981–2022.</p>
+<p><strong>Supporting evidence:</strong>
+- Gauged scenario (test period 2007–2014): LSTM median NSE &gt; 0.7 in 12 of 14 clusters; lowest cluster (Cluster 14, southern Texas) achieves median NSE = 0.56.
+- Ungauged scenario (8-fold cross-validation, 1981–2014): 12 of 14 clusters achieve median NSE &gt; 0.6; Clusters 5 and 14 (high-aridity) are the poorest performers.
+- LSTM LTRMSE is lower than both Noah and VIC in all 14 clusters in both gauged and ungauged scenarios (exact values not tabulated in the text excerpt).
+- Clustering quality: Silhouette Coefficient = 0.56, Davies-Bouldin Index = 0.65 for the 14-cluster solution from 530 training basins.
+- Mann-Kendall trend analysis (1981–2022) shows consistent positive baseflow trends in eastern clusters (e.g., 12, 13) and negative trends in western clusters (e.g., 3, 5, 14), particularly in summer.</p>
+<p><strong>Figures &amp; tables:</strong>
+- Fig. 2 (cluster spatial maps for 530 and 1,661 basins with FS/AI overlays): key for understanding cluster geography; axes/legends present but no uncertainty bounds — qualitative interpretation only.
+- Fig. 3 (spatial NSE and LTRMSE maps for LSTM, Noah, VIC in gauged scenario): carries the main validation argument; color maps used but no confidence intervals or statistical significance reported.
+- Fig. 4 (NSE and LTRMSE spatial maps for ungauged scenario): same limitations as Fig. 3.
+- Fig. 5 (multi-year monthly average baseflow maps, 1981–2022): illustrates spatiotemporal patterns; no uncertainty shown.
+- Fig. 6 (Mann-Kendall Z-value maps by season): significance levels stated (p &lt; 0.1, 0.05, 0.01) — the only figure with explicit statistical thresholds.
+- Table 1 (static attributes with units and sources): well-structured.
+- Table 2 (12 baseflow separation methods): complete reference list.
+- No box plots, violin plots, or quantitative summary tables for NSE/LTRMSE distributions by cluster are present in the excerpt.</p>
+<p><strong>Follow-up references:</strong>
+- Kratzert et al. 2019 (<em>HESS</em>) — foundational multi-basin LSTM hydrology paper this framework directly extends.
+- Xie et al. 2022 (<em>WRR</em>) — closest prior work (monthly gridded LSTM baseflow for CONUS); direct methodological predecessor.
+- Beck et al. 2013 (<em>WRR</em>) — global BFI mapping via ANN; provides the benchmark framing for spatial baseflow products.
+- Xie et al. 2020 (<em>J. Hydrology</em>) — evaluation of baseflow separation methods for CONUS; provides the separation-method toolkit used here as training targets.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Digital-filter and graphical baseflow separation applied to USGS streamflow is treated as ground truth for training; these methods carry their own structural uncertainties and parameter sensitivities, which are not propagated into model uncertainty estimates. If separation methods systematically over- or under-estimate baseflow in specific climate regimes, the LSTM inherits that bias.
+- Strict baseflow points used to select the "best" separation method per basin assume the four Brutsaert rules correctly isolate true baseflow; violation of these rules (e.g., in flashy or regulated streams) would corrupt the training target.
+- Basin area &lt; 2,000 km² cutoff is applied without justification of whether this threshold meaningfully separates basins where the LSTM physics approximation holds.
+- UMAP neighbor count (10) and GNG hyperparameters are chosen by trial-and-error without a held-out cluster quality test; the 14-cluster solution is not compared against alternative cluster counts quantitatively.
+- Transfer of cluster labels from 530 training basins to 1,131 ungauged basins (by forward-running UMAP-GNG) assumes the dimensionality-reduction manifold generalizes — not validated independently.</p>
+<p><strong>Missing context or citations:</strong>
+- No comparison against process-based models beyond NLDAS-2 (e.g., MOSAIC, SAC-SMA also in NLDAS-2, or mHM, HBV) despite these being available benchmarks.
+- No comparison against the Xie et al. 2022 LSTM monthly product at matched temporal aggregation, which is the most directly comparable DL baseline.
+- Uncertainty quantification of the generated baseflow is absent; no ensemble, Monte Carlo, or Bayesian interval is reported, which limits use for drought/flood risk applications.
+- Basins excluded due to gaps &gt; 3 years (&gt;2/3 of the 1,661 basins) receive no cross-check of generated baseflow quality; the paper does not discuss how data gaps in the training pool affect spatial extrapolation.
+- The paper does not engage with regulated vs. unregulated streamflow: GAGES-II "least disturbed" criterion is mentioned but not verified to eliminate all anthropogenic baseflow modification.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- Training target is itself a model output (digital filter applied to streamflow), not a direct measurement; the paper acknowledges field-based validation is lacking but does not quantify the resulting uncertainty floor.
+- The gauged scenario uses a single temporal split (train 1981–2001, validation 2001–2007, test 2007–2014); this does not account for inter-decadal non-stationarity and is not replicated across different period splits.
+- Ungauged validation uses 8-fold cross-validation but the fold composition (random or spatially stratified) is not described; spatially clustered folds could inflate apparent generalization.
+- Exact NSE and LTRMSE values for each cluster are not reported in tables; only qualitative thresholds ("above 0.7," "above 0.6") are stated, preventing full reproduction or meta-analysis.
+- The LSTM is trained using NSE* (basin-averaged NSE) as the loss function, but the chosen hidden state, dropout, and learning rate hyperparameter combination actually selected is not reported.
+- No ablation is provided comparing (a) general LSTM only vs. (b) general + finetuned LSTM, so the contribution of the finetuning step to performance gains is unquantified.
+- Comparison with NLDAS-2 is unfair in one direction: Noah and VIC are gridded products evaluated at basin-average via zonal statistics, whereas the LSTM is trained basin-by-basin — spatial resolution mismatch is acknowledged only briefly.</p>
+<p><strong>Ideas for future work:</strong>
+- Introduce conformal prediction or Bayesian LSTM to attach calibrated uncertainty intervals to each daily baseflow estimate, enabling probabilistic drought/flood risk assessments.
+- Conduct an ablation study isolating the contribution of UMAP-GNG clustering and finetuning vs. a single general LSTM applied to all 1,661 basins, with reported confidence intervals on NSE differences.
+- Extend the framework to regulated basins by incorporating reservoir operation data, allowing coverage beyond GAGES-II "least disturbed" basins.
+- Validate generated baseflow against available field-based measurements (e.g., tracer-based baseflow estimates, groundwater-level recession data) in a subset of basins to constrain the error floor introduced by using digital-filter baseflow as training labels.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Long Short-Term Memory (LSTM)</li><li>UMAP dimensionality reduction</li><li>Growing Neural Gas (GNG) clustering</li><li>transfer learning and fine-tuning</li><li>digital filter baseflow separation</li><li>graphical baseflow separation</li><li>k-fold cross-validation</li><li>Mann-Kendall trend analysis</li><li>Nash-Sutcliffe efficiency (NSE)</li><li>Log-transformed RMSE (LTRMSE)</li></ul>
+        <h4>Datasets</h4><ul><li>GAGES-II</li><li>DayMet</li><li>NLDAS-2 Noah</li><li>NLDAS-2 VIC</li><li>GRACE/GRACE-FO</li><li>USGS NWIS</li><li>STATSGO</li><li>GLHYMPS</li><li>GTOPO30</li><li>DeepBase (generated dataset)</li></ul>
+        <h4>Claims</h4><ul><li>DeepBase provides daily baseflow estimates for 1661 CONUS basins from 1981 to 2022 using a UMAP-GNG clustering and LSTM deep learning framework applicable to both gauged and ungauged basins.</li><li>The LSTM-based model outperforms NLDAS-2 Noah and VIC land surface models in baseflow estimation across all 14 identified hydroclimatological clusters.</li><li>The UMAP-GNG algorithm identifies 14 distinct basin clusters enabling transfer learning that achieves median NSE above 0.7 in 12 of 14 clusters for gauged scenarios and above 0.6 in 12 of 14 clusters for ungauged scenarios.</li><li>Western CONUS basins exhibit declining seasonal baseflow trends while eastern and southeastern basins show increasing or insignificant trends over 1981-2022.</li><li>Time-ordered data splitting is critical for realistic model evaluation, as random splitting exploits autocorrelation and yields overly optimistic performance metrics for hydrological prediction.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

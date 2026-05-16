@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Algorithms for Decision Making</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Algorithms for Decision Making</h1>
+      <p class="paper-detail-meta">
+        Mykel J. Kochenderfer, Tim A. Wheeler, Kyle H. Wray
+         · <em>The MIT Press</em>
+         · 2022
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">decision-making</span><span class="entry-tag">reinforcement-learning</span><span class="entry-tag">probabilistic-reasoning</span><span class="entry-tag">markov-decision-processes</span><span class="entry-tag">multiagent-systems</span><span class="entry-tag">planning-under-uncertainty</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Algorithms for Decision Making</h1>
+<p><strong>Authors:</strong> Mykel J. Kochenderfer, Tim A. Wheeler, Kyle H. Wray
+<strong>Year:</strong> 2022
+<strong>Tags:</strong> decision-making-under-uncertainty, markov-decision-processes, pomdp, reinforcement-learning, multiagent-systems, probabilistic-reasoning</p>
+<h2>TL;DR</h2>
+<p>A graduate-level textbook unifying algorithms for decision making under four sources of uncertainty — outcome, model, state, and interaction — spanning Bayesian networks, MDPs, POMDPs, reinforcement learning, and multiagent games. All algorithms are implemented in Julia with readability prioritized over runtime efficiency. Serves advanced undergraduates, graduate students, and professionals in CS, engineering, statistics, and operations research.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Textbook / unified pedagogical survey of a research area.</p>
+<p><strong>Context.</strong> AI and operations research subfields of sequential decision making and probabilistic reasoning. Explicitly builds on: Russell &amp; Norvig (<em>Artificial Intelligence: A Modern Approach</em>, 4th ed.) as the broader AI reference; Sutton &amp; Barto (<em>Reinforcement Learning: An Introduction</em>, 2nd ed.) for the RL foundation; Kochenderfer (<em>Decision Making Under Uncertainty</em>, MIT Press 2015) as a predecessor volume; Morgenstern &amp; von Neumann (<em>Theory of Games and Economic Behavior</em>) for game-theoretic grounding.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions are pedagogical rather than empirical: (1) the MDP/POMDP hierarchy is the right abstraction for the problem classes covered; (2) discrete-time formulation is sufficient (continuous-time control theory is explicitly out of scope); (3) multivariable calculus, linear algebra, and basic probability are adequate prerequisites. These assumptions are reasonable given the book's scope but do bound what it covers.</p>
+<p><strong>Contributions.</strong>
+- Single-volume treatment connecting probabilistic inference, sequential planning, model-free RL, belief-state planning, and multiagent systems under one organizational framework (four types of uncertainty).
+- Complete Julia implementations of every algorithm, prioritizing human readability.
+- Chapter 14 on policy validation covering rare-event simulation, robustness analysis, trade analysis, and adversarial analysis — uncommon in competing texts.
+- Coverage of Dec-POMDPs and partially observable Markov games, extending multiagent treatment beyond what most RL textbooks include.</p>
+<p><strong>Clarity.</strong> Consistently structured (summary + exercises per chapter) with Tufte-inspired wide-margin sidenotes for citations and asides; writing is accessible and well-paced for the intended audience, though the breadth (27 chapters) means some topics receive only introductory depth.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> The book progresses through five parts — probabilistic reasoning, sequential MDPs, model-uncertain RL, state-uncertain POMDPs, and multiagent systems — providing mathematical formulations and Julia-implemented algorithms for each, organized around the principle of maximum expected utility.</p>
+<p><strong>Supporting evidence:</strong>
+- Part I (Ch. 2–6): Bayesian networks, exact and approximate inference (variable elimination, belief propagation, Gibbs sampling, particle methods), parameter/structure learning, utility theory, decision networks, value of information.
+- Part II (Ch. 7–14): Exact MDP solvers (policy iteration, value iteration, LP formulation), approximate value functions (nearest neighbor through neural regression), online planning (MCTS, heuristic search), policy search (cross-entropy, evolution strategies), policy gradient (REINFORCE, reward-to-go, PPO-style clamped surrogate), actor-critic, and policy validation.
+- Part III (Ch. 15–18): Bandit exploration, model-based RL (Bayes-adaptive MDPs, posterior sampling), Q-learning, Sarsa, eligibility traces, experience replay, and imitation learning (behavioral cloning through GAIL).
+- Part IV (Ch. 19–23): Kalman/particle filters, exact POMDP value iteration (alpha vectors), offline approximations (PBVI, sawtooth bounds), online belief-state planning (POMCP, DESPOT-style), and finite state controller abstractions.
+- Part V (Ch. 24–27): Normal-form games (Nash, correlated equilibria, fictitious play), Markov games, POMGs, Dec-POMDPs with dynamic programming and heuristic search.
+- Appendices cover: mathematical foundations, probability distributions, complexity theory, neural network architectures, search algorithms, 15 benchmark problems (HexWorld through collaborative predator-prey), and a Julia language primer.</p>
+<p><strong>Figures &amp; tables:</strong> The preface states figures, examples, and exercises are provided per chapter; Tufte-style layout with sidenotes is used throughout. From the excerpt alone, axis labels, error bars, and statistical significance of figures cannot be assessed — the body of algorithmic content dominates over empirical plots.</p>
+<p><strong>Follow-up references:</strong>
+- Sutton &amp; Barto, <em>Reinforcement Learning: An Introduction</em> (2nd ed.) — the standard RL reference this book assumes familiarity with or complements.
+- Russell &amp; Norvig, <em>Artificial Intelligence: A Modern Approach</em> (4th ed.) — broader AI context the book situates itself against.
+- Kochenderfer, <em>Decision Making Under Uncertainty</em> (MIT Press, 2015) — predecessor volume with more focused POMDP depth, cited directly for collision avoidance application.
+- Hillier, <em>Introduction to Operations Research</em> — cited for OR foundations including dynamic and linear programming underpinnings.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Discrete-time Markov structure is assumed throughout; problems with continuous-time dynamics or non-Markovian history dependence are out of scope without acknowledgment of when this is limiting.
+- Tabular or low-dimensional state spaces are implicitly assumed for many exact methods; scalability gaps to high-dimensional continuous spaces are noted but not quantified.
+- Julia readability is assumed to transfer to understanding — readers unfamiliar with Julia may find the code appendix insufficient for practical implementation.
+- The maximum expected utility framework is adopted without deep treatment of its behavioral critiques (prospect theory, ambiguity aversion), though irrationality is briefly noted in Ch. 6.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with Bertsekas (<em>Dynamic Programming and Optimal Control</em>) or Puterman (<em>Markov Decision Processes</em>), the canonical technical references in this space.
+- Deep RL at scale (DQN, A3C, SAC) appears only partially through actor-critic and experience replay; no discussion of sample efficiency benchmarks or Atari/MuJoCo results that define the empirical landscape.
+- Constrained MDPs and safe RL are absent from the table of contents despite being active research areas with practical safety relevance.
+- Model-based deep RL (Dyna, World Models, MuZero) is not covered.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- As a textbook, no original empirical claims are made, so standard experimental critique does not apply. However, the stated appendix benchmark problems (e.g., HexWorld, Cart-Pole, Mountain Car) are illustrative only — no algorithm comparison tables or convergence plots appear to be provided, making it hard to build intuition for when one method outperforms another.
+- The "interpretability over efficiency" design philosophy of the Julia code means timing or scaling results are not presented; practitioners cannot gauge real-world feasibility from the implementations.
+- No discussion of hyperparameter sensitivity or practical tuning guidance for the implemented algorithms.</p>
+<p><strong>Ideas for future work:</strong>
+- A companion empirical chapter benchmarking the implemented algorithms head-to-head on the appendix problems would make algorithm selection guidance concrete.
+- Extension to continuous-time formulations (stochastic differential equations, Hamilton-Jacobi-Bellman) would close the gap with control theory audiences.
+- A chapter on constrained/safe MDPs (CMDPs, shielding, Lagrangian methods) would address the growing safety-critical deployment context the introduction motivates.
+- Scaling discussions connecting the tabular methods to deep function approximation (e.g., how PBVI connects to deep POMDP solvers) would bridge the gap to current research practice.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Bayesian networks</li><li>value iteration</li><li>policy iteration</li><li>Monte Carlo tree search</li><li>Q-learning</li><li>policy gradient</li><li>actor-critic</li><li>particle filter</li><li>Kalman filter</li><li>POMDP solvers</li><li>imitation learning</li><li>inverse reinforcement learning</li><li>evolutionary strategies</li><li>cross-entropy method</li></ul>
+        
+        <h4>Claims</h4><ul><li>Decision making under uncertainty can be systematically addressed through four categories of uncertainty: outcome, model, state, and interaction uncertainty.</li><li>Markov decision processes (MDPs) and partially observable MDPs (POMDPs) provide rigorous mathematical frameworks for sequential decision problems.</li><li>Reinforcement learning algorithms enable agents to learn optimal behavior without requiring a fully known model by balancing exploration and exploitation.</li><li>Multiagent decision problems can be formalized via Markov games, partially observable Markov games, and decentralized POMDPs.</li><li>The maximum expected utility principle, grounded in utility theory, forms the foundation for rational decision making under uncertainty.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Algorithms for Optimization</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Algorithms for Optimization</h1>
+      <p class="paper-detail-meta">
+        Mykel J. Kochenderfer, Tim A. Wheeler
+         · <em>The MIT Press</em>
+         · 2025
+      </p>
+      <p class="paper-entry-links">
+        
+        
+        
+        
+        <span class="entry-tag">optimization-algorithms</span><span class="entry-tag">engineering-design</span><span class="entry-tag">convex-optimization</span><span class="entry-tag">numerical-methods</span><span class="entry-tag">machine-learning</span><span class="entry-tag">operations-research</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Algorithms for Optimization (Second Edition)</h1>
+<p><strong>Authors:</strong> Mykel J. Kochenderfer, Tim A. Wheeler
+<strong>Year:</strong> 2025
+<strong>Tags:</strong> numerical-optimization, engineering-design, convex-optimization, surrogate-methods, stochastic-methods, multidisciplinary-optimization</p>
+<h2>TL;DR</h2>
+<p>A broad graduate-level textbook covering optimization algorithms for engineering design, spanning bracketing and gradient descent through Bayesian surrogate optimization, discrete optimization, and multidisciplinary design optimization. All algorithms are implemented in Julia. The second edition adds three new chapters on duality, quadratic programming, and disciplined convex programming.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Textbook / pedagogical survey of algorithms. Not a research paper; makes no novel empirical or theoretical claims.</p>
+<p><strong>Context.</strong> Engineering design optimization subfield. Directly builds on Boyd &amp; Vandenberghe's <em>Convex Optimization</em> (cited for problem formulation philosophy); invokes Wolpert &amp; Macready's no-free-lunch theorems to motivate algorithm diversity; traces lineage through Kantorovich and Dantzig (linear programming), Bellman (dynamic programming), and Lagrange (constrained optimization). Stylistically modeled on Tufte's information design and Knuth's clarity.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) readers possess multivariable calculus, linear algebra, and probability; (2) objective functions have sufficient regularity (Lipschitz continuity or convexity) for covered algorithms to be effective — explicitly acknowledged via no-free-lunch framing; (3) Julia is adequate as both pedagogical and practical implementation language. All three appear defensible for the stated audience.</p>
+<p><strong>Contributions.</strong>
+- Unified treatment of ~24 distinct algorithm families in a single coherent notation, all implemented in executable Julia code.
+- Three new chapters (vs. first edition) on duality/ADMM, quadratic programming, and disciplined convex programming.
+- Chapter on expression optimization (genetic programming, grammatical evolution, probabilistic prototype trees) rarely found in competing optimization textbooks.
+- Appendix of standard test functions (Ackley, Rosenbrock, Branin, etc.) providing reproducible benchmarking scaffolding.</p>
+<p><strong>Clarity.</strong> Writing in the provided excerpt is precise and accessible; wide Tufte-style margins carry worked examples and cross-references without cluttering the main text. Occasional density in constraint/duality chapters is flagged in the preface as motivation for dedicating full chapters to those topics in this edition.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> A pedagogically complete reference for optimization algorithms—covering unconstrained, constrained, stochastic, surrogate-based, discrete, and multidisciplinary formulations—intended to let practitioners select and implement appropriate methods for engineering design problems.</p>
+<p><strong>Supporting evidence:</strong>
+- Chapter dependency graph (Figure 1.16) structures 24 chapters into a coherent learning path, showing which topics can be read independently.
+- Worked example (Example 1.2): verifies first- and second-order necessary conditions on the Rosenbrock function at [1,1]; gradient = 0, Hessian = [[42,−20],[−20,10]] (positive definite).
+- No free lunch theorem (Wolpert &amp; Macready, 1997) cited to justify covering multiple algorithm families rather than prescribing one.
+- Application vignettes span aircraft airfoil parameterization (7 design variables), Gaussian mixture fitting, mean-variance portfolio construction, radiotherapy beam planning, robot grid navigation, and job-shop scheduling — illustrating algorithm generality across domains.
+- All algorithms implemented in Julia; ancillary code available at mitpress.mit.edu/algorithms-for-optimization.</p>
+<p><strong>Figures &amp; tables:</strong> Figure 1.16 (chapter dependency DAG) is the most structurally important figure; it is clearly labeled. Figures 1.3–1.5 illustrate feasible sets and missing-solution pathologies with labeled axes. Figure 1.13 distinguishes global, strong local, and weak local minima cleanly. No statistical results, confidence intervals, or error bars appear — appropriate for a textbook but absent by design. Contour plot in Example 1.1 has labeled axes. No tables of algorithm performance comparisons are present in the provided excerpt.</p>
+<p><strong>Follow-up references:</strong>
+- Boyd &amp; Vandenberghe, <em>Convex Optimization</em> (2004) — theoretical foundation for chapters 10–14; essential companion.
+- Wolpert &amp; Macready, "No Free Lunch Theorems for Optimization," <em>IEEE TEC</em> (1997) — underpins the book's pluralist algorithm philosophy.
+- Bellman, "On the Theory of Dynamic Programming," <em>PNAS</em> (1952) — foundational for Chapter 22 (discrete/DP).
+- Goodfellow, Bengio &amp; Courville, <em>Deep Learning</em> (2016) — context for Chapters 5–6 as applied to neural network training.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Julia fluency or willingness to learn it is assumed implicitly; Python translations are promised but not guaranteed, and most ML practitioners work in Python/JAX/PyTorch — this may limit adoption in ML-adjacent audiences.
+- The no-free-lunch framing, while honest, provides no practical guidance on algorithm selection for a given problem class; the book implicitly assumes practitioners will develop selection intuition through exposure to all methods.
+- "Engineering design" framing presupposes batch, offline optimization; online, continual, or bandit-style optimization settings are not addressed.
+- Regularity conditions (Lipschitz continuity, convexity, twice-differentiability) are invoked locally per chapter but not synthesized into a unified decision framework for when each class of method is appropriate.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with reinforcement learning policy gradient methods (e.g., REINFORCE, PPO), which are optimization algorithms with massive current usage and overlap with stochastic and population chapters.
+- Second-order methods for large-scale neural networks (K-FAC, Shampoo, L-BFGS in ML) are absent despite the deep learning application vignette.
+- Modern hyperparameter optimization literature (Hyperband, BOHB, neural architecture search) is not mentioned in the surrogate optimization chapters.
+- Complexity-theoretic results (NP-hardness of integer programming, inapproximability) are not discussed in Chapter 22, which could mislead readers about the tractability landscape.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- No empirical comparison of algorithms on benchmark functions (Appendix B provides the functions but no comparative results); readers cannot judge relative performance without external sources.
+- Breadth-over-depth trade-off: 24 chapters in a single volume necessarily provides surface-level coverage of some topics (e.g., expression optimization and multidisciplinary optimization receive one chapter each, topics that support entire dedicated textbooks).
+- Julia code snippets shown in-line cannot be run-tested from the provided excerpt; no CI or reproducibility infrastructure is described.
+- The Rosenbrock worked example (Example 1.2) uses a non-standard coefficient of 5 (canonical form uses 100) without comment — minor but potentially confusing for readers cross-referencing other texts.</p>
+<p><strong>Ideas for future work:</strong>
+- Add a comparative benchmark chapter running all covered algorithm families on the Appendix B test functions with wall-clock time, function-evaluation count, and solution quality — directly addressing the algorithm-selection gap.
+- Provide Python (NumPy/JAX) implementations alongside Julia to broaden practitioner adoption.
+- Add a chapter or extended section on optimization in the stochastic/online setting (stochastic gradient with streaming data, regret minimization) to bridge to modern ML training practice.
+- Develop a decision tree or structured taxonomy (beyond Figure 1.16) mapping problem properties — convexity, differentiability, noise level, evaluation cost, constraint type — to recommended algorithm families.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>gradient-descent</li><li>Newton&#39;s method</li><li>Levenberg-Marquardt</li><li>simulated annealing</li><li>genetic algorithms</li><li>particle swarm optimization</li><li>simplex algorithm</li><li>ADMM</li><li>interior point methods</li><li>Bayesian optimization</li><li>Gaussian processes</li><li>dynamic programming</li><li>automatic differentiation</li><li>quasi-Newton methods</li><li>cross-entropy method</li><li>covariance matrix adaptation</li><li>disciplined convex programming</li><li>quadratic programming</li></ul>
+        
+        <h4>Claims</h4><ul><li>The book provides a broad introduction to optimization algorithms with a focus on practical engineering design applications, implemented in Julia.</li><li>The second edition adds three new chapters on duality, quadratic programming, and disciplined convex programming compared to the first edition.</li><li>The alternating direction method of multipliers (ADMM) is presented as a generally applicable constrained optimization approach that scales robustly to extremely large problems.</li><li>Disciplined convex programming allows problems to be expressed naturally while enabling automatic verification of convexity and reformulation for efficient solution.</li><li>No single optimization algorithm is universally best; the no free lunch theorems imply that algorithm choice should be guided by assumptions about the objective function&#39;s distribution.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

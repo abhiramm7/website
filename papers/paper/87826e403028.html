@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A comprehensive review of deep learning applications in hydrology and water resources</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>A comprehensive review of deep learning applications in hydrology and water resources</h1>
+      <p class="paper-detail-meta">
+        Muhammed Sit, Bekir Z. Demiray, Zhongrun Xiang, Gregory J. Ewing, Yusuf Sermet, Ibrahim Demir
+         · <em>Water Science &amp; Technology</em>
+         · 2020
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.2166/wst.2020.369" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">deep-learning</span><span class="entry-tag">hydrology</span><span class="entry-tag">water-resources</span><span class="entry-tag">systematic-review</span><span class="entry-tag">flood-forecasting</span><span class="entry-tag">hydrologic-modeling</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>A Comprehensive Review of Deep Learning Applications in Hydrology and Water Resources</h1>
+<p><strong>Authors:</strong> Muhammed Sit, Bekir Z. Demiray, Zhongrun Xiang, Gregory J. Ewing, Yusuf Sermet, Ibrahim Demir
+<strong>Year:</strong> 2020
+<strong>Tags:</strong> deep-learning, hydrology, water-resources, systematic-review, lstm, flood-forecasting</p>
+<h2>TL;DR</h2>
+<p>Systematic review of 129 peer-reviewed papers applying deep learning to hydrology and water resources published January 2018–March 2020, covering architectures, task types, frameworks, and eight environmental subfields. Finds LSTM and CNN dominant, reproducibility and open-sourcing rare, and Transformers entirely absent despite their suitability for sequential hydrological data.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Systematic survey / literature review.</p>
+<p><strong>Context.</strong> Subfield: deep learning in hydroscience. Builds on Shen (DL review in geophysical sciences), Kratzert et al. 2018 (first large-scale LSTM rainfall-runoff application), Goodfellow et al. (DL textbook, foundational architecture descriptions), and Hochreiter &amp; Schmidhuber (LSTM). Positioned as the first systematic review explicitly covering all DL architectures across the full water-sector scope.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (1) journal-level filtering (not domain-keyword filtering) gives comprehensive coverage of hydrology DL literature — plausible but unverified; (2) the 2018–2020 window captures the mature phase of DL adoption in hydrology — reasonable but excludes formative earlier work; (3) eight environmental subfields and six task types are exhaustive and unambiguous — no inter-rater reliability reported to support this.</p>
+<p><strong>Contributions.</strong>
+- Curated metadata table (Table 1) for 129 papers capturing architecture, framework, dataset source, open-source status, reproducibility, DL task type, and water subfield.
+- Quantitative summary of architecture and framework adoption trends in the water sector (2018–2020), including simple projections for full-year 2020.
+- Identification that no reviewed paper used Transformer architectures despite widespread NLP use and that GRU is underemployed relative to comparable LSTM performance.
+- Discussion of ethics, governance implications, and reproducibility crisis specific to DL-in-water applications.</p>
+<p><strong>Clarity.</strong> Readable and well-organized with clear section delineation; the architecture tutorial section is textbook-level introductory and may feel redundant to ML-literate readers, while the Results section (truncated in the provided text) reads as a list of paper summaries rather than synthesized argument.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Deep learning — especially LSTM for time-series and CNN for spatial/image tasks — has been rapidly adopted across hydrology subfields (2018–2020), but the literature is characterized by poor reproducibility, near-zero code sharing, reliance on authority-acquired data, and absence of benchmark datasets, collectively limiting scientific progress.</p>
+<p><strong>Supporting evidence:</strong>
+- Search pipeline: 1,515 initial papers → 315 after journal/type filtering → 129 after technical DL criterion, all manually reviewed.
+- LSTM and CNN are the most-used architectures across reviewed papers (Figure 9); exact counts not given in extracted text but visually dominant.
+- Flood is the most-studied environmental subfield; sequence prediction and regression the dominant task types (Figures 13–14).
+- Keras (typically running atop TensorFlow) identified as the most-used framework; PyTorch underrepresented relative to broader DL community norms (Figure 15).
+- Code is open-sourced in a small minority of papers (Table 1 inspection); reproducibility flagged as "Yes" in a minority of entries — exact proportions not given as explicit percentages in the extracted text.
+- Zero papers employed Transformer architectures despite their dominance in NLP, another sequential-data domain.</p>
+<p><strong>Figures &amp; tables:</strong> Table 1 is the core artifact — 129 rows × 8 columns, fully readable; no statistical uncertainty is applicable (these are counts). Figures 9–15 are bar/histogram charts with labeled axes and no error bars (appropriate for descriptive counts). Figure 11 includes 2020 projections built on 3 months of data; projection methodology is not described. No confidence intervals or significance tests appear anywhere — none are claimed.</p>
+<p><strong>Follow-up references:</strong>
+- Kratzert et al. 2018 &amp; 2019a/b — foundational LSTM rainfall-runoff papers that benchmark against Sacramento SAC-SMA and National Water Model across 531 US watersheds; essential for understanding the flood subfield results.
+- Shen (year not given in text) — the prior DL-in-geophysical-sciences review this paper positions itself against.
+- Goodfellow et al. — the DL textbook underlying the architecture tutorial; needed to evaluate whether architecture descriptions are accurate.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Journal-level domain filtering assumes hydrology DL papers concentrate in environmental journals; papers appearing in IEEE, ACM, or interdisciplinary venues may be systematically excluded — this would break the completeness claim.
+- Binary reproducibility scoring (yes/no) assumes a shared threshold for what "reproducible" means; no rubric or inter-rater reliability metric is reported, making this field subjective.
+- The 2018 start date implicitly frames pre-2018 DL hydrology work (including early LSTM streamflow papers) as prior context rather than reviewable literature, understating the field's maturity.</p>
+<p><strong>Missing context or citations:</strong>
+- Physics-informed neural networks (PINNs) — emerging hybrid approach integrating PDEs with DL — are not discussed despite direct relevance to physically-based hydrological modeling.
+- Transfer learning and domain adaptation literature in hydrology are not engaged with, even though Kratzert et al. 2019b (reviewed herein) demonstrates cross-watershed transfer.
+- Conference proceedings excluded by design; NeurIPS, ICLR, and AGU workshop papers on climate/hydrology DL are omitted with no justification of the trade-off.
+- No engagement with uncertainty quantification literature (e.g., Bayesian deep learning, dropout-based uncertainty), mentioned only briefly via Zhu et al.'s probabilistic LSTM.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- 2020 projection in Figure 11 extrapolates from January–March 2020 data only; no methodology (linear, polynomial, seasonal adjustment) is described — projection is essentially uninterpretable.
+- Reproducibility and open-source fields in Table 1 are binary with no rubric; a paper sharing model weights but not training code could be coded either way.
+- Excluding conference papers and non-journal outputs inflates the apparent rarity of open-sourcing (the DL community heavily uses arXiv and GitHub alongside conference papers).
+- The paper does not report how disagreements between reviewers were resolved during manual metadata extraction, or whether multiple reviewers coded each paper.
+- Results section (flood subsection visible) reads as an enumeration of individual paper findings without quantitative cross-study synthesis (e.g., no meta-analytic comparison of LSTM vs. physical model NSE scores across studies).
+- Flood-subfield dominance (Figure 14) may partly reflect the search keyword list (which includes 'lstm', 'lstm' being most common in flood papers) rather than true field distribution.</p>
+<p><strong>Ideas for future work:</strong>
+- Benchmark dataset initiative: establish standardized, publicly available hydrological datasets analogous to ImageNet or GLUE to enable direct cross-study performance comparison.
+- Apply Transformer and attention-based architectures to long-range streamflow and precipitation sequences — the paper flags this gap but does not elaborate on design challenges (e.g., handling irregular time steps, missing sensor data).
+- Develop and adopt a reporting checklist for DL-in-hydrology papers (analogous to EQUATOR for clinical trials) covering hyperparameter disclosure, train/test split strategy, and uncertainty reporting.
+- Conduct a quantitative meta-analysis restricted to studies that share comparable metrics (e.g., NSE, RMSE) on overlapping watersheds, to test whether LSTM performance gains over physical models are consistent across climates and scales.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>LSTM</li><li>CNN</li><li>GAN</li><li>RNN</li><li>GRU</li><li>Autoencoder</li><li>Deep Belief Network</li><li>Restricted Boltzmann Machine</li><li>Extreme Learning Machine</li><li>Deep Q-Network</li><li>NARX</li><li>Elman Network</li><li>encoder-decoder LSTM</li><li>wavelet decomposition preprocessing</li></ul>
+        <h4>Datasets</h4><ul><li>USGS streamflow data</li><li>authority/governmental agency datasets</li><li>collected field datasets</li><li>CAMELS (531 US watersheds)</li></ul>
+        <h4>Claims</h4><ul><li>CNN and LSTM are the most widely used deep learning architectures in hydrology, owing to their strengths in matrix and sequence prediction tasks respectively.</li><li>LSTM models applied to rainfall-runoff modeling outperform well-established physical models such as SAC-SMA and the National Water Model.</li><li>Open-sourcing code and ensuring reproducibility are uncommon practices in water-domain deep learning publications, limiting reuse and validation.</li><li>Keras is the most-used deep learning framework in the water field, typically used on top of TensorFlow for rapid prototyping.</li><li>Transformer architectures, widely adopted in sequential NLP tasks, have not yet been applied in the reviewed water-domain literature despite relevance to sequential hydrological data.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>
