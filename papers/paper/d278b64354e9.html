@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>pystorms: A simulation sandbox for the development and evaluation of stormwater control algorithms</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>pystorms: A simulation sandbox for the development and evaluation of stormwater control algorithms</h1>
+      <p class="paper-detail-meta">
+        Sara P. Rimer, Abhiram Mullapudi, Sara C. Troutman, Gregory Ewing, Benjamin D. Bowes, Aaron A. Akin, Jeffrey Sadler, Ruben Kertesz, Bryant McDonnell, Luis Montestruque, Jon Hathaway, Jonathan L. Goodall, Branko Kerkez
+         · <em>arXiv</em>
+         · 2021
+      </p>
+      <p class="paper-entry-links">
+        
+        <a href="https://arxiv.org/abs/2110.12289" target="_blank">[arxiv]</a>
+        
+        
+        <span class="entry-tag">stormwater-control</span><span class="entry-tag">simulation-sandbox</span><span class="entry-tag">smart-water-systems</span><span class="entry-tag">open-source-software</span><span class="entry-tag">adaptive-control</span><span class="entry-tag">urban-hydrology</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>pystorms: A simulation sandbox for the development and evaluation of stormwater control algorithms</h1>
+<p><strong>Authors:</strong> Sara P. Rimer, Abhiram Mullapudi, Sara C. Troutman, Gregory Ewing, Benjamin D. Bowes, Aaron A. Akin, Jeffrey Sadler, Ruben Kertesz, Bryant McDonnell, Luis Montestruque, Jon Hathaway, Jonathan L. Goodall, Branko Kerkez
+<strong>Year:</strong> 2021
+<strong>Tags:</strong> stormwater-control, simulation-sandbox, open-source-software, smart-water-systems, urban-hydrology, benchmarking</p>
+<h2>TL;DR</h2>
+<p>pystorms is an open-source Python package that bundles seven real-world-inspired stormwater control scenarios with a standardized three-call programming interface wrapping EPA-SWMM (via PySWMM), enabling researchers to implement and compare control algorithms without building their own simulators or sourcing proprietary network models. It is the first benchmark platform specifically for smart stormwater control, analogous to OpenAI Gym for reinforcement learning and BWSN for water distribution.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Software/tool paper presenting a research prototype open-source package.</p>
+<p><strong>Context.</strong> Smart stormwater control subfield; builds directly on Kerkez et al. 2016 (foundational vision for smart stormwater systems), McDonnell et al. 2020 (PySWMM, the Python-SWMM wrapper pystorms wraps), Brockman et al. 2016 (OpenAI Gym, the interface design paradigm), and Borsányi et al. 2008 / Schütze &amp; Vanrolleghem reviews (prior stormwater control benchmarking context).</p>
+<p><strong>Correctness.</strong> Three load-bearing assumptions: (1) EPA-SWMM simulation fidelity is sufficient to meaningfully rank control strategies before real deployment; (2) the seven curated scenarios adequately represent real-world stormwater diversity; (3) the pre-defined per-scenario performance metrics are valid proxies for real management objectives. All are plausible but none are formally validated in the paper.</p>
+<p><strong>Contributions.</strong>
+- A curated, open repository of seven real-world-inspired stormwater scenarios spanning 0.12–67 km², combined and separated systems, and multiple control objectives (flood, overflow, water quality, aesthetics).
+- A simulator-agnostic Python interface (initialize / <code>state()</code> / <code>step()</code>) that collapses algorithm testing to ~10 lines of code.
+- A modular three-module architecture (config, environment, scenario) that allows substitution of alternative hydrologic solvers with minimal overhead.
+- The first unified, open benchmark enabling quantitative cross-comparison of smart stormwater control algorithms across diverse watersheds.</p>
+<p><strong>Clarity.</strong> Generally well-organized and readable; the API walkthrough is clear, but the paper reads more as a system description than a research article and defers most algorithmic results to external Jupyter Notebooks and supplementary appendices not fully reproduced in the text.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> pystorms packages calibrated stormwater simulation scenarios with a standardized Python API so that any control algorithm — from simple rule-based logic to deep reinforcement learning — can be implemented, run, and scored against a common performance metric without bespoke simulator setup.</p>
+<p><strong>Supporting evidence:</strong>
+- Seven scenarios cover subcatchment areas of 0.12–67 km², both combined and separated sewer arrangements, and objectives including CSO volume minimization, TSS load control, flooding reduction, and aesthetic water-level bounds.
+- Scenario theta demo: equal-filling degree controller scores 0 (perfect, no threshold violations or flooding); rule-based controller scores 1624; uncontrolled scores 1630 — on a cumulative penalty metric that adds flow exceedance above 0.5 m³/s per timestep and a flat penalty of 10³ per flooding event.
+- Advanced controllers from prior published work (Sadler et al., Mullapudi et al. deep-RL, Troutman et al., Sun et al.) are ported to scenarios beta, gamma, epsilon, and zeta in accompanying Jupyter Notebooks.
+- Package is pip-installable, GPLv3 licensed, and cross-platform (OSX, Windows, Linux); source and documentation available on GitHub.</p>
+<p><strong>Figures &amp; tables:</strong> Fig. 1 (conceptual abstraction diagram) and Fig. 3 (architecture schematic) carry the structural argument but contain no data. Fig. 5 shows time-series of basin depth and outlet flow for three strategies on theta — axes appear labeled (m, m³/s, hours) but only single deterministic runs are shown; no error bars, no confidence intervals, no statistical significance reported anywhere. Table 2 (scenario summary) is the most useful reference item. Table 3 (performance metrics) contains only three scalar values. Visualization is adequate for illustration but insufficient for rigorous comparison.</p>
+<p><strong>Follow-up references:</strong>
+- McDonnell et al. 2020 (PySWMM) — the direct Python-SWMM interface pystorms depends on; needed to understand its capabilities and limits.
+- Kerkez et al. 2016 — the motivating vision paper for smart stormwater systems that frames the research gap pystorms addresses.
+- Mullapudi et al. 2020 — deep-RL for real-time stormwater control; one of the advanced controllers demonstrated, and representative of the algorithm class pystorms is designed to host.
+- Brockman et al. 2016 (OpenAI Gym) — the interface design inspiration; useful for understanding what pystorms adopts and what it does not.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Sim-to-real transfer gap is entirely unaddressed; SWMM calibration quality for each "real-world-inspired" network is not described, so benchmark scores may not correlate with real deployment performance.
+- The seven scenarios are assumed representative without any formal diversity or coverage analysis of the global stormwater control problem space.
+- Performance metrics are designed by the authors and treated as ground truth; no sensitivity analysis of metric design choices (e.g., the arbitrary 10³ flooding penalty magnitude in Eq. 1c) is provided.
+- Single rainfall events per scenario are assumed sufficient to rank algorithms; robustness to storm variability is not examined.</p>
+<p><strong>Missing context or citations:</strong>
+- MIKE URBAN+ RTC and other commercial simulators with control interfaces are dismissed in one sentence ("confine real-time control to limited rule-based approaches") without detailed comparison or citation of their actual capabilities.
+- The Astlingen benchmarking network (cited for Scenario zeta) already provides a stormwater control benchmark; no explicit comparison of pystorms' approach to Astlingen's is made.
+- No citation or engagement with the urban drainage modeling literature on model uncertainty (parameter sensitivity, rainfall input uncertainty).
+- The social equity discussion in Section 5 cites only a single framework paper (Ewing &amp; Demir 2021); no environmental justice literature is engaged.
+- No runtime or computational cost data for any scenario is reported.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- The primary demo compares rule-based (1624) vs. uncontrolled (1630) on Scenario theta — a difference of &lt; 0.4%, rendering that comparison practically meaningless; the paper's narrative treats this as a meaningful ordering.
+- All results are single deterministic simulation runs; no uncertainty quantification, no ensemble evaluation, no sensitivity analysis.
+- Advanced controller demos for scenarios beta, gamma, epsilon, and zeta are described as available in Jupyter Notebooks but are not analyzed in the paper body, making independent verification impossible from the paper alone.
+- No baseline beyond "uncontrolled" is benchmarked on any scenario; a passive rule-of-thumb controller or a static rule-based controller for each non-theta scenario would strengthen comparative claims.
+- Network calibration methodology for the seven scenarios is not stated, making it impossible to assess how faithfully they reflect their real-world counterparts.
+- The paper claims pystorms enables "rigorous" evaluation (abstract) but provides no statistical rigor in its own demonstration.</p>
+<p><strong>Ideas for future work:</strong>
+- Run a suite of published control algorithms (rule-based, MPC, RL) on all seven scenarios and publish a leaderboard to demonstrate the cross-scenario generalization pystorms is designed to enable.
+- Add stochastic rainfall ensemble inputs (e.g., design storm families, historical event sets) to support uncertainty-aware algorithm evaluation and statistical ranking of controllers.
+- Conduct a sim-to-real transfer case study: deploy a pystorms-optimized algorithm on a real instrumented watershed and quantify the performance gap between simulation and field scores.
+- Develop a scenario-construction toolkit with calibration workflows so community-contributed scenarios can meet a minimum fidelity standard before entering the repository.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>rule-based control</li><li>equal-filling degree control</li><li>EPA-SWMM simulation</li><li>PySWMM Python interface</li><li>performance metric evaluation</li><li>object-oriented Python framework</li></ul>
+        <h4>Datasets</h4><ul><li>Scenario theta (idealized 2 km2 separated stormwater network)</li><li>Scenario alpha (0.12 km2 residential combined sewer network)</li><li>Scenario beta (1.3 km2 tidally-influenced separated stormwater network)</li><li>Scenario gamma (4 km2 highly urban separated stormwater network)</li><li>Scenario delta (2.5 km2 combined sewer network)</li><li>Scenario epsilon (67 km2 highly urban combined sewer network)</li><li>Scenario zeta (Astlingen benchmarking network)</li></ul>
+        <h4>Claims</h4><ul><li>pystorms provides a Python-based simulation sandbox with real world-inspired stormwater control scenarios enabling rigorous quantitative evaluation of control strategies with only a few lines of code.</li><li>The equal-filling degree control strategy achieves a perfect performance metric of 0 on Scenario theta, outperforming both rule-based control and the uncontrolled case.</li><li>pystorms lowers the barrier to entry for smart stormwater control research by coupling an accessible programming interface with EPA-SWMM via PySWMM.</li><li>The sandbox is designed to be simulator-agnostic through a modular environment module, allowing users to substitute custom hydrologic solvers.</li><li>pystorms is intended as a community-driven resource to foster cross-comparison of stormwater control algorithms across diverse watershed scenarios.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>

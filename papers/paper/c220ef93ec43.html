@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Representing Socio-Economic Uncertainty in Human System Models</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+<body>
+<div class="academic">
+  <p class="back-link"><a href="../index.html">← back to papers</a></p>
+
+  <article class="paper-detail">
+    <header>
+      <h1>Representing Socio-Economic Uncertainty in Human System Models</h1>
+      <p class="paper-detail-meta">
+        Jennifer Morris, John Reilly, Sergey Paltsev, Andrei Sokolov, Kenneth Cox
+         · <em>Earth&#39;s Future</em>
+         · 2022
+      </p>
+      <p class="paper-entry-links">
+        <a href="https://doi.org/10.1029/2021EF002239" target="_blank">[doi]</a>
+        
+        
+        
+        <span class="entry-tag">uncertainty-quantification</span><span class="entry-tag">energy-transition</span><span class="entry-tag">multi-sector-dynamics</span><span class="entry-tag">scenario-discovery</span><span class="entry-tag">climate-policy</span><span class="entry-tag">computable-general-equilibrium</span>
+      </p>
+    </header>
+
+    <div class="summary-md"><h1>Representing Socio-Economic Uncertainty in Human System Models</h1>
+<p><strong>Authors:</strong> Jennifer Morris, John Reilly, Sergey Paltsev, Andrei Sokolov, Kenneth Cox
+<strong>Year:</strong> 2022
+<strong>Tags:</strong> uncertainty-quantification, monte-carlo, scenario-discovery, energy-economics, multi-sector-dynamics, climate-policy</p>
+<h2>TL;DR</h2>
+<p>The paper runs 400-member Latin Hypercube Sampling ensembles of the EPPA recursive-dynamic global economy model under four temperature-pathway scenarios, then applies CART classification and parallel axis plots to the ensemble's endogenous outputs rather than inputs. The core finding is that temperature targets through 2050 compress sectoral emission intensities far more than sectoral output levels, and no single dominant energy-technology storyline exists for any given economic or climate outcome.</p>
+<h2>First pass — the five C's</h2>
+<p><strong>Category.</strong> Research prototype / methodology paper combining established UQ methods (Monte Carlo, LHS) with scenario discovery applied to model output space rather than the conventional input-output space.</p>
+<p><strong>Context.</strong> MultiSector Dynamics subfield; updates and extends Webster et al. (2002, 2012) Monte Carlo UQ of global emissions; draws on Bryant &amp; Lempert (2010) and Groves &amp; Lempert (2007) for scenario discovery foundations; uses EPPA model documented in Paltsev et al. (2005) and Chen et al. (2016); situates within Moss et al. (2016) MSD priority framing.</p>
+<p><strong>Correctness.</strong> Load-bearing assumptions: (a) EPPA's nested CES production functions adequately represent cross-sectoral dynamics; (b) parametric uncertainty subsumes the dominant uncertainty (structural uncertainty is explicitly excluded); (c) 400 LHS samples suffice for convergence; (d) emissions constraints for 1.9° and 1.5°C are identical fixed paths across all ensemble members, decoupling climate system uncertainty from economic decisions. All four are at least partially questionable.</p>
+<p><strong>Contributions.</strong>
+- Novel application of scenario discovery to endogenous output–output relationships in a probabilistic ensemble, rather than the standard input-to-output mapping.
+- Updated probability distributions for a near-exhaustive list of EPPA parameters (population, labor/capital productivity, AEEI, fossil resource availability, advanced technology costs, substitution elasticities, etc.).
+- Quantitative demonstration that long-term temperature targets affect sectoral emission intensities far more than sectoral output through 2050 across all six aggregated sectors.
+- Illustration that no single dominant storyline exists for high or low US GDP growth, with CART feature importance scores confirming weak-to-moderate relationships among endogenous outcomes.</p>
+<p><strong>Clarity.</strong> Generally well-structured with clear mapping between methods and results sections; the scenario discovery exposition is dense and the provided text ends mid-sentence before the conclusions, leaving the synthesis incomplete.</p>
+<h2>Second pass — content</h2>
+<p><strong>Main thrust:</strong> Combining 400-member LHS ensembles of a multi-sector global economy model with CART and parallel axis-based scenario discovery shows that both the distribution of sectoral outcomes and the relationships among those outcomes are highly dispersed — many technology and emissions mixes are compatible with any given temperature or economic target, undermining narratives that a single pathway is necessary.</p>
+<p><strong>Supporting evidence:</strong>
+- Median sectoral output (all sectors except electricity) grows &gt;4× from 2020 to 2100 in all ensembles; 90% probability bounds are nearly indistinguishable across all four temperature scenarios through 2050 for most sectors.
+- Under the least-constrained 3.5°C ensemble, sectoral emission intensities still drop ~40% by 2050 from 2020 levels across all sectors.
+- Coal and gas electricity generation (without CCS) disappear by 2050 in the 1.9° and 1.5°C ensembles; oil generation disappears entirely because no oil-CCS option is modeled.
+- Median primary electricity (nuclear + hydro + wind + solar combined) grows 50–100% by 2050 and doubles-to-triples by 2100 across all four ensembles; biomass primary energy expands 7.5–12.5× by 2100.
+- CART node for high US GDP (≥80th percentile) with Bio Energy &gt;5.866 EJ contains 40% high-GDP members vs. 20% in the full sample — the strongest single split found, indicating only a moderate signal.
+- 1,000-member sensitivity test of ensemble size is reported in supplemental as not substantially changing findings.</p>
+<p><strong>Figures &amp; tables:</strong> Figures 1, 2, 5–7 carry the main distributional results as time-series bands (median + 5th–95th percentile); axes include units (trillions of 2019 USD; tCO2eq per $1000; EJ; TWh). No formal statistical significance testing is reported; bands represent probability quantiles, not confidence intervals, and no error bars on medians are shown. Figures 8–9 present the scenario discovery results; y-axes are percentile ranks, with absolute min/max values annotated — this is informative but makes cross-figure comparison difficult. CART diagrams (Figures 8b–c, 9b–c) show split values and node compositions but do not report tree depth, pruning criteria, or out-of-sample accuracy. Table 2 reports CART feature importance scores but without uncertainty or cross-validation estimates.</p>
+<p><strong>Follow-up references:</strong>
+- Webster et al. (2012): the direct predecessor Monte Carlo UQ study this updates — essential for methodological context.
+- Gillingham et al. (2018): recent probabilistic treatment of emissions uncertainty with which results could be benchmarked.
+- Groves &amp; Lempert (2007) / Bryant &amp; Lempert (2010): foundational scenario discovery papers whose standard input-output framing this paper departs from.
+- Guivarch et al. (2016): one of the only prior studies applying scenario discovery to endogenous output relationships, directly comparable in method.</p>
+<h2>Third pass — critique</h2>
+<p><strong>Implicit assumptions:</strong>
+- Structural uncertainty in EPPA (functional form of production, trade equilibrium logic, absence of climate-economy feedbacks) is entirely excluded; the paper acknowledges this but does not bound how large this omission might be.
+- Inter-parameter correlations are not discussed; LHS as implemented treats parameters as independent, which could inflate or deflate outcome variance if parameters co-vary (e.g., population growth and labor productivity).
+- The 1.9° and 1.5°C ensembles apply an identical global emissions constraint path to all 400 members, meaning uncertainty in what emissions path achieves a given temperature is resolved outside the economic ensemble and not propagated through economic decisions.
+- No environmental-economic feedbacks: damages from warming do not affect GDP trajectories, which biases all scenario comparisons toward underestimating divergence between constrained and unconstrained pathways at longer horizons.</p>
+<p><strong>Missing context or citations:</strong>
+- No engagement with the Shared Socioeconomic Pathways (SSPs), the current standard framework for socio-economic scenario analysis used in IPCC AR6; the omission makes it difficult to position these results relative to the broader IAM literature.
+- Single-model study; inter-model uncertainty across the IAM ensemble (GCAM, MESSAGE, REMIND, etc.) is typically larger than parametric uncertainty within any single model and is not discussed.
+- No engagement with formal global sensitivity analysis methods (Sobol indices, Morris screening) that would more rigorously identify which parameters drive output variance; CART on outputs is not a substitute for input-sensitivity decomposition.</p>
+<p><strong>Possible experimental / analytical issues:</strong>
+- With ~50+ uncertain parameters and 400 LHS samples, the ensemble is sparse in high-dimensional space; convergence of multi-variate outcome relationships (as opposed to marginal distributions) is not formally demonstrated.
+- The scenario discovery application is limited to one outcome (US GDP) as the focal variable, described as "illustrative." Generalizability of the method to other outcomes of MSD relevance (e.g., renewable penetration, water or food sector output) is asserted but not shown.
+- CART results exhibit weak signal (best node purity lifted from 20% to 40% baseline for high GDP); the practical value of the storyline decomposition relative to simple correlation matrices (provided in supplemental but not highlighted) is not clearly established.
+- The paper reports that high wind &amp; solar generation is paradoxically somewhat higher in the 3.5° and 3.1°C ensembles than in 1.9°/1.5°C; this counterintuitive result is attributed to lower overall electricity demand in constrained scenarios and nuclear competition, but is not rigorously tested.
+- Reproducibility: probability distributions are described as in Supporting Information, but the EPPA model is not publicly available, limiting replication.</p>
+<p><strong>Ideas for future work:</strong>
+- Apply the output-space scenario discovery to outcomes more directly relevant to MSD interdependencies (water demand, agricultural output, transportation energy) to test whether the "no dominant storyline" finding generalizes beyond GDP.
+- Incorporate inter-model structural uncertainty via a multi-model ensemble, allowing separation of parametric vs. structural contributions to outcome variance.
+- Relax the fixed emissions-path assumption for constrained ensembles by sampling from climate sensitivity distributions and propagating resulting variation back into economic decisions, creating a fully coupled uncertainty chain.
+- Perform formal variance-based global sensitivity analysis (Sobol decomposition) on the same ensemble to rank input parameters by their contribution to output variance, enabling a rigorous complement to the CART feature importance scores reported.</p></div>
+
+    
+
+    
+      <div class="academic-auto">
+        <h4>Methods</h4><ul><li>Monte Carlo analysis</li><li>Latin Hypercube Sampling</li><li>scenario discovery</li><li>Classification and Regression Trees (CART)</li><li>parallel axis plots</li><li>Patient Rule Induction Method (PRIM)</li><li>recursive-dynamic general equilibrium modeling</li></ul>
+        <h4>Datasets</h4><ul><li>GTAP 8 (Global Trade Analysis Project Version 8)</li><li>IMF 2018 economic data</li><li>IEA 2018 energy data</li><li>IPCC Fifth Assessment Report (AR5) emissions scenarios</li></ul>
+        <h4>Claims</h4><ul><li>Many patterns of energy and technology development are possible under a given long-term environmental pathway, with no single dominant storyline.</li><li>Sectoral output for most economic sectors is little affected through 2050 by long-term temperature targets, but emission intensities must fall much more rapidly under tight emissions constraints.</li><li>Combining traditional Monte Carlo uncertainty quantification with scenario discovery techniques provides richer insights than either approach alone.</li><li>There is no single or simple storyline linking high or low GDP growth to specific energy mixes or emissions outcomes.</li><li>Probabilistic Monte Carlo ensembles can be used as input to scenario discovery to recover relationships among endogenous outcomes that are lost in marginal distribution analysis.</li></ul>
+      </div>
+    
+  </article>
+
+  <footer class="academic-footer">
+    Generated locally with paper_manager.
+  </footer>
+</div>
+</body>
+</html>
