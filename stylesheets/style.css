@@ -208,6 +208,15 @@ img {
     display: inline-block;
 }
 
+/* ─── Live Side Quests ─── */
+#side-quests .section-title { margin-bottom: var(--gap-sm); }
+.side-quest-blurb {
+    margin: 0 0 var(--gap-sm);
+    color: var(--secondary-text);
+}
+.side-quest-list { margin: 0; padding-left: var(--gap-md); }
+.side-quest-list li { margin-bottom: var(--gap-xs); }
+
 /* Fade-in animation — snappy brutalist entrance */
 .fade-in {
     opacity: 0;
