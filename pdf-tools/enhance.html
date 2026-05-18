@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Enhance Scan · PDF Tools — Abhiram Mullapudi</title>
+    <meta name="description" content="Clean up phone-scanned PDFs. Flattens lighting, whitens the background, snaps text to solid black. Runs entirely in your browser." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://randomstorms.net/pdf-tools/enhance.html" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/site.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌧️</text></svg>">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="brand" href="../">RANDOM // STORMS</a>
+            <nav class="site-header-links">
+                <a href="../">Home</a>
+                <a href="./">All tools</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-container tool-page">
+        <a class="back-link" href="./">← back to tools</a>
+        <h1>Enhance Scan</h1>
+        <p class="subtitle">Clean up phone-scanned PDFs. Whitens the background, flattens lighting, and snaps text to solid black. Everything runs in your browser.</p>
+
+        <div class="dropzone" id="dropzone">
+            <div class="icon">⬆</div>
+            <h3>Drop a scanned PDF</h3>
+            <p>or click to choose a file</p>
+            <input type="file" />
+        </div>
+
+        <div id="config" style="display:none;">
+            <div id="info"></div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label>Render DPI</label>
+                    <select id="dpi">
+                        <option value="150">150 (fast)</option>
+                        <option value="200" selected>200 (balanced)</option>
+                        <option value="300">300 (high quality)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Tone strength</label>
+                    <select id="tone">
+                        <option value="soft">Soft</option>
+                        <option value="standard" selected>Standard</option>
+                        <option value="aggressive">Aggressive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn" id="run">Enhance &amp; download</button>
+                <button class="btn btn-secondary" id="preview-btn">Preview first page</button>
+                <button class="btn btn-secondary" id="clear">Clear</button>
+            </div>
+        </div>
+
+        <div class="status" id="status"></div>
+        <div class="progress" id="progress"><div class="progress-bar"></div></div>
+
+        <div class="preview" id="preview">
+            <div class="preview-pane">
+                <h4>Before</h4>
+                <canvas id="before"></canvas>
+            </div>
+            <div class="preview-pane">
+                <h4>After</h4>
+                <canvas id="after"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <p>Part of <a href="../">randomstorms.net</a> · runs entirely in your browser</p>
+        </div>
+    </footer>
+
+    <!-- pdf.js as classic script (UMD) so we can set workerSrc explicitly. -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
+    <script>
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+    </script>
+    <script type="module" src="./js/enhance.js"></script>
+</body>
+</html>
