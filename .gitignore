@@ -11,3 +11,4 @@ tags
 *.synctex.gz
 *.fdb_latexmk
 venv
+.idea/

@@ -91,18 +91,38 @@
         <section id="side-quests" class="section">
             <h2 class="section-title">Live Side Quests</h2>
             <p class="side-quest-blurb">Small things I'm tinkering with right now, updated as they evolve.</p>
-            <ul class="side-quest-list">
-                <li>
-                    <a href="https://abhiramm7.github.io/sift/">Sift</a> — a fast, native macOS app to collect,
-                    tag, rate, and recall the papers I read. Plain files, no accounts, syncs through whatever
-                    cloud folder you already use. Source:
-                    <a href="https://github.com/abhiramm7/sift" target="_blank">abhiramm7/sift</a>.
-                </li>
-                <li>
-                    <a href="papers/">Reading summaries</a> — short auto-generated notes on papers I've
-                    read, published here. (Produced by an earlier version of the Sift project.)
-                </li>
-            </ul>
+            <div class="publication-list">
+                <div class="publication-row">
+                    <div class="publication-image">
+                        <a href="https://abhiramm7.github.io/dc-flood-sim/?flood=1">
+                            <img src="data/images/dc-flood-sim.jpg" alt="DC flood simulation" loading="lazy" />
+                        </a>
+                    </div>
+                    <div class="publication-description">
+                        <h3>flood sim</h3>
+                        <p class="pub-summary">A city flood model that runs the actual shallow-water physics in your
+                            browser, on your GPU. The DC demo is built from open data: USGS lidar terrain, OpenStreetMap
+                            buildings, and river inflows pulled live from USGS gauges. The pipeline starts from a
+                            bounding box, so it should extend to pretty much any river.</p>
+                        <p class="pub-links"><a href="https://abhiramm7.github.io/dc-flood-sim/?flood=1">demo</a> / <a
+                                href="https://github.com/abhiramm7/dc-flood-sim" target="_blank">code</a></p>
+                    </div>
+                </div>
+                <div class="publication-row">
+                    <div class="publication-image">
+                        <a href="https://abhiramm7.github.io/sift/">
+                            <img src="data/images/sift-screenshot.png" alt="Sift app" loading="lazy" />
+                        </a>
+                    </div>
+                    <div class="publication-description">
+                        <h3>Sift</h3>
+                        <p class="pub-summary">A fast, native macOS app to collect, tag, rate, and recall the papers I
+                            read. Plain files, no accounts, syncs through whatever cloud folder you already use.</p>
+                        <p class="pub-links"><a href="https://abhiramm7.github.io/sift/">webpage</a> / <a
+                                href="https://github.com/abhiramm7/sift" target="_blank">code</a></p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Work Experience -->

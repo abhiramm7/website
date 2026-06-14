@@ -214,8 +214,8 @@ img {
     margin: 0 0 var(--gap-sm);
     color: var(--secondary-text);
 }
-.side-quest-list { margin: 0; padding-left: var(--gap-md); }
-.side-quest-list li { margin-bottom: var(--gap-xs); }
+/* Side quests reuse the .publication-list / .publication-row card +
+   side-scroll layout (see Publications below). */
 
 /* Fade-in animation — snappy brutalist entrance */
 .fade-in {
