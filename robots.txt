@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://randomstorms.net/sitemap.xml
