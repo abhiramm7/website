@@ -12,3 +12,4 @@ tags
 *.fdb_latexmk
 venv
 .idea/
+.claude/
