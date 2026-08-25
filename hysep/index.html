@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HYSEP baseflow separation</title>
+<meta name="description" content="USGS HYSEP hydrograph separation in the browser. Upload daily streamflow as CSV, JSON, or parquet and separate baseflow by the fixed-interval, sliding-interval, or local-minimum method.">
+<link rel="canonical" href="https://randomstorms.net/hysep/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HYSEP baseflow separation">
+<meta property="og:description" content="The 1996 USGS program that splits a daily streamflow record into baseflow and storm runoff, running in your browser.">
+<meta property="og:url" content="https://randomstorms.net/hysep/">
+<meta property="og:image" content="https://randomstorms.net/data/images/hysep.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HYSEP baseflow separation">
+<meta name="twitter:image" content="https://randomstorms.net/data/images/hysep.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect x=%221%22 y=%221%22 width=%2230%22 height=%2230%22 fill=%22white%22 stroke=%22black%22 stroke-width=%222%22/><path d=%22M5 26 L10 15 L15 21 L21 8 L27 19 L27 26 Z%22 fill=%22%23ff3300%22/><path d=%22M5 26 L10 15 L15 21 L21 8 L27 19%22 fill=%22none%22 stroke=%22black%22 stroke-width=%222%22/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* Brutalist skin, matches randomstorms.net */
+  :root {
+    color-scheme: light;
+    --surface: #ffffff; --border: #000000;
+    --ink: #000000; --mut: #666666;
+    --accent: #ff3300;
+    --grid: #e0e0e0;
+    --font-main: "Space Mono", "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; font: 14px/1.6 var(--font-main); background: var(--surface); color: var(--ink);
+         -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; height: 100vh; }
+  a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: var(--accent); }
+
+  header { flex: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; padding: 10px 16px;
+           background: var(--surface); border-bottom: 3px solid var(--border); }
+  header h1 { font-size: 15px; margin: 0 12px 0 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+  header .meta { color: var(--mut); font-size: 11px; letter-spacing: 0.04em; }
+  header .links { margin-left: auto; font-size: 11px; display: flex; gap: 14px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+
+  .frame {
+    flex: 1; min-height: 0;
+    padding: 16px; display: grid; gap: 16px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas: "chart" "rail";
+  }
+  .zone {
+    position: relative; display: flex; flex-direction: column; min-height: 0;
+    background: var(--surface); border: 2px solid var(--border);
+    padding: 12px 14px; overflow: hidden;
+  }
+  .zone h2 { font-size: 12px; margin: 0 0 2px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+  .zone .sub { color: var(--mut); font-size: 11px; margin: 0 0 6px; letter-spacing: 0.02em; }
+  .zone-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+  #chartZone { grid-area: chart; }
+  .chart-ctl { display: flex; gap: 8px; }
+  button, select, input[type=number], input[type=text] {
+    font: inherit; font-size: 12px; color: inherit; background: var(--surface);
+    border: 2px solid var(--border); border-radius: 0; padding: 3px 8px;
+  }
+  button { cursor: pointer; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 10.5px; }
+  button:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+  button:disabled { opacity: .45; cursor: default; }
+  button.primary { background: var(--surface); transition: all .15s ease; padding: 6px 10px; }
+  button.primary:hover:not(:disabled) { background: var(--border); color: var(--surface); border-color: var(--border); box-shadow: 3px 3px 0 var(--accent); }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { button.primary { transition: none; } }
+
+  .legend { display: flex; gap: 16px; font-size: 10.5px; color: var(--mut); margin: 2px 0 4px;
+            text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; flex-wrap: wrap; }
+  .legend i { width: 16px; height: 3px; display: inline-block; vertical-align: middle; margin-right: 6px; }
+  .legend .sw-hatch { height: 10px; border: 1px solid var(--accent);
+    background: repeating-linear-gradient(45deg, transparent 0 3px, rgba(255,51,0,.55) 3px 4.5px); }
+
+  .plot-wrap { position: relative; flex: 1; min-height: 0; }
+  .plot-wrap svg { width: 100%; height: 100%; display: block; touch-action: none;
+    -webkit-user-select: none; user-select: none; cursor: crosshair; }
+  .plot-metrics { position: absolute; top: 6px; right: 6px; z-index: 2; display: flex; gap: 8px; }
+  .plot-metrics span { background: var(--surface); border: 2px solid var(--border); padding: 3px 9px;
+    font-size: 10.5px; color: var(--mut); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+  .plot-metrics b { color: var(--ink); font-variant-numeric: tabular-nums; font-size: 12px; }
+
+  .dropzone { position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center;
+    background: var(--surface); border: 2px dashed var(--border); text-align: center; }
+  .dropzone.over, body.dragging .dropzone { border-color: var(--accent); box-shadow: inset 0 0 0 3px rgba(255,51,0,.15); }
+  .dropzone b { display: block; font-size: 15px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .dropzone p { color: var(--mut); font-size: 12px; margin: 0 0 14px; }
+  .dropzone .row { display: flex; gap: 10px; justify-content: center; }
+
+  #rail { grid-area: rail; display: grid; grid-template-columns: 1.2fr 1.3fr 1fr 0.8fr;
+          gap: 12px; align-items: stretch; max-height: 42vh; overflow-y: auto; }
+  .rail-block { border: 2px solid var(--border); padding: 10px 12px; min-width: 0; }
+  .rail-block h3 { font-size: 11px; margin: 0 0 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+  .filebar { display: flex; gap: 8px; }
+  .filebar button { flex: 1; }
+  .samplenote { font-size: 11px; color: var(--mut); margin: 8px 0 0; }
+  .datameta { font-size: 11.5px; color: var(--mut); margin: 8px 0 4px; line-height: 1.5; overflow-wrap: anywhere; }
+  .datameta b { color: var(--ink); }
+  .notice { font-size: 11px; margin: 6px 0 0; padding: 4px 8px; border: 2px solid var(--border); color: var(--ink); }
+  .notice.warn { border-color: var(--accent); color: var(--accent); }
+
+  .cfg-row { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: center; margin: 6px 0; }
+  .cfg-row label { color: var(--mut); font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+  .cfg-row select, .cfg-row .wrap { justify-self: end; }
+  .cfg-row .wrap { display: flex; gap: 6px; }
+  .cfg-row input[type=number] { width: 82px; text-align: right; }
+
+  .methods { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 2px solid var(--border); margin-bottom: 8px; }
+  .methods button { border: none; border-right: 2px solid var(--border); padding: 6px 2px; font-size: 10px; }
+  .methods button:last-child { border-right: none; }
+  .methods button[aria-pressed="true"] { background: var(--border); color: var(--surface); }
+  .methods button[aria-pressed="true"]:hover { color: var(--surface); }
+  .mdesc { font-size: 11px; color: var(--mut); margin: 0 0 8px; line-height: 1.5; }
+  .intnote { font-size: 11px; color: var(--mut); margin-top: 2px; }
+  .intnote b { color: var(--ink); }
+
+  table.kv { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  table.kv td { padding: 3px 0; border-bottom: 1px solid var(--grid); }
+  table.kv tr:last-child td { border-bottom: none; }
+  table.kv td:first-child { color: var(--mut); text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.03em; }
+  table.kv td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+
+  .exports { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .credit { grid-column: 1 / -1; font-size: 10.5px; color: var(--mut); line-height: 1.55; margin: 0; }
+
+  .tip { position: fixed; pointer-events: none; background: var(--surface); border: 2px solid var(--border);
+    padding: 5px 9px; font-size: 11.5px; display: none; box-shadow: 3px 3px 0 var(--border); z-index: 1000; line-height: 1.5; }
+  .tip b { font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 940px) {
+    body { height: auto; }
+    .frame {
+      grid-template-rows: 400px auto;
+    }
+    #rail { grid-template-columns: 1fr; max-height: none; overflow-y: visible; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>HYSEP // BASEFLOW</h1>
+  <span class="meta">USGS HYSEP 2.2 streamflow hydrograph separation, in your browser</span>
+  <span class="links">
+    <a href="https://pubs.usgs.gov/wri/1996/4040/report.pdf" target="_blank" rel="noopener">report</a>
+    <a href="https://github.com/abhiramm7/hysep-terminal" target="_blank" rel="noopener">code</a>
+  </span>
+</header>
+
+<div class="frame">
+
+  <section class="zone" id="chartZone">
+    <div class="zone-head">
+      <h2>Hydrograph</h2>
+      <div class="chart-ctl">
+        <button id="scaleBtn" title="toggle y-axis scale">Y: LOG</button>
+        <button id="resetBtn" hidden>reset zoom</button>
+      </div>
+    </div>
+    <p class="sub" id="chartSub">drag to zoom &middot; double-click to reset</p>
+    <div class="legend">
+      <span><i style="background:#000"></i>streamflow</span>
+      <span><i class="sw-hatch"></i>baseflow</span>
+    </div>
+    <div class="plot-wrap" id="plotWrap">
+      <div class="plot-metrics">
+        <span>BF <b id="mBF">&ndash;</b></span>
+        <span>INT <b id="mInt">&ndash;</b></span>
+      </div>
+      <svg id="chart" role="img" aria-label="Hydrograph of streamflow and separated baseflow"></svg>
+      <div class="dropzone" id="dropzone">
+        <div>
+          <b>Drop a file</b>
+          <p>daily streamflow (date, flow) as csv, json, or parquet</p>
+          <div class="row">
+            <button class="primary" id="pickBtn2">choose file</button>
+            <button class="primary" id="demoBtn2">load demo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="zone" id="rail">
+    <div class="rail-block">
+      <h3>Data</h3>
+      <input type="file" id="fileInput" accept=".csv,.txt,.tsv,.json,.parquet,.pq" hidden>
+      <div class="filebar">
+        <button class="primary" id="pickBtn">upload</button>
+        <button class="primary" id="demoBtn">demo</button>
+      </div>
+      <p class="samplenote"><a href="#" id="sampleCSV">download a sample csv</a> to see the input format</p>
+      <div class="datameta" id="dataMeta">no data loaded</div>
+      <div class="cfg-row" id="dateColRow" hidden>
+        <label for="dateCol">date col</label><select id="dateCol"></select>
+      </div>
+      <div class="cfg-row" id="flowColRow" hidden>
+        <label for="flowCol">flow col</label><select id="flowCol"></select>
+      </div>
+      <div id="notices"></div>
+    </div>
+
+    <div class="rail-block">
+      <h3>Method</h3>
+      <div class="methods" role="group" aria-label="separation method">
+        <button id="mFixed" aria-pressed="false">fixed</button>
+        <button id="mSlide" aria-pressed="true">sliding</button>
+        <button id="mLocmin" aria-pressed="false">local min</button>
+      </div>
+      <p class="mdesc" id="mdesc"></p>
+      <div class="cfg-row">
+        <label for="areaIn">drainage area</label>
+        <span class="wrap">
+          <input id="areaIn" type="number" min="0" step="any" placeholder="&ndash;">
+          <select id="areaUnit"><option value="mi2">mi&sup2;</option><option value="km2">km&sup2;</option></select>
+        </span>
+      </div>
+      <div class="cfg-row">
+        <label for="intSel">interval</label>
+        <select id="intSel">
+          <option value="auto" selected>auto (2N*)</option>
+          <option value="3">3 days</option>
+          <option value="5">5 days</option>
+          <option value="7">7 days</option>
+          <option value="9">9 days</option>
+          <option value="11">11 days</option>
+        </select>
+      </div>
+      <div class="intnote" id="intNote"></div>
+    </div>
+
+    <div class="rail-block">
+      <h3>Summary</h3>
+      <table class="kv">
+        <tr><td>mean streamflow</td><td id="sQ">&ndash;</td></tr>
+        <tr><td>mean baseflow</td><td id="sBF">&ndash;</td></tr>
+        <tr><td>mean runoff</td><td id="sRO">&ndash;</td></tr>
+        <tr><td>baseflow index</td><td id="sPct">&ndash;</td></tr>
+        <tr><td>days used</td><td id="sDays">&ndash;</td></tr>
+      </table>
+    </div>
+
+    <div class="rail-block">
+      <h3>Export</h3>
+      <div class="exports">
+        <button class="primary" id="expCSV" disabled>csv</button>
+        <button class="primary" id="expJSON" disabled>json</button>
+        <button class="primary" id="expPNG" disabled>png</button>
+      </div>
+    </div>
+
+    <p class="credit">
+      Fixed-interval, sliding-interval, and local-minimum methods of Pettyjohn &amp; Henning (1979)
+      as programmed in Sloto &amp; Crouse (1996), <em>HYSEP</em>, USGS WRIR 96-4040.
+      This page processes the record continuously (the 1996 program chunked it by year).
+      Everything runs in your browser, so uploaded data stays on your machine.
+    </p>
+  </aside>
+
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const MISS = -999;
+const DAY = 86400000;
+const FONT = "'Space Mono', Menlo, Consolas, monospace";
+const INK = '#000000', ACCENT = '#ff3300', MUT = '#666666', GRID = '#e0e0e0';
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ------------------------------------------------------------------ state
+const S = {
+  rows: null, cols: [], dateKey: null, flowKey: null,   // raw table (uploads)
+  fileMeta: {},                                          // # name / # id / # area headers
+  name: '', id: '', unit: '',
+  day0: 0, flow: null,                                   // continuous daily record; MISS = missing
+  bf: null, interval: 5, method: 'slide',
+  view: null,                                            // [i0,i1] zoom, inclusive
+  log: false, notices: [], stats: null,
+};
+
+const METHODS = {
+  fixed:  { name: 'fixed interval',  desc: 'minimum of each consecutive N-day block, assigned to every day of the block.' },
+  slide:  { name: 'sliding interval', desc: 'minimum streamflow in the N-day window centered on each day.' },
+  locmin: { name: 'local minimum',   desc: 'connects local minima of the hydrograph with log-linear interpolation.' },
+};
+
+// ------------------------------------------------------- HYSEP algorithms
+// Straight ports of FIXED / SLIDE / LOCMIN from src/hysepc.f (Sloto & Crouse 1996).
+// Missing days carry the sentinel MISS (< 0), matching HYSEP's negative-value convention.
+
+function autoInterval(areaMi2) {                          // src/hysepx.f: INTRVL = odd int near 2*A^0.2
+  if (!(areaMi2 > 0)) return null;
+  const r = 2 * Math.pow(areaMi2, 0.2);
+  if (r <= 4) return 3;
+  if (r <= 6) return 5;
+  if (r <= 8) return 7;
+  if (r <= 10) return 9;
+  return 11;
+}
+
+function firstGood(dis) { for (let i = 0; i < dis.length; i++) if (dis[i] >= 0) return i; return -1; }
+function lastGood(dis) { for (let i = dis.length - 1; i >= 0; i--) if (dis[i] >= 0) return i; return -1; }
+
+function sepFixed(dis, intrvl) {
+  const n = dis.length, g = new Float64Array(n).fill(MISS);
+  const fg = firstGood(dis); if (fg < 0) return g;
+  const end = lastGood(dis) + 1;
+  const k = Math.floor((end - fg) / intrvl);
+  let l2 = fg;
+  for (let i = 0; i < k; i++) {
+    const a = fg + i * intrvl, b = a + intrvl;
+    let pmin = Infinity;
+    for (let j = a; j < b; j++) if (dis[j] < pmin) pmin = dis[j];
+    for (let j = a; j < b; j++) g[j] = pmin;
+    l2 = b;
+  }
+  if (l2 < end) {                                         // leftover days at the end
+    let pmin = Infinity;
+    for (let j = l2; j < end; j++) if (dis[j] < pmin) pmin = dis[j];
+    for (let j = l2; j < end; j++) g[j] = pmin;
+  }
+  for (let i = 0; i < n; i++) if (g[i] < 0) g[i] = MISS;  // a missing day poisons its block
+  return g;
+}
+
+function sepSlide(dis, intrvl) {
+  const n = dis.length, g = new Float64Array(n).fill(MISS);
+  const fg = firstGood(dis); if (fg < 0) return g;
+  const lg = lastGood(dis);
+  const half = (intrvl - 1) >> 1;
+  for (let i = fg; i <= lg; i++) {
+    if (dis[i] < 0) continue;
+    const k1 = Math.max(fg, i - half), k2 = Math.min(lg, i + half);
+    let pmin = Infinity;
+    for (let j = k1; j <= k2; j++) if (dis[j] < pmin) pmin = dis[j];
+    g[i] = pmin < 0 ? MISS : pmin;                        // a missing day poisons its window
+  }
+  return g;
+}
+
+function sepLocmin(dis, intrvl) {
+  const n = dis.length, g = new Float64Array(n).fill(MISS);
+  const w = (intrvl - 1) >> 1;
+  let i = 0;
+  while (i < n) {
+    while (i < n && dis[i] < 0) i++;
+    if (i >= n) break;
+    const s = i;
+    while (i < n && dis[i] >= 0) i++;
+    const e = i - 1;                                      // good run [s, e]
+    if (e - s + 1 < intrvl) continue;                     // too short: stays missing
+    const pts = [];
+    for (let p = s + w; p <= e - w; p++) {
+      let ok = true;
+      for (let q = 1; q <= w && ok; q++)
+        if (!(dis[p] <= dis[p + q] && dis[p] <= dis[p - q])) ok = false;
+      if (ok) pts.push(p);
+    }
+    if (!pts.length) continue;                            // no local minimum: run stays missing
+    const f = pts[0], l = pts[pts.length - 1];
+    for (let j = s; j <= f; j++) g[j] = dis[f];
+    for (let j = l; j <= e; j++) g[j] = dis[l];
+    for (let t = 0; t < pts.length - 1; t++) {
+      const p1 = pts[t], p2 = pts[t + 1];
+      const v1 = Math.log10(Math.max(dis[p1], 0.01));     // HYSEP bumps 0 to 0.01 for log interp
+      const v2 = Math.log10(Math.max(dis[p2], 0.01));
+      for (let j = p1; j <= p2; j++)
+        g[j] = Math.pow(10, ((j - p1) / (p2 - p1)) * (v2 - v1) + v1);
+    }
+    for (let j = s; j <= e; j++) if (g[j] > dis[j]) g[j] = dis[j];
+  }
+  return g;
+}
+
+// ------------------------------------------------------------ date parsing
+const toDayNum = (y, m, d) => {
+  const t = Date.UTC(y, m - 1, d);
+  const chk = new Date(t);
+  if (chk.getUTCFullYear() !== y || chk.getUTCMonth() !== m - 1 || chk.getUTCDate() !== d) return null;
+  return Math.round(t / DAY);
+};
+const dayToDate = n => new Date(n * DAY);
+const fmtDay = n => dayToDate(n).toISOString().slice(0, 10);
+
+function parseDateVal(v) {
+  if (v == null || v === '') return null;
+  if (v instanceof Date) {
+    if (isNaN(v)) return null;
+    return Math.floor(v.getTime() / DAY);
+  }
+  if (typeof v === 'bigint') v = Number(v);
+  if (typeof v === 'number') {
+    if (!isFinite(v)) return null;
+    if (v >= 10000101 && v <= 29991231 && Number.isInteger(v)) {         // yyyymmdd
+      return toDayNum(Math.floor(v / 10000), Math.floor(v / 100) % 100, v % 100);
+    }
+    if (v > 1e11 && v < 1e13) return Math.floor(v / DAY);                // epoch ms
+    if (v > 1e8 && v < 1e11) return Math.floor(v * 1000 / DAY);          // epoch s
+    return null;
+  }
+  const s = String(v).trim();
+  let m;
+  if ((m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})([T ]|$)/)))             // ISO
+    return toDayNum(+m[1], +m[2], +m[3]);
+  if ((m = s.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})([T ]|$)/)))
+    return toDayNum(+m[1], +m[2], +m[3]);
+  if ((m = s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})([T ]|$)/))) {     // M/D/YYYY (D/M if M>12)
+    let mo = +m[1], da = +m[2];
+    if (mo > 12 && da <= 12) [mo, da] = [da, mo];
+    return toDayNum(+m[3], mo, da);
+  }
+  if ((m = s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{2})$/))) {            // M/D/YY
+    const y = +m[3] + (+m[3] >= 50 ? 1900 : 2000);
+    return toDayNum(y, +m[1], +m[2]);
+  }
+  if ((m = s.match(/^(\d{4})(\d{2})(\d{2})$/)))                          // yyyymmdd string
+    return toDayNum(+m[1], +m[2], +m[3]);
+  const t = Date.parse(s);
+  if (isFinite(t)) {
+    const d = new Date(t);
+    return toDayNum(d.getFullYear(), d.getMonth() + 1, d.getDate());
+  }
+  return null;
+}
+
+function parseFlowVal(v) {
+  if (v == null || v === '') return NaN;
+  if (typeof v === 'bigint') return Number(v);
+  if (typeof v === 'number') return v;
+  const s = String(v).trim().replace(/,/g, '');
+  if (!s || /^(na|nan|null|none|-|\.|ice|eqp|dis|\*+)$/i.test(s)) return NaN;
+  const f = parseFloat(s);
+  return isFinite(f) ? f : NaN;
+}
+
+// ------------------------------------------------------------ file parsing
+function parseCSV(text) {
+  const meta = {};
+  const dataLines = [];
+  for (const ln of text.split(/\r\n|\n|\r/)) {
+    if (!ln.trim()) continue;
+    if (ln[0] === '#') {
+      const m = ln.match(/^#\s*([\w .-]+?)\s*:\s*(.+)$/);
+      if (m) meta[m[1].toLowerCase().trim()] = m[2].trim();
+      continue;
+    }
+    dataLines.push(ln);
+  }
+  if (!dataLines.length) throw new Error('no data rows found');
+  const first = dataLines[0].replace(/"[^"]*"/g, '');
+  const delim = [',', ';', '\t', '|'].map(d => [d, first.split(d).length]).sort((a, b) => b[1] - a[1])[0][0];
+  const split = ln => {
+    const out = []; let cur = '', q = false;
+    for (let i = 0; i < ln.length; i++) {
+      const ch = ln[i];
+      if (q) { if (ch === '"') { if (ln[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+      else if (ch === '"') q = true;
+      else if (ch === delim) { out.push(cur); cur = ''; }
+      else cur += ch;
+    }
+    out.push(cur);
+    return out.map(s => s.trim());
+  };
+  let header = split(dataLines[0]);
+  let start = 1;
+  if (header.length >= 2 && parseDateVal(header[0]) !== null && isFinite(parseFlowVal(header[1]))) {
+    header = header.map((_, i) => i === 0 ? 'date' : (header.length === 2 ? 'flow' : 'col' + i));
+    start = 0;                                            // headerless file
+  }
+  header = header.map((h, i) => h || 'col' + i);
+  const rows = [];
+  for (let i = start; i < dataLines.length; i++) {
+    const c = split(dataLines[i]);
+    if (c.length < 2) continue;
+    const o = {};
+    header.forEach((h, j) => o[h] = c[j]);
+    rows.push(o);
+  }
+  return { rows, cols: header, meta };
+}
+
+function parseJSONFile(text) {
+  const j = JSON.parse(text);
+  if (Array.isArray(j)) {
+    if (!j.length) throw new Error('empty JSON array');
+    if (Array.isArray(j[0]))
+      return { rows: j.map(a => ({ date: a[0], flow: a[1] })), cols: ['date', 'flow'], meta: {} };
+    if (typeof j[0] === 'object') {
+      const cols = [...new Set(j.flatMap(r => Object.keys(r)))];
+      return { rows: j, cols, meta: {} };
+    }
+    throw new Error('unrecognized JSON layout');
+  }
+  if (j && typeof j === 'object') {
+    const arrKeys = Object.keys(j).filter(k => Array.isArray(j[k]));
+    if (arrKeys.length >= 2) {                            // {dates: [...], flows: [...]}
+      const n = Math.min(...arrKeys.map(k => j[k].length));
+      const rows = Array.from({ length: n }, (_, i) =>
+        Object.fromEntries(arrKeys.map(k => [k, j[k][i]])));
+      const meta = {};
+      for (const k of ['name', 'id', 'area', 'units', 'unit'])
+        if (typeof j[k] === 'string' || typeof j[k] === 'number') meta[k] = String(j[k]);
+      return { rows, cols: arrKeys, meta };
+    }
+    const entries = Object.entries(j);                    // {"1969-01-01": 50, ...}
+    if (entries.length && entries.every(([k]) => parseDateVal(k) !== null))
+      return { rows: entries.map(([d, v]) => ({ date: d, flow: v })), cols: ['date', 'flow'], meta: {} };
+  }
+  throw new Error('unrecognized JSON layout');
+}
+
+async function parseParquet(buf) {
+  $('dataMeta').textContent = 'loading parquet reader…';
+  const hp = await import('https://cdn.jsdelivr.net/npm/hyparquet@1/+esm');
+  const opts = { file: buf };
+  try {
+    const hc = await import('https://cdn.jsdelivr.net/npm/hyparquet-compressors@1/+esm');
+    opts.compressors = hc.compressors;
+  } catch (e) { /* snappy + uncompressed still work without it */ }
+  const rows = await hp.parquetReadObjects(opts);
+  if (!rows.length) throw new Error('parquet file has no rows');
+  return { rows, cols: Object.keys(rows[0]), meta: {} };
+}
+
+// -------------------------------------------------------- column detection
+function detectColumns(rows, cols) {
+  const sample = rows.slice(0, 300);
+  let dateKey = null, dateBest = 0.5, flowKey = null, flowBest = 0.5;
+  const scores = {};
+  for (const c of cols) {
+    let dOk = 0, nOk = 0, seen = 0;
+    for (const r of sample) {
+      const v = r[c];
+      if (v == null || v === '') continue;
+      seen++;
+      if (parseDateVal(v) !== null) dOk++;
+      if (isFinite(parseFlowVal(v))) nOk++;
+    }
+    if (!seen) continue;
+    scores[c] = {
+      d: dOk / seen + (/date|time|day|dt$|month|index/i.test(c) ? 0.2 : 0),
+      n: nOk / seen + (/flow|discharge|^q$|value|cfs|cms|stream/i.test(c) ? 0.25 : 0),
+    };
+  }
+  for (const c of cols) if (scores[c] && scores[c].d > dateBest) { dateBest = scores[c].d; dateKey = c; }
+  for (const c of cols) {
+    if (c === dateKey || !scores[c]) continue;
+    if (scores[c].n > flowBest) { flowBest = scores[c].n; flowKey = c; }
+  }
+  return { dateKey, flowKey };
+}
+
+// -------------------------------------------------- build daily series
+function buildSeries() {
+  const map = new Map();
+  let nRec = 0, badDates = 0;
+  for (const r of S.rows) {
+    const dn = parseDateVal(r[S.dateKey]);
+    if (dn === null) { badDates++; continue; }
+    nRec++;
+    const f = parseFlowVal(r[S.flowKey]);
+    let e = map.get(dn);
+    if (!e) { e = { s: 0, c: 0, neg: 0, any: 0 }; map.set(dn, e); }
+    e.any++;
+    if (isFinite(f)) { if (f < 0) e.neg++; else { e.s += f; e.c++; } }
+  }
+  if (!map.size) throw new Error('no parseable (date, flow) pairs; check the column mapping');
+  const days = [...map.keys()].sort((a, b) => a - b);
+  const d0 = days[0], n = days[days.length - 1] - d0 + 1;
+  if (n > 200 * 366) throw new Error('record spans over 200 years; check the date parsing');
+  const flow = new Float64Array(n).fill(MISS);
+  let negDays = 0, subdaily = 0;
+  for (const dn of days) {
+    const e = map.get(dn);
+    if (e.c > 0) flow[dn - d0] = e.s / e.c;
+    else if (e.neg > 0) negDays++;
+    if (e.any > 1) subdaily++;
+  }
+  let gaps = 0;
+  for (const v of flow) if (v < 0) gaps++;
+  S.day0 = d0; S.flow = flow; S.view = null;
+  S.notices = [];
+  if (subdaily > 0) S.notices.push({ warn: false, text: `sub-daily input: ${nRec.toLocaleString()} records averaged to ${map.size.toLocaleString()} daily means` });
+  if (negDays > 0) S.notices.push({ warn: true, text: `${negDays.toLocaleString()} days with negative flow treated as missing (HYSEP convention)` });
+  if (badDates > 0) S.notices.push({ warn: true, text: `${badDates.toLocaleString()} rows with unparseable dates skipped` });
+  if (gaps > 0) S.notices.push({ warn: true, text: `${gaps.toLocaleString()} of ${n.toLocaleString()} days missing; HYSEP assumes a continuous daily record, so separation is flagged missing around gaps` });
+  let hasZero = false, minPos = Infinity;
+  for (const v of flow) { if (v === 0) hasZero = true; else if (v > 0 && v < minPos) minPos = v; }
+  S.log = !hasZero && isFinite(minPos);                   // log axis unless zero-flow days exist
+}
+
+// ------------------------------------------------------------- recompute
+function areaMi2() {
+  const v = parseFloat($('areaIn').value);
+  if (!(v > 0)) return null;
+  return $('areaUnit').value === 'km2' ? v * 0.3861021585 : v;
+}
+
+function recompute() {
+  if (!S.flow) return;
+  const sel = $('intSel').value;
+  const a = areaMi2();
+  if (sel === 'auto') {
+    const auto = autoInterval(a);
+    S.interval = auto || 5;
+    $('intNote').innerHTML = auto
+      ? `2&middot;A<sup>0.2</sup> = ${(2 * Math.pow(a, 0.2)).toFixed(2)} &rarr; <b>${auto}-day</b> interval`
+      : `no drainage area, using the <b>5-day</b> default`;
+  } else {
+    S.interval = +sel;
+    const auto = autoInterval(a);
+    $('intNote').innerHTML = auto && auto !== S.interval
+      ? `manual <b>${S.interval}-day</b> (2N* for this area would be ${auto})`
+      : `manual <b>${S.interval}-day</b> interval`;
+  }
+  const fn = { fixed: sepFixed, slide: sepSlide, locmin: sepLocmin }[S.method];
+  S.bf = fn(S.flow, S.interval);
+
+  let gd = 0, tq = 0, tb = 0;
+  for (let i = 0; i < S.flow.length; i++)
+    if (S.flow[i] >= 0 && S.bf[i] >= 0) { gd++; tq += S.flow[i]; tb += S.bf[i]; }
+  S.stats = { gdays: gd, totQ: tq, totBF: tb,
+              meanQ: gd ? tq / gd : NaN, meanBF: gd ? tb / gd : NaN,
+              pct: tq > 0 ? 100 * tb / tq : NaN };
+  updateSummary();
+  draw();
+}
+
+function updateSummary() {
+  const st = S.stats, u = S.unit ? ' ' + S.unit : '';
+  $('sQ').textContent = st.gdays ? fmtNum(st.meanQ) + u : '–';
+  $('sBF').textContent = st.gdays ? fmtNum(st.meanBF) + u : '–';
+  $('sRO').textContent = st.gdays ? fmtNum(st.meanQ - st.meanBF) + u : '–';
+  $('sPct').textContent = isFinite(st.pct) ? st.pct.toFixed(1) + ' %' : '–';
+  $('sDays').textContent = `${st.gdays.toLocaleString()} / ${S.flow.length.toLocaleString()}`;
+  $('mBF').textContent = isFinite(st.pct) ? st.pct.toFixed(1) + '%' : '–';
+  $('mInt').textContent = S.interval + 'D';
+  for (const id of ['expCSV', 'expJSON', 'expPNG']) $(id).disabled = !st.gdays;
+}
+
+// ------------------------------------------------------------------ chart
+const PLOT = { a: 0, b: 0, px: null, py: null, M: null, W: 0, H: 0, drag: null };
+
+function fmtNum(v) {
+  if (!isFinite(v)) return '–';
+  const a = Math.abs(v);
+  if (a >= 10000) return Math.round(v).toLocaleString();
+  if (a >= 1) return String(+v.toFixed(2));
+  if (a === 0) return '0';
+  return a < 0.001 ? v.toExponential(1) : String(+v.toFixed(4));
+}
+
+function fmtTick(dayNum, spanDays) {
+  const d = dayToDate(dayNum);
+  if (spanDays > 5.5 * 365) return String(d.getUTCFullYear());
+  if (spanDays > 120) return MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+  return MON[d.getUTCMonth()] + ' ' + d.getUTCDate();
+}
+
+// contiguous runs of valid values in [a,b], min/max-decimated to ~maxPts points
+function seriesRuns(vals, a, b, maxPts) {
+  const runs = [];
+  let run = null;
+  const push = (i, v) => { if (!run) { run = []; runs.push(run); } run.push([i, v]); };
+  const brk = () => { run = null; };
+  const n = b - a + 1;
+  if (n <= maxPts) {
+    for (let i = a; i <= b; i++) {
+      const v = vals[i];
+      if (v < 0 || !isFinite(v)) brk(); else push(i, v);
+    }
+  } else {
+    const nb = Math.ceil(maxPts / 2), step = n / nb;
+    for (let k = 0; k < nb; k++) {
+      const s = a + Math.floor(k * step), e = Math.min(b, a + Math.floor((k + 1) * step) - 1);
+      let iMin = -1, iMax = -1, vMin = Infinity, vMax = -Infinity, sawBad = false;
+      for (let i = s; i <= e; i++) {
+        const v = vals[i];
+        if (v < 0 || !isFinite(v)) { sawBad = true; continue; }
+        if (v < vMin) { vMin = v; iMin = i; }
+        if (v > vMax) { vMax = v; iMax = i; }
+      }
+      if (iMin < 0) { brk(); continue; }
+      if (iMin === iMax) push(iMin, vMin);
+      else if (iMin < iMax) { push(iMin, vMin); push(iMax, vMax); }
+      else { push(iMax, vMax); push(iMin, vMin); }
+      if (sawBad) brk();
+    }
+  }
+  return runs;
+}
+
+function draw() {
+  const svg = $('chart');
+  const W = svg.clientWidth, H = svg.clientHeight;
+  if (!S.flow || !W || !H) { if (svg) svg.innerHTML = ''; return; }
+  const M = { l: 58, r: 12, t: 22, b: 26 };
+  const [a, b] = S.view || [0, S.flow.length - 1];
+
+  // y domain over visible good values
+  let y0 = Infinity, y1 = -Infinity, minPos = Infinity;
+  for (let i = a; i <= b; i++) {
+    const q = S.flow[i], g = S.bf[i];
+    if (q >= 0) { if (q < y0) y0 = q; if (q > y1) y1 = q; if (q > 0 && q < minPos) minPos = q; }
+    if (g >= 0) { if (g < y0) y0 = g; if (g > 0 && g < minPos) minPos = g; }
+  }
+  if (!isFinite(y0)) { svg.innerHTML = ''; return; }
+  const log = S.log && isFinite(minPos);
+  let py, yticks = [];
+  if (log) {
+    const lo = Math.log10(Math.max(y0, minPos) * 0.9), hi = Math.log10(y1) + 0.02 * (Math.log10(y1) - Math.log10(minPos) || 1);
+    py = v => M.t + (H - M.t - M.b) * (1 - (Math.log10(Math.max(v, minPos * 0.9)) - lo) / (hi - lo || 1));
+    for (let k = Math.floor(lo); k <= Math.ceil(hi); k++)
+      for (const m of [1, 2, 5]) {
+        const t = m * Math.pow(10, k);
+        if (Math.log10(t) >= lo - 1e-9 && Math.log10(t) <= hi + 1e-9) yticks.push(t);
+      }
+    while (yticks.length > 7) yticks = yticks.filter((_, i) => i % 2 === 0);
+  } else {
+    const lo = Math.min(0, y0), hi = y1 + 0.05 * (y1 - lo || 1);
+    py = v => M.t + (H - M.t - M.b) * (1 - (v - lo) / (hi - lo || 1));
+    const rawStep = (hi - lo) / 4.5, mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+    const step = [1, 2, 2.5, 5, 10].map(s => s * mag).find(s => (hi - lo) / s <= 5.5) || 10 * mag;
+    for (let t = Math.ceil(lo / step) * step; t <= hi + 1e-9; t += step) yticks.push(t);
+  }
+  const px = i => M.l + (W - M.l - M.r) * (b === a ? 0.5 : (i - a) / (b - a));
+
+  let g = `<defs><pattern id="bfhatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">` +
+          `<line x1="0" y1="0" x2="0" y2="6" stroke="${ACCENT}" stroke-width="1.4" opacity="0.4"></line></pattern></defs>`;
+
+  // grid + y labels
+  for (const t of yticks) {
+    const y = py(t);
+    if (y < M.t - 1 || y > H - M.b + 1) continue;
+    g += `<line x1="${M.l}" x2="${W - M.r}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${GRID}" stroke-width="1"></line>` +
+         `<text x="${M.l - 7}" y="${(y + 3.5).toFixed(1)}" text-anchor="end" fill="${MUT}" font-size="10">${fmtNum(t)}</text>`;
+  }
+  // x ticks
+  const span = b - a;
+  const nx = Math.min(6, Math.max(2, Math.floor(W / 130)));
+  for (let k = 0; k <= nx; k++) {
+    const i = a + Math.round(span * k / nx);
+    const anchor = k === 0 ? 'start' : k === nx ? 'end' : 'middle';
+    g += `<text x="${px(i).toFixed(1)}" y="${H - 8}" text-anchor="${anchor}" fill="${MUT}" font-size="10">${fmtTick(S.day0 + i, span)}</text>`;
+  }
+  // unit label
+  if (S.unit) g += `<text x="${M.l - 7}" y="10" text-anchor="end" fill="${MUT}" font-size="9">${escHTML(S.unit)}</text>`;
+
+  const maxPts = Math.max(500, (W - M.l - M.r) * 2);
+  const yBase = H - M.b;
+  // baseflow: hatched area + line
+  const bfRuns = seriesRuns(S.bf, a, b, maxPts);
+  for (const run of bfRuns) {
+    if (run.length < 2) continue;
+    let d = `M${px(run[0][0]).toFixed(1)} ${yBase}`;
+    for (const [i, v] of run) d += `L${px(i).toFixed(1)} ${Math.min(py(v), yBase).toFixed(1)}`;
+    d += `L${px(run[run.length - 1][0]).toFixed(1)} ${yBase}Z`;
+    g += `<path d="${d}" fill="url(#bfhatch)" stroke="none"></path>`;
+  }
+  g += pathOf(bfRuns, px, py, ACCENT, 2);
+  // streamflow line
+  g += pathOf(seriesRuns(S.flow, a, b, maxPts), px, py, INK, 1.6);
+
+  // axis frame
+  g += `<line x1="${M.l}" x2="${W - M.r}" y1="${yBase}" y2="${yBase}" stroke="${INK}" stroke-width="2"></line>` +
+       `<line x1="${M.l}" x2="${M.l}" y1="${M.t}" y2="${yBase}" stroke="${INK}" stroke-width="2"></line>`;
+  // interaction layers
+  g += `<line id="xhair" y1="${M.t}" y2="${yBase}" stroke="${MUT}" stroke-width="1" stroke-dasharray="3 3" visibility="hidden"></line>` +
+       `<rect id="selRect" y="${M.t}" height="${yBase - M.t}" fill="${ACCENT}" opacity="0.12" visibility="hidden"></rect>`;
+
+  svg.setAttribute('font-family', FONT);
+  svg.innerHTML = g;
+  Object.assign(PLOT, { a, b, px, py, M, W, H });
+  $('resetBtn').hidden = !S.view;
+  $('scaleBtn').textContent = 'Y: ' + (S.log ? 'LOG' : 'LINEAR');
+}
+
+function pathOf(runs, px, py, color, width) {
+  let out = '';
+  for (const run of runs) {
+    let d = '', pen = false;
+    for (const [i, v] of run) { d += (pen ? 'L' : 'M') + px(i).toFixed(1) + ' ' + py(v).toFixed(1); pen = true; }
+    if (run.length === 1) {
+      const [i, v] = run[0];
+      out += `<rect x="${(px(i) - 1.5).toFixed(1)}" y="${(py(v) - 1.5).toFixed(1)}" width="3" height="3" fill="${color}"></rect>`;
+    } else if (d)
+      out += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linejoin="round"></path>`;
+  }
+  return out;
+}
+
+function escHTML(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+// ------------------------------------------------- chart interaction
+function idxFromEvent(e) {
+  const r = $('chart').getBoundingClientRect();
+  const frac = (e.clientX - r.left - PLOT.M.l) / (PLOT.W - PLOT.M.l - PLOT.M.r);
+  return Math.max(PLOT.a, Math.min(PLOT.b, Math.round(PLOT.a + frac * (PLOT.b - PLOT.a))));
+}
+
+function initChartEvents() {
+  const svg = $('chart'), tip = $('tip');
+  svg.addEventListener('pointerdown', e => {
+    if (!S.flow) return;
+    svg.setPointerCapture(e.pointerId);
+    PLOT.drag = { x0: e.clientX, i0: idxFromEvent(e), moved: false };
+  });
+  svg.addEventListener('pointermove', e => {
+    if (!S.flow || !PLOT.px) return;
+    const i = idxFromEvent(e);
+    if (PLOT.drag) {
+      if (Math.abs(e.clientX - PLOT.drag.x0) > 6) PLOT.drag.moved = true;
+      if (PLOT.drag.moved) {
+        tip.style.display = 'none';
+        const sel = $('selRect');
+        const x1 = PLOT.px(Math.min(PLOT.drag.i0, i)), x2 = PLOT.px(Math.max(PLOT.drag.i0, i));
+        sel.setAttribute('x', x1); sel.setAttribute('width', Math.max(1, x2 - x1));
+        sel.setAttribute('visibility', 'visible');
+        return;
+      }
+    }
+    const xh = $('xhair'), x = PLOT.px(i);
+    xh.setAttribute('x1', x); xh.setAttribute('x2', x); xh.setAttribute('visibility', 'visible');
+    const q = S.flow[i], bf = S.bf[i];
+    const qs = q >= 0 ? fmtNum(q) : 'missing';
+    const bs = bf >= 0 ? fmtNum(bf) : 'missing';
+    const ro = (q >= 0 && bf >= 0) ? fmtNum(q - bf) : '–';
+    const pc = (q > 0 && bf >= 0) ? (100 * bf / q).toFixed(0) + '%' : '–';
+    tip.innerHTML = `${fmtDay(S.day0 + i)}<br>` +
+      `<span style="color:${INK}">■</span> flow <b>${qs}</b><br>` +
+      `<span style="color:${ACCENT}">■</span> baseflow <b>${bs}</b> (${pc})<br>` +
+      `<span style="color:${MUT}">■</span> runoff <b>${ro}</b>`;
+    tip.style.display = 'block';
+    const tw = tip.offsetWidth;
+    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - tw - 8) + 'px';
+    tip.style.top = (e.clientY + 14) + 'px';
+  });
+  svg.addEventListener('pointerup', e => {
+    if (!PLOT.drag) return;
+    const d = PLOT.drag; PLOT.drag = null;
+    $('selRect') && $('selRect').setAttribute('visibility', 'hidden');
+    if (d.moved) {
+      const i1 = idxFromEvent(e);
+      const lo = Math.min(d.i0, i1), hi = Math.max(d.i0, i1);
+      if (hi - lo >= 4) { S.view = [lo, hi]; draw(); }
+    }
+  });
+  svg.addEventListener('pointerleave', () => {
+    tip.style.display = 'none';
+    const xh = $('xhair'); if (xh) xh.setAttribute('visibility', 'hidden');
+  });
+  svg.addEventListener('dblclick', () => { S.view = null; draw(); });
+}
+
+// ------------------------------------------------------------------ files
+async function handleFile(file) {
+  try {
+    let parsed;
+    const nm = file.name.toLowerCase();
+    if (nm.endsWith('.parquet') || nm.endsWith('.pq')) parsed = await parseParquet(await file.arrayBuffer());
+    else if (nm.endsWith('.json')) parsed = parseJSONFile(await file.text());
+    else parsed = parseCSV(await file.text());
+    ingest(parsed, file.name);
+  } catch (err) {
+    S.notices = [];
+    showError(String(err && err.message || err));
+  }
+}
+
+function showError(msg) {
+  $('notices').innerHTML = `<div class="notice warn">${escHTML(msg)}</div>`;
+}
+
+function ingest(parsed, fname) {
+  const { rows, cols, meta } = parsed;
+  const det = detectColumns(rows, cols);
+  if (!det.dateKey || !det.flowKey)
+    throw new Error('could not identify the date and flow columns; pick them below');
+  S.rows = rows; S.cols = cols; S.fileMeta = meta;
+  S.dateKey = det.dateKey; S.flowKey = det.flowKey;
+  S.name = meta.name || fname || '';
+  S.id = meta.id || '';
+  S.unit = meta.units || meta.unit || '';
+  if (meta.area && isFinite(parseFloat(meta.area))) {
+    $('areaIn').value = parseFloat(meta.area);
+    $('areaUnit').value = 'mi2';                          // HYSEP CSV headers carry square miles
+  }
+  fillColSelects();
+  rebuild();
+}
+
+function fillColSelects() {
+  for (const [selId, rowId, key] of [['dateCol', 'dateColRow', 'dateKey'], ['flowCol', 'flowColRow', 'flowKey']]) {
+    const sel = $(selId);
+    sel.innerHTML = S.cols.map(c => `<option${c === S[key] ? ' selected' : ''}>${escHTML(c)}</option>`).join('');
+    $(rowId).hidden = S.cols.length <= 2;
+  }
+}
+
+function rebuild() {
+  try {
+    buildSeries();
+  } catch (err) { showError(String(err && err.message || err)); return; }
+  $('dropzone').hidden = true;
+  const n = S.flow.length;
+  $('dataMeta').innerHTML =
+    `<b>${escHTML(S.name || 'unnamed series')}</b>` +
+    (S.id ? `<br>station ${escHTML(S.id)}` : '') +
+    `<br>${fmtDay(S.day0)} → ${fmtDay(S.day0 + n - 1)} · ${n.toLocaleString()} days` +
+    (S.unit ? ` · ${escHTML(S.unit)}` : '');
+  $('chartSub').textContent =
+    `${S.name ? S.name + ' · ' : ''}drag to zoom · double-click to reset`;
+  $('notices').innerHTML = S.notices.map(o =>
+    `<div class="notice${o.warn ? ' warn' : ''}">${escHTML(o.text)}</div>`).join('');
+  recompute();
+}
+
+// ---------------------------------------------------------------- exports
+function baseName() {
+  return ((S.id || S.name || 'hysep').replace(/\.[a-z0-9]+$/i, '').replace(/[^\w.-]+/g, '_').slice(0, 40) || 'hysep');
+}
+
+function downloadBlob(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
+const sig = v => v >= 0 ? String(+v.toPrecision(6)) : '';
+
+function exportCSV() {
+  const L = [];
+  if (S.name) L.push('# name: ' + S.name);
+  if (S.id) L.push('# id: ' + S.id);
+  const a = areaMi2();
+  if (a) L.push('# area: ' + +a.toFixed(4) + ' (mi2)');
+  if (S.unit) L.push('# units: ' + S.unit);
+  L.push('# method: ' + METHODS[S.method].name, '# interval: ' + S.interval + ' days',
+         '# source: HYSEP web (github.com/abhiramm7/hysep-terminal)');
+  L.push('date,streamflow,baseflow,runoff');
+  for (let i = 0; i < S.flow.length; i++) {
+    const q = S.flow[i], g = S.bf[i];
+    L.push(`${fmtDay(S.day0 + i)},${sig(q)},${sig(g)},${q >= 0 && g >= 0 ? +((q - g).toPrecision(6)) : ''}`);
+  }
+  downloadBlob(new Blob([L.join('\n') + '\n'], { type: 'text/csv' }),
+    `${baseName()}_baseflow_${S.method}${S.interval}.csv`);
+}
+
+function exportJSON() {
+  const out = {
+    name: S.name || null, id: S.id || null, units: S.unit || null,
+    area_mi2: areaMi2(), method: METHODS[S.method].name, interval_days: S.interval,
+    baseflow_percent: +S.stats.pct.toFixed(2),
+    dates: [], streamflow: [], baseflow: [],
+  };
+  for (let i = 0; i < S.flow.length; i++) {
+    out.dates.push(fmtDay(S.day0 + i));
+    out.streamflow.push(S.flow[i] >= 0 ? +S.flow[i].toPrecision(6) : null);
+    out.baseflow.push(S.bf[i] >= 0 ? +S.bf[i].toPrecision(6) : null);
+  }
+  downloadBlob(new Blob([JSON.stringify(out)], { type: 'application/json' }),
+    `${baseName()}_baseflow_${S.method}${S.interval}.json`);
+}
+
+function exportPNG() {
+  const svg = $('chart');
+  const W = svg.clientWidth, H = svg.clientHeight, TH = 64;
+  const title = `${S.name || 'streamflow'}${S.id ? ' · ' + S.id : ''}`;
+  const sub = `${METHODS[S.method].name}, ${S.interval}-day interval · baseflow = ${S.stats.pct.toFixed(1)}% of streamflow` +
+              ` · black: streamflow · red hatch: baseflow`;
+  const str =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H + TH}" font-family="Menlo,Consolas,monospace">` +
+    `<rect width="${W}" height="${H + TH}" fill="#ffffff"></rect>` +
+    `<rect x="1" y="1" width="${W - 2}" height="${H + TH - 2}" fill="none" stroke="#000" stroke-width="2"></rect>` +
+    `<text x="16" y="26" font-size="14" font-weight="bold" fill="#000">${escHTML(title)}</text>` +
+    `<text x="16" y="45" font-size="11" fill="#666">${escHTML(sub)}</text>` +
+    `<g transform="translate(0,${TH})">${svg.innerHTML.replace(/<(line id="xhair"|rect id="selRect")[^>]*><\/(line|rect)>/g, '')}</g>` +
+    `</svg>`;
+  const img = new Image();
+  img.onload = () => {
+    const scale = 2, cv = document.createElement('canvas');
+    cv.width = W * scale; cv.height = (H + TH) * scale;
+    const ctx = cv.getContext('2d');
+    ctx.scale(scale, scale);
+    ctx.drawImage(img, 0, 0, W, H + TH);
+    cv.toBlob(bl => downloadBlob(bl, `${baseName()}_hydrograph_${S.method}${S.interval}.png`), 'image/png');
+  };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(str);
+}
+
+// ------------------------------------------------------------------- demo
+// French Creek near Phoenixville, Pa. (USGS 01472157), data/french.csv from the
+// original HYSEP 2.2 distribution. Consecutive daily values starting 1969-01-01.
+const DEMO = {
+  name: 'French Creek near Phoenixville, Pa.', id: '01472157',
+  area: 59.1, unit: 'ft3/s', start: [1969, 1, 1],
+  flows: '50,41,35,31,27,25,30,32,35,32,30,31,33,34,35,32,40,47,57,51,41,36,36,49,48,40,35,30,35,47,71,51,52,57,64,54,50,43,35,32,30,33,35,34,31,25,27,28,29,30,31,31,35,31,38,60,55,43,47,54,45,44,48,51,49,56,51,57,60,56,51,46,54,70,64,67,70,67,58,54,49,44,48,211,112,67,52,49,54,46,41,41,41,38,43,50,40,36,35,35,48,37,33,31,31,54,88,54,108,68,50,63,85,57,48,44,40,38,40,41,40,35,33,31,29,28,27,29,50,51,35,32,31,29,28,26,25,24,24,86,51,33,28,28,28,25,23,21,21,19,18,18,18,56,33,24,22,20,19,31,24,20,18,18,17,22,25,20,17,18,17,15,14,15,31,35,35,23,21,18,16,14,14,13,12,12,12,23,30,20,17,17,44,70,28,21,18,16,16,20,21,23,20,154,172,45,31,64,476,610,167,68,49,42,39,226,123,65,47,40,36,117,50,39,35,32,31,42,33,37,33,30,27,24,23,23,22,22,21,19,19,20,20,19,28,68,54,35,28,26,39,42,28,23,22,21,20,20,20,20,44,30,24,21,20,20,20,20,19,18,23,22,20,19,21,27,24,21,20,20,22,15,20,18,20,19,20,19,18,19,19,20,18,28,25,21,21,21,19,19,18,18,18,18,19,21,29,23,21,28,27,26,42,36,27,27,30,26,28,24,21,20,18,63,35,25,23,23,21,21,20,19,19,19,20,20,19,18,19,22,40,90,65,106,392,81,49,43,40,36,37,35,31,30,28,110,108,66,52,45,38,40,43,46,120,90,62,52,47,40,36,34,32,30,31,33,30,28,26,28,31,37,39,37,33,25,23,24,26,28,31,35,40,54,80,70,58,250,670,238,125,106,99,93,88,396,288,150,115,94,94,93,88,88,93,86,77,76,80,76,68,67,67,63,60,62,63,64,86,76,67,64,59,56,55,59,89,79,63,59,55,62,82,94,115,125,186,106,88,89,148,94,117,129,129,148,1010,436,206,164,141,129,117,113,108,99,94,91,171,460,196,137,121,112,204,155,121,123,267,284,155,135,125,117,110,108,103,135,125,104,93,86,83,82,77,73,70,68,68,77,68,97,96,70,67,60,56,55,54,59,62,85,56,51,50,47,46,45,47,104,79,74,68,52,46,43,41,44,64,43,41,46,45,53,115,52,152,209,74,54,46,43,45,41,37,36,34,45,45,42,40,35,32,30,32,68,48,38,33,30,30,33,29,26,26,28,93,39,32,46,41,34,29,28,33,34,76,68,40,32,32,27,26,24,23,25,22,22,21,21,21,20,19,18,18,18,21,20,20,300,80,35,28,25,24,23,22,25,23,22,22,21,21,20,20,19,20,21,20,19,18,18,17,16,16,21,17,16,15,15,14,14,14,14,18,23,18,16,16,16,16,16,15,15,15,15,15,15,15,15,15,15,31,34,20,17,16,16,24,180,102,43,30,27,25,23,22,21,21,21,21,22,81,267,71,47,39,35,34,56,326,430,142,319,165,88,72,64,62,72,58,53,47,44,43,44,43,44,63,52,45,42,46,43,41,38,48,37,39,39,56,78,58,48,47,382,127,83,69,62,69,97,132,84,75,67,69,69,88,78,59,75,74,137,486,225,117,109,104,77,72,74,69,71,74,69,60,55,50,45,50,60,70,93,63,75,60,45,50,55,50,45,40,45,50,195,270,295,746,361,104,88,95,1360,733,165,115,98,106,137,186,207,231,403,192,142,124,393,204,147,127,137,340,204,213,312,213,147,132,132,120,122,115,111,113,98,89,201,330,147,120,134,113,98,95,91,88,88,84,80,77,80,89,78,74,86,337,140,100,91,84,80,80,77,72,71,69,68,65,63,63,63,62,59,59,59,59,61,93,69,62,61,65,61,55,78,80,198,153,91,72,65,309,228,109,207,147,97,83,75,93,91,72,67,64,62,58,56,56,69,337,137,83,78,69,62,59,55,58,54,50,48,46,44,50,70,60,50,46,43,40,39,38,37,36,34,32,30,28,30,32,34,40,33,30,29,28,28,26,25,27,27,31,27,25,24,23,25,25,30,34,28,25,25,26,33,30,27,25,24,80,63,111,288,132,88,83,48,37,33,30,27,29,34,27,25,25,24,23,22,23,25,23,22,22,20,19,19,570,1250,189,86,67,59,55,50,46,43,41,40,39,37,36,52,240,1160,450,186,115,97,145,91,81,93,77,69,68,61,65,77,67,64,60,55,60,65,60,55,52,50,48,47,600,200,110,84,81,77,68,68,63,61,59,59,58,59,213,213,115,89,80,74,71,75,86,120,198,115,84,78,106,88,77,75,72,69,69,65,68,67,63,62,62,63,62,58,55,57,482,234,122,111,261,386,145,109,97,93,86,89,250,150,120,110,100,90,85,80,89,88,86,82,80,89,84,76,74,81,78,76,75,74,69,95,88,72,207,127,95,150,106,83,77,84,192,117,97,102,109,84,71,89,91,75,75,78,77,83,81,80,71,64,64,62,60,58,56,64,100,284,95,100,84,75,66,64,70,89,450,350,270,200,180,150,160,153,156,132,132,115,113,177,168,162,237,368,545,426,255,222,183,171,165,142,140,132,137,137,186,240,171,615,284,195,168,156,210,225,156,134,124,117,113,109,111,109,102,100,95,109,102,93,91,95,91,82,82,81,142,142,192,192,379,147,111,102,97,111,150,198,122,98,91,86,83,80,80,81,145,201,120,89,86,159,261,284,150,117,102,102,153,132,100,106,97,115,106,89,81,75,69,62,59,58,57,57,422,326,140,117,104,132,93,88,77,74,72,68,68,71,86,72,93,122,80,106,89,201,4530,1630,400,442,312,246,207,255,277,195,159,145,132,147,142,122,137,124,109,98,93,255,162,102,97,120,95,91,81,77,71,67,64,84,89,68,67,63,62,53,45,43,43,45,40,38,38,37,35,33,33,34,35,33,33,32,32,33,33,32,31,31,31,31,40,45,60,45,38,33,31,30,40,39,32,30,30,29,26,33,30,27,30,34,32,29,27,26,25,29,27,25,27,25,24,25,25,24,25,24,31,32,24,23,22,22,26,162,54,31,27,24,24,25,24,23,22,24,24,32,45,35,33,32,31,34,38,38,57,116,50,40,38,37,34,56,52,45,51,1150,198,107,88,75,444,300,120,100,80,70,80,450,250,100,85,75,68,342,200,100,85,100,190,170,130,100,95,330,210,216,426,261,192,142,150,125,250,370,152,125,118,148,152,545,264,186,168,152,155,130,112,109,168,158,118,103,275,178,130,103,100,98,95,92,88,82,76,78,80,80,82,99,130,85,130,201,116,92,86,201,278,710,222,155,130,620,535,244,192,170,175,195,219,142,125,121,114,114,244,165,116,112,107,101,103,105,99,94,88,88,88,83,83,85,107,172,123,109,109,162,130,103,99,105,90,85,90,86,189,140,98,86,82,82,78,74,75,330,178,118,103,114,116,338,818,306,410,350,222,192,493,314,430,264,222,201,180,168,160,155,155,145,132,125,123,138,162,132,386,282,272,180,152,140,132,140,148,125,114,105,103,183,118,98,88,85,80,83,86,80,92,75,99,114,83,86,105,135,109,116,560,254,158,145,121,109,116,101,96,82,83,75,69,65,62,64,99,66,57,62,74,62,64,66,61,64,66,155,140,75,66,74,2100,556,158,114,103,180,234,112,85,77,71,68,83,74,65,62,82,94,66,62,58,58,72,82,61,53,50,50,48,47,44,42,41,44,228,77,54,47,44,42,40,38,36,50,46,42,38,36,34,33,32,31,30,35,33,31,30,29,29,28,27,27,26,25,25,25,25,25,25,26,30,26,23,22,22,21,20,77,234,47,33,51,46,31,28,27,34,32,27,26,24,24,34,44,33,31,41,33,30,28,27,27,27,29,27,27,27,27,25,25,23,24,23,24,24,23,24,24,24,23,23,28,183,195,57,44,38,34,30,30,30,29,27,27,27,25,26,26,26,26,26,25,25,25,25,25,26,25,27,29,27,27,43,56,35,29,27,26,26,222,210,68,47,251,170,77,57,52,133,72,56,58,62,90,80,1500,362,165,123,99,632,746,225,163,143,128,148,114,109,175,121,105,101,96,90,94,216,207,123,105,98,105,138,109,98,103,240,251,165,138,121,109,140,116,123,103,96,88,86,86,80,77,82,80,83,82,80,77,78,75,85,74,65,68,65,74,140,86,94,107,74,75,72,69,77,109,86,83,77,72,68,66,65,96,128,83,74,68,64,62,94,173,90,78,72,213,186,107,98,85,80,77,75,77,303,600,247,195,165,394,268,219,163,155,585,254,186,168,457,318,244,189,165,155,153,150,133,128,150,128,114,107,101,96,94,94,92,86,123,107,88,86,86,78,78,140,98,275,410,145,112,98,90,83,80,77,74,75,138,92,69,66,64,64,61,64,59,83,82,78,61,56,53,51,54,56,52,46,45,44,43,43,48,54,44,41,39,66,51,74,69,112,69,52,68,99,59,54,48,43,39,39,44,38,34,34,32,31,30,29,28,27,27,26,25,27,25,23,23,22,39,36,30,29,27,27,39,30,27,28,75,34,43,31,28,28,28,27,25,22,22,22,20,20,20,30,22,20,19,18,20,19,17,17,34,23,20,25,30,22,22,51,78,31,24,68,42,28,25,29,28,24,29,25,20,20,20,19,19,19,21,19,18,17,17,16,68,173,42,29,25,22,20,20,19,20,18,18,17,17,17,18,19,19,140,83,39,30,27,25,24,24,24,24,25,25,23,22,22,22,22,24,23,25,27,30,25,21,19,17,18,20,70,40,25,23,22,21,20,22,30,35,30,25,27,30,26,24,24,22,22,72,53,34,28,26,28,683,228,82,57,50,46,44,41,406,282,102,72,62,55,51,46,45,44,42,39,38,36,37,37,70,87,51,48,46,41,100,80,266,122,109,88,127,118,78,69,65,123,204,334,134,106,95,94,246,234,121,100,129,105,89,84,80,74,68,79,94,104,79,71,69,64,62,60,58,60,62,78,187,217,151,109,94,202,561,464,196,150,130,121,110,101,92,88,88,88,93,77,76,83,122,137,108,139,147,136,111,655,973,260,197,185,213,249,160,135,127,127,196,147,121,112,169,145,111,104,100,96,92,90,88,86,83,80,87,104,86,80,82,79,71,68,67,124,423,538,179,138,124,116,145,170,132,229,205,145,146,120,110,106,102,104,175,133,105,194,129,105,100,93,102,183,472,141,109,101,97,87,82,91,115,513,120,100,90,130,261,144,108,97,90,87,249,389,140,110,130,110,90,80,110,70,66,64,64,66,80,95,156,130,80,68,60,60,80,64,62,60,60,60,66,60,58,282,1200,283,197,139,111,99,95,376,126,100,91,113,85,77,74,71,66,64,62,60,58,58,80,59,65,53,48,45,46,44,42,43,42,80,59,50,44,45,41,40,37,36,38,36,37,34,32,32,32,33,34,32,30,30,30,31,30,29,27,26,37,58,33,29,29,30,29,48,44,150,65,347,603,374,196,132,82,66,59,55,52,47,44,43,44,42,40,44,55,77,91,58,48,44,42,44,208,646,236,137,99,83,76,81,78,74,68,64,63,58,56,56,55,54,53,51,51,74,62,103,116,167,357,157,104,88,80,74,72,69,80,90,73,67,72,78,84,82,76,75,79,77,70,64,57,57,57,54,52,60,52,49,47,47,48,54,49,47,45,44,43,44,48,53,63,280,150,79,63,65,148,489,164,163,160,104,93,102,129,105,98,94,88,99,260,117,87,79,78,77,76,74,73,72,71,73,377,879,685,213,160,132,158,330,149,130,114,106,102,96,85,86,157,128,104,106,90,102,144,198,128,106,104,173,135,100,96,91,86,82,80,78,74,86,90,82,76,70,66,68,73,77,80,265,185,125,117,123,96,95,87,80,85,85,81,78,75,73,97,80,72,69,591,195,135,123,112,98,92,86,83,80,78,74,72,71,69,68,68,65,64,64,61,62,60,56,57,74,61,56,53,51,88,147,77,64,58,53,53,50,47,46,46,62,51,48,48,51,56,61,69,51,61,48,42,39,38,38,38,35,35,45,42,39,90,57,41,35,34,35,33,31,30,29,28,25,26,27,26,50,35,31,31,66,61,48,36,31,29,26,32,37,55,50,32,27,52,69,33,35,56,96,38,342,116,48,40,38,35,41,33,30,29,26,30,31,38,32,27,26,26,32,80,38,32,29,26,25,24,24,42,41,78,192,56,38,34,68,40,60,42,31,27,25,24,22,21,21,20,20,35,31,27,24,23,23,24,25,23,22,21,19,19,19,20,23,19,19,19,18,68,96,55,35,29,27,27,22,20,19,20,24,26,22,23,50,40,170,100,47,39,37,35,330,147,62,48,45,42,40,38,36,36,35,121,369,88,60,53,69,137,77,58,53,50,162,104,68,61,61,56,53,51,48,46,46,44,43,42,42,41,40,39,40,39,39,38,38,36,35,36,37,37,37,52,49,42,41,40,39,39,39,313,160,73,60,55,55,53,51,56,44,45,43,41,42,60,51,50,46,50,42,45,43,41,25,20,18,16,15,15,15,15,30,25,20,123,217,60,50,45,60,45,35,33,31,29,28,26,25,25,35,32,30,28,27,26,25,24,23,22,24,27,25,24,23,30,50,144,292,349,240,149,108,83,71,69,69,66,57,62,300,449,125,96,96,74,66,60,165,209,100,82,72,68,65,61,58,267,369,132,104,86,116,119,90,100,723,516,182,137,121,108,104,102,96,88,83,198,245,132,1020,336,198,176,147,135,125,119,110,106,100,96,90,86,85,83,82,80,80,88,160,152,112,90,102,83,75,72,71,71,121,98,77,69,68,65,61,60,57,55,52,51,50,51,61,53,50,46,44,44,43,42,38,35,34,34,36,39,71,41,36,34,43,52,39,56,75,46,42,41,45,40,37,36,35,40,37,45,30,27,26,25,60,40,50,80,45,35,31,28,26,24,35,50,35,30,27,30,40,30,26,24,22,30,24,21,25,35,25,20,18,40,25,20,17,16,16,17,19,51,25,35,21,20,19,17,16,16,32,20,25,30,30,21,20,27,20,17,16,37,25,20,22,19,17,16,15,16,15,92,29,20,16,15,15,14,13,13,13,12,10,11,10,10,11,21,19,15,39,23,22,22,23,132,62,38,37,28,22,22,30,25,21,20,19,21,20,71,69,34,27,24,33,112,94,157,66,44,40,34,30,27,26,25,27,43,35,30,27,25,25,25,37,112,53,40,377,959,178,112,173,92,72,62,57,53,66,112,64,53,51,56,162,104,80,311,110,83,78,110,431,152,108,92,102,157,94,72,74,71,88,90,65,110,186,103,82,741,756,263,683,296,188,162,224,155,116,115,120,114,98,95,94,85,88,90,81,86,130,862,180,132,131,114,300,154,126,121,380,183,134,170,150,134,132,463,2050,608,292,217,181,162,159,151,140,125,122,107,151,155,145,132,134,129,130,104,118,110,105,100,100,98,98,97,98,99,100,102,100,98,96,94,92,92,92,92,93,94,96,100,120,170,350,800,910,450,350,320,360,440,430,400,292,278,209,723,1160,431,303,247,218,204,181,170,173,198,162,184,152,137,130,130,144,123,112,108,104,102,100,165,260,144,119,106,102,98,94,92,88,83,82,78,75,75,77,102,96,90,100,260,230,96,86,83,795,449,294,356,281,201,162,140,123,116,303,218,140,122,116,108,101,94,88,81,94,137,90,81,78,93,83,71,66,64,88,69,61,58,60,62,59,55,62,104,63,55,51,50,65,54,47,44,41,40,378,318,112,77,65,60,56,53,55,48,45,44,65,96,75,56,47,44,42,40,38,37,45,48,42,57,43,39,68,68,58,47,45,55,52,53,44,38,35,35,135,381,75,51,45,42,36,35,33,30,30,29,28,28,30,108,714,110,60,66,172,70,54,47,42,40,38,37,39,35,34,34,33,30,36,42,52,37,44,41,34,35,36,32,31,29,28,28,27,26,27,30,30,31,34,208,59,41,35,34,33,32,31,48,45,36,88,53,42,40,38,36,35,35,35,35,65,47,40,38,36,36,35,34,34,34,34,34,34,33,33,33,33,33,33,35,45,54,142,68,52,47,44,43,54,48,42,45,51,58,162,99,68,59,172,192,96,72,75,596,298,118,92,85,79,72,68,70,65,62,59,124,87,67,85,592,141,101,83,80,78,77,176,626,362,134,125,114,156,927,268,165,152,155,160,210,144,116,103,100,102,148,1540,535,240,2370,1620,366,285,250,213,186,167,155,140,125,121,103,103,103,100,96,92,86,81,77,74,74,72,70,65,63,80,110,180,271,1090,1280,1630,560,366,299,289,252,216,253,319,253,227,205,187,327,198,160,158,141,126,126,123,117,108,103,100,97,137,146,114,97,90,94,91,87,86,97,108,119,148,100,85,82,130,217,112,102,105,243,159,121,105,94,86,82,79,77,76,72,73,80,172,136,93,80,74,69,69,84,75,66,62,60,58,55,53,52,62,91,75,57,51,90,233,134,86,75,94,505,281,196,140,122,139,116,126,107,137,168,201,137,116,106,97,87,83,117,96,80,70,64,64,64,64,60,56,53,55,93,61,55,51,48,48,79,58,67,57,50,49,56,46,42,40,38,37,38,37,36,96,87,44,39,43,53,38,57,54,41,39,35,35,49,37,38,65,37,34,67,50,35,30,28,26,25,25,24,26,159,112,45,36,32,29,30,40,32,29,29,27,27,30,28,31,38,29,29,26,24,24,24,24,25,775,125,54,40,35,33,31,29,33,61,34,30,28,28,26,100,1250,175,89,71,63,56,52,53,57,201,137,150,97,119,174,92,83,85,463,256,176,167,121,108,100,96,92,87,83,82,81,80,166,100,85,79,90,99,69,66,64,64,286,137,96,86,82,77,75,121,119,173,112,110,94,88,83,80,77,75,74,72,72,71,71,278,192,121,104,92,86,85,80,78,78,80,102,82,74,72,72,71,104,116,78,74,77,72,70,65,65,68,78,94,222,135,92,82,75,72,69,66,65,65,61,62,62,62,60,58,55,142,278,102,88,90,78,72,78,143,85,73,71,76,64,63,61,61,58,58,55,55,55,50,50,55,50,50,50,55,60,55,50,50,45,45,53,62,50,45,50,55,49,72,107,82,71,64,55,50,45,45,45,45,50,52,56,52,60,106,72,94,64,58,114,112,123,234,444,176,137,682,440,201,170,285,173,144,130,257,187,423,401,247,198,281,201,162,147,137,243,296,176,152,144,144,206,149,128,121,114,110,106,100,96,94,92,90,135,440,373,218,326,198,170,147,132,123,119,152,125,112,106,125,345,154,114,100,90,112,110,112,168,128,96,85,83,74,68,65,64,62,65,74,66,65,61,56,52,56,75,64,71,60,53,50,47,46,57,48,46,46,46,45,43,41,41,40,39,39,37,51,74,46,41,39,39,39,47,39,35,35,35,34,34,33,31,28,31,48,44,35,32,30,32,44,38,32,29,27,27,27,27,26,31,29,30,26,25,25,25,22,21,20,20,32,27,22,22,25,23,21,20,20,19,19,17,17,17,17,16,15,15,15,15,15,15,14,13,13,15,14,14,13,12,11,11,10,10,12,12,12,14,15,15,14,14,13,11,11,34,20,16,15,15,12,13,16,27,18,15,14,14,14,13,13,13,13,12,12,12,12,13,20,16,12,12,12,12,138,83,29,22,19,17,16,16,16,15,16,21,20,19,17,18,21,20,19,18,18,18,17,17,58,51,33,28,26,25,97,173,53,36,36,40,31,27,25,24,21,22,24,21,20,20,20,20,20,20,19,21,18,18,18,17,17,17,17,16,16,16,16,15,16,17,18,19,19,16,14,13,15,16,17,15,13,12,12,13,13,13,14,14,14,14,13,14,13,13,13,13,13,12,12,12,13,13,13,14,234,325,169,85,78,58,59,111,74,113,232,57,64,51,41,34,34,38,134,111,82,150,281,96,66,53,46,51,43,37,33,38,41,38,44,78,82,64,60,52,43,36,43,50,41,35,32,31,30,29,28,27,27,27,26,24,27,39,35,62,39,32,40,119,53,41,37,39,42,102,86,196,143,77,62,56,46,43,38,35,37,50,40,34,32,32,35,34,34,77,45,35,30,29,27,24,23,23,106,138,60,43,86,261,89,64,55,51,45,41,37,34,32,30,29,30,42,37,33,29,29,36,30,26,25,24,24,24,24,27,28,26,24,45,70,75,45,29,28,27,40,35,26,32,40,35,30,27,25,24,74,49,62,89,56,41,34,29,27,24,22,22,21,19,19,19,18,18,22,50,31,24,20,19,21,21,20,20,18,16,15,15,15,19,18,15,15,46,34,20,16,21,20,18,17,17,15,12,11,9.8,9.4,9.4,9.8,9.4,8.9,8.9,8.9,8.9,8.9,9.8,10,11,11,11,10,11,11,12,21,35,18,13,12,11,11,12,35,29,71,49,29,19,17,16,15,13,12,12,11,11,11,12,31,24,17,15,15,15,15,14,14,14,14,14,13,14,14,14,15,21,19,17,17,23,51,30,34,45,51,34,26,23,21,21,20,18,18,46,43,28,24,22,21,20,19,19,21,32,36,27,24,28,37,29,24,21,21,20,20,20,19,18,25,150,48,31,29,25,21,26,29,22,21,18,23,37,91,99,72,52,49,54,44,37,50,70,62,54,49,52,51,45,45,108,106,60,665,222,101,80,62,52,48,40,35,33,31,30,29,28,27,27,26,26,26,25,35,30,27,25,24,24,23,23,264,127,819,394,158,104,80,72,77,83,69,57,51,51,71,108,99,67,96,108,92,91,77,71,60,56,51,48,46,48,51,48,51,55,112,133,81,68,67,74,72,69,58,56,70,61,55,51,50,49,45,43,42,47,44,38,37,37,53,77,50,141,255,100,107,100,96,108,110,141,114,93,85,75,70,73,205,99,82,76,69,64,60,58,174,205,240,123,100,90,83,77,72,68,65,62,60,61,55,51,50,57,50,45,43,41,40,39,45,47,47,63,57,61,51,42,49,129,62,67,133,533,117,92,103,122,95,79,67,59,61,60,354,292,125,348,1470,344,192,155,131,117,112,98,93,87,92,94,234,239,108,87,108,150,92,80,72,69,65,60,58,62,54,55,56,52,49,46,44,58,71,48,45,45,40,38,37,1330,138,75,66,58,52,49,46,45,44,42,40,213,81,57,130,60,46,41,38,36,34,32,31,32,30,30,35,64,39,31,31,27,26,27,27,31,63,35,30,29,28,29,29,28,27,26,25,24,25,25,24,22,22,23,27,27,35,26,24,24,95,45,30,27,26,24,23,23,23,23,23,23,23,22,22,22,24,33,28,24,22,21,21,21,22,21,21,21,29,86,41,29,26,25,24,24,23,23,42,194,58,39,33,30,28,26,26,89,56,39,32,30,29,28,27,28,28,27,26,24,24,24,24,217,85,69,102,62,53,47,44,38,34,33,30,30,30,27,30,32,205,107,53,51,48,48,42,40,42,40,39,37,41,37,39,35,34,34,32,30,34,87,83,44,39,68,189,86,61,55,60,57,57,53,49,45,42,69,182,258,164,118,93,79,70,73,98,76,144,449,156,106,91,99,89,80,74,60,70,90,100,92,82,86,91,104,97,99,121,154,162,144,126,102,107,148,367,177,131,114,103,125,133,163,178,149,143,127,109,102,95,91,140,459,187,641,293,183,158,144,132,245,492,195,158,148,141,132,471,215,166,151,150,208,233,948,394,243,204,185,246,860,312,239,230,282,257,200,179,421,934,329,251,222,202,189,177,170,161,163,147,137,131,131,135,119,113,110,106,102,104,202,213,117,106,113,111,156,364,141,113,119,152,104,129,172,119,104,94,87,111,97,83,78,73,69,66,65,64,64,61,60,57,57,68,76,79,197,102,71,61,56,51,49,56,167,68,56,55,50,46,47,45,42,39,38,36,35,34,33,31,30,29,28,38,32,31,32,38,28,32,30,27,25,24,23,23,23,23,27,24,22,22,22,22,20,20,19,27,65,29,23,22,21,21,22,23,20,19,18,19,19,18,18,17,18,22,22,38,36,22,20,19,19,18,17,16,15,15,15,21,32,20,17,16,16,16,16,15,21,44,21,18,17,17,16,16,15,16,19,23,21,18,17,21,19,17,16,16,16,26,63,39,27,21,20,21,56,41,24,21,56,344,113,60,42,34,29,25,24,24,24,24,25,23,23,23,23,22,27,86,67,41,32,124,437,108,68,53,46,256,98,67,65,418,190,102,130,351,135,98,82,84,297,197,136,169,108,95,91,85,992,1820,700,292,212,173,151,141,122,109,484,263,152,124,115,110,316,305,141,128,137,123,103,101,101,101,99,91,85,82,78,74,70,66,63,61,58,55,52,50,48,46,45,43,60,110,238,175,106,91,83,79,74,116,357,174,122,95,87,80,90,184,194,153,266,1580,880,314,264,208,183,163,147,150,689,257,203,171,224,197,152,141,135,128,184,250,169,141,135,130,125,122,159,312,265,266,256,197,176,160,241,230,164,147,150,146,133,314,538,370,296,239,199,181,224,949,506,288,239,213,199,187,178,176,185,200,275,208,184,177,165,149,139,199,184,155,138,130,122,222,154,137,121,121,694,258,187,174,239,310,180,159,166,167,146,135,127,120,116,137,121,109,103,126,152,104,121,219,138,689,749,311,211,174,163,149,132,124,118,110,104,99,98,91,88,151,97,86,90,190,168,100,85,78,75,116,153,86,75,71,68,121,2230,439,176,136,123,217,1580,264,177,160,185,153,124,113,106,101,104,131,114,94,171,130,101,91,83,78,241,135,90,81,75,71,70,71,69,82,68,62,71,59,57,70,69,61,55,50,47,48,44,44,48,42,39,47,52,42,34,34,34,34,34,48,37,31,32,55,38,31,27,26,25,27,31,31,29,26,43,38,27,24,24,23,23,21,21,21,21,21,22,28,36,30,43,84,45,33,29,27,26,26,26,27,27,25,24,24,24,24,24,24,24,27,28,29,105,59,48,37,33,34,176,61,42,37,35,32,29,114,64,44,39,36,36,35,35,32,29,28,29,29,29,39,35,30,29,29,28,29,28,28,29,198,94,56,45,50,67,48,171,109,62,53,51,50,46,43,41,47,45,42,40,40,45,43,90,62,48,50,42,41,43,42,40,38,41,67,81,53,56,52,50,53,46,45,44,43,42,41,40,39,38,38,38,37,37,36,36,35,35,35,35,35,35,35,35,77,132,113,88,66,48,37,35,33,32,31,603,497,170,113,87,79,71,75,81,73,89,156,131,97,78,73,61,57,56,51,50,64,53,45,50,50,45,42,68,64,50,45,41,41,38,36,37,37,35,49,60,63,47,41,40,41,40,40,88,57,47,48,44,44,42,39,38,36,35,35,34,33,33,35,34,30,30,29,27,27,26,26,29,28,25,24,23,23,22,44,491,160,85,64,58,46,41,38,34,32,38,32,27,27,66,136,52,37,33,57,39,48,34,28,25,24,29,24,23,28,24,23,24,24,25,22,21,25,22,20,20,20,19,19,66,80,31,23,20,21,20,19,19,19,18,18,19,20,20,19,19,18,17,17,22,65,22,22,19,19,18,17,16,16,32,18,16,15,15,14,18,18,15,14,19,78,29,19,17,16,18,17,15,14,14,13,13,82,33,23,20,18,16,74,27,18,17,16,17,17,18,21,17,16,38,82,29,21,18,17,18,17,16,16,15,15,15,14,14,18,16,16,14,14,14,13,13,13,13,13,13,13,13,13,15,14,14,1660,376,77,50,40,35,166,123,78,58,44,37,34,32,30,28,28,28,28,27,25,24,25,25,24,24,24,27,48,30,26,25,24,23,24,24,24,24,24,247,126,68,49,40,36,35,35,36,37,58,109,363,116,82,70,61,157,178,93,75,83,158,384,407,266,438,281,184,141,128,128,124,114,105,98,95,96,106,142,95,85,84,79,69,68,66,65,64,62,61,60,59,58,57,56,56,56,58,71,78,77,70,62,58,56,53,50,52,48,46,44,42,41,40,83,265,127,87,76,64,92,585,294,153,112,100,92,91,102,123,116,262,214,136,118,103,98,92,86,84,80,78,76,74,267,322,381,365,303,216,185,168,142,133,118,107,103,101,108,107,105,101,86,84,93,144,105,152,312,400,199,154,133,128,116,103,98,97,94,88,87,86,83,80,78,78,75,75,72,72,75,104,98,84,76,70,67,64,61,61,61,330,500,284,165,133,128,127,156,145,106,98,95,92,91,89,84,79,74,72,71,70,69,64,62,57,59,57,53,53,54,56,63,53,50,51,71,182,73,56,52,49,47,46,44,41,39,36,33,33,32,29,31,32,34,31,28,28,65,48,35,32,29,30,29,27,27,27,25,24,24,23,23,22,22,22,21,20,31,31,21,21,20,20,19,19,21,20,20,20,21,15,16,17,18,26,22,26,20,18,17,16,18,69,27,20,19,18,18,27,29,20,18,17,17,17,16,15,53,23,18,16,15,15,18,29,20,20,59,58,23,56,25,19,18,18,18,16,15,14,15,16,15,15,14,14,13,13,12,12,12,12,12,11,11,11,11,12,12,12,12,13,20,15,13,63,36,21,18,16,19,19,22,21,17,15,15,15,14,14,14,15,25,24,18,16,16,15,15,15,15,14,14,14,24,36,23,20,18,17,16,17,17,17,33,152,47,84,67,40,93,119,48,33,28,26,24,30,203,103,357,91,58,72,66,277,264,97,71,57,48,77,373,119,77,63,56,52,134,142,84,80,71,59,54,53,55,276,228,107,84,69,63,90,573,174,116,98,85,80,76,70,117,110,90,74,66,66,66,63,72,105,87,77,81,114,107,76,95,283,235,143,106,100,94,90,86,81,76,71,68,64,60,79,116,148,110,87,87,89,82,76,69,70,68,66,59,58,57,56,55,54,53,54,73,69,64,62,63,62,540,393,217,167,128,115,117,115,103,89,80,80,79,74,73,70,66,64,62,61,62,62,59,57,55,55,54,57,56,59,197,124,78,68,307,193,301,184,137,112,100,93,92,93,85,82,80,127,128,96,94,84,77,72,77,125,86,73,69,68,65,59,61,66,112,112,77,65,60,55,52,49,46,44,42,48,50,43,40,91,174,165,89,84,91,67,60,61,59,53,47,43,42,40,38,49,57,41,37,37,37,35,31,32,34,31,29,28,26,25,25,24,26,38,59,35,28,27,39,30,26,24,24,36,86,37,28,24,25,27,24,25,23,22,23,62,137,42,30,26,24,23,22,23,22,20,20,23,25,20,18,18,20,20,18,18,17,17,32,21,18,18,121,39,23,20,19,18,17,17,16,15,15,14,15,17,15,14,14,17,110,48,24,20,20,19,17,16,16,18,27,176,1120,101,52,38,102,127,52,40,36,463,354,131,87,66,62,55,55,49,44,42,40,41,43,38,44,70,45,38,52,48,37,34,34,37,32,29,27,27,26,26,26,25,42,37,28,26,25,24,26,212,72,49,42,38,37,36,35,34,31,30,29,30,104,293,117,106,87,70,60,56,71,64,55,50,45,45,46,47,45,45,47,221,850,188,122,94,91,81,70,63,60,59,58,55,52,51,47,90,143,75,60,55,81,85,64,60,55,56,64,58,53,56,49,79,55,48,41,38,37,36,35,33,32,31,31,29,28,27,26,25,24,23,217,472,233,145,99,68,80,94,85,99,80,70,66,180,410,330,380,250,170,160,130,90,76,70,199,168,124,165,379,222,183,179,481,218,157,149,146,127,115,116,119,115,109,101,108,204,248,144,126,114,110,112,100,96,97,93,88,84,81,78,81,78,74,70,71,71,71,129,201,106,87,81,79,79,78,78,84,81,74,182,167,105,87,80,77,74,71,71,78,69,74,96,73,66,59,58,78,64,56,58,166,95,94,78,68,63,64,134,286,188,115,100,118,330,189,125,161,118,105,105,182,1360,417,264,226,197,189,177,162,140,129,122,112,106,102,129,101,97,93,84,79,79,86,85,73,69,64,61,57,55,55,52,50,47,44,42,40,37,37,37,35,32,30,30,28,28,26,25,25,24,24,23,23,24,22,23,24,21,20,19,55,160,42,138,393,685,143,282,112,98,146,96,71,55,71,60,50,44,40,37,35,33,31,28,27,26,25,24,23,23,22,21,37,27,31,35,26,23,61,43,26,23,22,44,95,37,25,23,22,74,138,56,41,34,31,29,26,25,31,38,27,24,24,30,28,25,24,23,23,42,32,29,25,23,22,21,22,22,42,33,26,24,22,22,22,22,21,20,19,19,19,19,19,19,19,20,28,90,34,30,25,24,23,23,22,22,21,21,20,19,25,34,50,31,28,26,26,30,29,34,60,42,34,132,108,60,500,347,102,69,59,53,50,50,243,118,78,68,61,58,54,51,50,49,47,44,42,42,41,40,39,38,37,37,37,37,37,41,46,41,52,75,50,41,41,49,40,37,35,35,35,34,33,33,39,56,83,55,46,67,120,68,197,131,82,69,64,59,53,56,55,52,47,48,56,48,45,51,58,48,45,45,46,42,41,42,39,38,38,40,41,43,45,70,108,66,52,49,46,186,223,155,102,82,77,76,72,65,61,58,58,59,87,85,71,66,65,77,95,95,81,79,71,64,68,103,74,137,105,80,241,239,149,122,111,103,125,187,175,124,126,124,114,186,162,130,120,108,99,93,88,84,96,159,103,89,88,79,74,70,66,62,60,59,57,54,53,58,56,170,102,68,86,847,360,186,148,517,427,209,194,170,169,809,661,243,204,198,180,161,186,354,195,164,168,150,127,119,114,107,97,90,93,84,93,171,156,320,667,173,130,135,120,145,315,182,136,114,103,102,307,277,195,167,198,136,127,123,102,94,88,83,89,247,185,132,100,86,78,73,69,694,224,143,159,178,131,119,179,167,132,121,104,106,174,111,96,82,77,118,101,84,75,69,64,60,60,59,54,52,54,67,206,92,70,82,60,52,69,76,55,50,46,43,40,39,37,37,38,44,38,34,33,31,30,29,30,30,29,28,27,27,26,26,25,26,26,37,32,49,373,142,73,126,115,73,119,100,82,81,77,40,154,105,70,48,45,41,40,39,38,39,42,40,36,36,36,60,100,270,472,254,140,110,90,80,72,70,66,64,62,60,62,60,64,66,60,59,58,56,115,125,70,62,56,52,56,90,104,69,60,56,52,50,57,70,73,62,69,80,68,55,52,52,52,52,51,51,51,50,50,50,48,48,46,45,42,41,40,40,40,39,39,39,38,38,38,38,38,38,38,38,50,370,252,197,175,185,173,146,121,153,213,215,80,69,72,47,46,57,72,69,73,110,110,73,69,150,370,180,120,190,711,200,180,160,150,190,150,130,110,100,99,176,150,115,102,98,93,102,95,83,84,78,74,81,98,141,94,72,74,76,76,75,78,73,67,68,63,61,65,83,73,70,67,64,62,62,76,153,85,88,81,69,65,64,67,64,59,57,56,74,85,73,130,305,198,143,108,129,132,98,91,103,90,81,77,169,114,94,88,79,77,78,78,72,68,66,67,63,61,66,83,69,62,56,70,151,85,67,59,52,219,249,101,98,137,86,77,78,68,62,57,61,60,54,52,50,80,90,60,517,854,181,119,96,84,77,68,63,62,60,82,64,55,52,47,47,73,57,48,98,181,76,63,58,54,50,47,46,44,43,42,39,38,36,35,34,33,33,32,31,32,36,34,38,131,60,49,42,37,34,32,30,36,53,36,32,29,28,27,26,26,27,31,32,27,25,24,29,79,95,43,37,126,138,54,43,90,43,34,32,30,44,49,41,244,143,81,61,53,44,38,38,49,36,33,31,32,30,28,29,28,27,26,27,26,25,25,26,31,26,33,28,25,28,26,68,53,33,28,26,26,26,25,25,24,23,22,24,25,23,22,21,92,42,29,28,96,145,49,35,31,62,174,54,40,36,94,175,67,49,41,38,36,34,33,33,33,32,31,31,35,36,32,31,286,236,79,57,48,44,43,43,43,39,37,36,35,45,50,40,37,35,35,36,34,33,33,60,484,155,85,69,61,56,52,48,46,46,44,64,113,67,122,116,74,91,127,102,258,123,87,76,68,62,59,275,141,113,100,90,81,85,98,83,121,124,114,466,199,132,116,231,270,152,127,119,152,126,113,104,98,90,84,80,74,71,128,86,79,79,78,76,93,155,123,94,85,79,73,72,110,101,72,76,69,84,108,85,76,69,64,67,66,64,61,61,71,82,246,127,97,165,100,86,82,76,72,72,83,131,118,89,195,151,108,94,91,228,198,128,106,111,107,91,137,113,93,87,79,76,77,78,73,69,68,69,67,63,65,89,110,110,75,69,64,62,265,244,133,159,173,114,102,95,89,90,86,81,77,74,71,108,115,79,72,70,66,62,58,56,62,53,55,83,56,50,47,46,44,42,41,41,39,182,66,53,71,49,43,40,39,38,38,36,34,33,32,31,51,38,32,31,30,31,57,92,48,37,33,34,34,30,29,27,26,26,25,27,26,27,28,31,32,53,55,32,27,25,25,388,256,58,37,32,29,27,25,25,28,28,24,25,27,38,26,28,31,26,25,24,23,22,21,20,20,20,24,148,42,26,23,23,34,28,23,23,29,166,143,42,29,24,22,22,22,21,21,21,21,20,19,19,20,26,22,22,24,26,26,26,29,32,32,33,32,31,31,40,43,24,19,18,18,159,74,34,25,22,21,20,20,20,19,27,23,19,18,17,17,20,28,24,19,18,30,74,76,33,26,23,23,21,21,21,21,20,20,19,19,19,20,21,20,19,17,17,18,17,16,19,25,26,21,20,17,17,16,16,16,15,19,102,217,63,44,39,32,29,28,27,30,47,331,185,77,54,46,41,44,159,82,56,52,72,64,47,41,39,38,37,36,36,35,39,35,34,33,35,66,72,47,41,37,37,47,68,47,40,36,40,50,42,37,35,84,84,50,42,37,38,38,38,41,56,146,67,49,48,47,47,47,40,40,39,39,38,36,38,37,32,29,27,29,26,28,30,54,159,74,61,69,62,50,44,42,47,52,93,71,54,49,42,41,40,41,38,37,94,99,64,59,133,80,60,52,49,46,45,45,80,96,102,82,77,77,76,119,549,171,118,98,104,88,79,65,60,60,56,52,51,49,49,70,53,48,44,42,42,54,74,58,52,48,63,57,49,50,70,57,48,45,44,43,42,39,36,35,34,33,185,326,113,84,71,67,65,60,139,88,67,65,53,49,49,48,45,50,50,58,48,44,42,180,100,62,52,47,242,210,95,74,64,57,54,51,50,47,38,38,41,41,49,81,45,38,36,40,54,42,40,40,39,39,38,37,37,50,34,32,50,31,59,48,39,30,33,68,31,50,79,55,37,32,29,32,79,35,33,32,70,30,27,25,30,29,25,25,25,24,23,22,21,24,24,22,70,25,31,28,30,58,27,22,21,20,18,16,16,17,17,18,18,28,19,17,16,15,16,19,17,17,32,25,20,19,25,18,16,15,14,14,14,13,13,12,11,13,26,18,16,150,70,58,33,24,21,20,19,19,18,17,17,16,16,122,51,51,33,27,25,23,23,24,23,25,24,22,21,21,27,25,23,21,21,21,23,23,24,248,83,50,70,47,37,33,31,29,30,267,82,49,40,37,34,33,31,31,37,293,109,82,70,65,55,50,46,39,36,34,32,37,34,33,32,30,34,606,288,144,96,79,76,197,188,101,100,89,78,75,67,57,55,51,56,68,69,67',
+};
+
+function loadDemo() {
+  S.rows = null; S.cols = []; S.fileMeta = {};
+  S.name = DEMO.name; S.id = DEMO.id; S.unit = DEMO.unit;
+  $('areaIn').value = DEMO.area; $('areaUnit').value = 'mi2';
+  const vals = DEMO.flows.split(',');
+  const flow = new Float64Array(vals.length);
+  for (let i = 0; i < vals.length; i++) flow[i] = +vals[i];
+  S.day0 = toDayNum(...DEMO.start); S.flow = flow; S.view = null;
+  S.notices = []; S.log = true;
+  $('dateColRow').hidden = $('flowColRow').hidden = true;
+  $('dropzone').hidden = true;
+  $('dataMeta').innerHTML = `<b>${escHTML(S.name)}</b><br>station ${S.id}` +
+    `<br>${fmtDay(S.day0)} → ${fmtDay(S.day0 + flow.length - 1)} · ${flow.length.toLocaleString()} days · ${S.unit}`;
+  $('chartSub').textContent = `${S.name} · drag to zoom · double-click to reset`;
+  $('notices').innerHTML = '';
+  recompute();
+}
+
+// sample input file: the first 90 days of the demo record, with the header comments
+function downloadSample(e) {
+  e.preventDefault();
+  const L = [`# name: ${DEMO.name}`, `# id: ${DEMO.id}`, `# area: ${DEMO.area}`,
+             `# units: ${DEMO.unit}`, 'date,flow'];
+  const vals = DEMO.flows.split(',', 90);
+  const d0 = toDayNum(...DEMO.start);
+  vals.forEach((v, i) => L.push(`${fmtDay(d0 + i)},${v}`));
+  downloadBlob(new Blob([L.join('\n') + '\n'], { type: 'text/csv' }), 'hysep_sample.csv');
+}
+
+// --------------------------------------------------------------- UI wiring
+function setMethod(m) {
+  S.method = m;
+  for (const [id, key] of [['mFixed', 'fixed'], ['mSlide', 'slide'], ['mLocmin', 'locmin']])
+    $(id).setAttribute('aria-pressed', String(key === m));
+  $('mdesc').textContent = METHODS[m].desc;
+  recompute();
+}
+
+for (const [id, key] of [['mFixed', 'fixed'], ['mSlide', 'slide'], ['mLocmin', 'locmin']])
+  $(id).addEventListener('click', () => setMethod(key));
+
+$('intSel').addEventListener('change', recompute);
+$('areaIn').addEventListener('input', recompute);
+$('areaUnit').addEventListener('change', recompute);
+$('scaleBtn').addEventListener('click', () => { S.log = !S.log; draw(); });
+$('resetBtn').addEventListener('click', () => { S.view = null; draw(); });
+$('dateCol').addEventListener('change', () => { S.dateKey = $('dateCol').value; rebuild(); });
+$('flowCol').addEventListener('change', () => { S.flowKey = $('flowCol').value; rebuild(); });
+$('expCSV').addEventListener('click', exportCSV);
+$('expJSON').addEventListener('click', exportJSON);
+$('expPNG').addEventListener('click', exportPNG);
+
+for (const id of ['pickBtn', 'pickBtn2']) $(id).addEventListener('click', () => $('fileInput').click());
+for (const id of ['demoBtn', 'demoBtn2']) $(id).addEventListener('click', loadDemo);
+$('sampleCSV').addEventListener('click', downloadSample);
+$('fileInput').addEventListener('change', e => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+  e.target.value = '';
+});
+
+let dragDepth = 0;
+window.addEventListener('dragenter', e => { e.preventDefault(); dragDepth++; document.body.classList.add('dragging'); $('dropzone').hidden = false; });
+window.addEventListener('dragover', e => e.preventDefault());
+window.addEventListener('dragleave', () => {
+  if (--dragDepth <= 0) { dragDepth = 0; document.body.classList.remove('dragging'); if (S.flow) $('dropzone').hidden = true; }
+});
+window.addEventListener('drop', e => {
+  e.preventDefault();
+  dragDepth = 0;
+  document.body.classList.remove('dragging');
+  if (S.flow) $('dropzone').hidden = true;
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+
+let rsTimer = null;
+window.addEventListener('resize', () => { clearTimeout(rsTimer); rsTimer = setTimeout(draw, 120); });
+
+initChartEvents();
+$('mdesc').textContent = METHODS[S.method].desc;
+loadDemo();
+</script>
+</body>
+</html>
