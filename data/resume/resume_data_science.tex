@@ -1,0 +1,180 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{fontspec}
+\usepackage{paracol}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fontawesome5}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+% Palette — ink for text, slate for secondary, cardinal accent (matches randomstorms.net)
+\definecolor{ink}{RGB}{38, 42, 48}
+\definecolor{slate}{RGB}{108, 112, 120}
+\definecolor{cardinal}{RGB}{170, 65, 53}
+\definecolor{hairline}{RGB}{214, 210, 205}
+
+\geometry{left=1.5cm, right=1.5cm, top=1.2cm, bottom=1.2cm, nohead, nofoot}
+
+% Typography — Garamond for reading, letterspaced Gill Sans for wayfinding
+\setmainfont{EB Garamond}[Scale=1.0, Numbers=OldStyle, BoldFont={* Bold}, ItalicFont={* Italic}]
+\newfontfamily\headfont{Gill Sans}[Scale=0.88, LetterSpace=6.0, BoldFont={* Bold}]
+\newfontfamily\metafont{Gill Sans}[Scale=0.82, LetterSpace=1.5]
+
+\hypersetup{colorlinks=true, urlcolor=cardinal, linkcolor=ink, citecolor=ink}
+
+\pagestyle{empty}
+
+\titleformat{\section}
+  {\headfont\bfseries\footnotesize\color{ink}}
+  {}{0em}{\MakeUppercase}[{\color{hairline}\titlerule[0.8pt]}]
+\titlespacing*{\section}{0pt}{1.5ex plus 1ex minus .2ex}{1ex plus .2ex}
+
+\newcommand{\degreeyear}[2]{
+  {\textbf{#1}}\\
+  {\small\textcolor{slate}{#2}}
+}
+
+\newcommand{\divider}{\textcolor{hairline}{\rule{\linewidth}{0.5pt}}}
+
+% Title on its own line(s); venue + year share the second line so they never collide
+\newcommand{\publication}[3]{
+  \textbf{#1}\\
+  {\small\textit{#2}} \hfill {\metafont\footnotesize\textcolor{slate}{#3}}\\[0.4em]
+}
+
+\newcommand{\role}[4]{
+  {\large\textbf{#1}}~~{\color{slate}\itshape #2} \hfill {\metafont\footnotesize\textcolor{slate}{#3}}\\[0.2em]
+  #4
+}
+
+\newcommand{\skillgroup}[2]{
+  {\metafont\footnotesize\textcolor{cardinal}{#1}}\\
+  {\small #2}
+  \vspace{0.3em}
+}
+
+\newcommand{\serviceitem}[2]{
+  {\small\textbf{#1} — #2}
+  \vspace{0.25em}
+}
+
+\setlength{\columnseprule}{0pt}
+\setlength{\columnsep}{0.9cm}
+\columnratio{0.68}
+
+\begin{document}
+\color{ink}
+\setlength{\parindent}{0pt}
+
+% ===== Header =====
+{\fontsize{26}{30}\selectfont\headfont\bfseries Abhiram Mullapudi}\\[0.5em]
+{\metafont\small\textcolor{slate}{LEAD DATA SCIENTIST~~·~~MACHINE LEARNING FOR CYBER-PHYSICAL INFRASTRUCTURE}}\\[0.7em]
+{\footnotesize
+{\color{cardinal}\faEnvelope}\hspace{0.4em}\href{mailto:abhiramm@umich.edu}{abhiramm@umich.edu}\hspace{1.1em}
+{\color{cardinal}\faGithub}\hspace{0.4em}\href{https://github.com/abhiramm7}{abhiramm7}\hspace{1.1em}
+{\color{cardinal}\faGlobe}\hspace{0.4em}\href{https://randomstorms.net}{randomstorms.net}\hspace{1.1em}
+{\color{cardinal}\faLinkedin}\hspace{0.4em}\href{https://www.linkedin.com/in/mullapudi-abhiram/}{mullapudi-abhiram}\hspace{1.1em}
+{\color{cardinal}\faMapMarker}\hspace{0.4em}Washington, DC}\\[0.8em]
+{\color{hairline}\rule{\textwidth}{0.8pt}}\\[0.4em]
+
+{\small Data science leader with a PhD and six years of industry experience taking machine learning from research to production for critical water infrastructure. I build and ship forecasting, anomaly detection, and optimization systems that run live at water utilities, and the MLOps platforms that keep them running. Maintainer of the industry-standard open-source stormwater modeling stack; author of 10+ peer-reviewed publications.}
+
+\begin{paracol}{2}
+
+% ===== MAIN COLUMN =====
+\section{Experience}
+\role{Lead Data Scientist}{Inframark}{2025–PRESENT}{
+\begin{itemize}[leftmargin=*, itemsep=0.8mm, topsep=0.5mm]
+  \item Lead the development of machine-learning solutions for optimizing collection-system and wastewater-treatment-plant operations, from problem framing with operators to production deployment.
+  \item Building scalable ML tooling that makes operational analytics viable for the small and mid-sized utilities that make up most of the market.
+\end{itemize}
+}
+\vspace{0.6em}
+
+\role{Senior Data Scientist}{Xylem}{2023–2025}{
+\begin{itemize}[leftmargin=*, itemsep=0.8mm, topsep=0.5mm]
+  \item Led the development of statistical and ML methodologies for time-series filtering and anomaly detection, powering predictive maintenance and operational decision-making across Xylem's digital water products.
+  \item Designed and built a Flyte-based MLOps platform that standardized model development, deployment, and maintenance across product teams.
+\end{itemize}
+}
+\vspace{0.6em}
+
+\role{Hydraulic Control \& Optimization Engineer}{Xylem}{2020–2023}{
+\begin{itemize}[leftmargin=*, itemsep=0.8mm, topsep=0.5mm]
+  \item Developed a 1D-CNN forecasting model combining NOAA rainfall forecasts with near-real-time flow measurements to predict 24-hour treatment-plant inflow; deployed as an operator-facing dashboard.
+  \item Designed a real-time anomaly detection system that monitors 600+ concurrent sensor streams using symbolic programming and statistical techniques.
+  \item Engineered a 1D-CNN interpolation framework for spatially distributed river-level data, supporting environmental monitoring and regulatory compliance reporting.
+  \item Built ML-powered visualization products, including a public-facing Combined Sewer Overflow event tracker, and maintained the real-time services, ETL pipelines, and databases behind a production network-optimization product.
+\end{itemize}
+}
+
+\section{Selected Publications}
+\publication{Identification of stormwater control strategies and their associated uncertainties using Bayesian Optimization}{arXiv preprint}{2023}
+
+\publication{pystorms: a simulation sandbox for the design and evaluation of stormwater control algorithms}{Environmental Modelling \& Software}{2023}
+
+\publication{Deep Reinforcement Learning for the Real Time Control of Stormwater Systems}{Advances in Water Resources}{2020}
+
+\publication{PySWMM: The Python Interface to Stormwater Management Model (SWMM)}{Journal of Open Source Software}{2020}
+
+{\footnotesize\textcolor{slate}{Full list of 10+ publications on \href{https://scholar.google.com/citations?user=W9mUihUAAAAJ}{Google Scholar}.}}
+
+\switchcolumn
+
+% ===== SIDEBAR =====
+\begin{flushleft}
+
+\section{Education}
+\vspace{0.3em}
+\degreeyear{Ph.D., Civil Engineering}{University of Michigan~~·~~2017--2020}
+
+\vspace{0.45em}
+\degreeyear{M.Sc.Eng., Civil Engineering}{University of Michigan~~·~~2015--2017}
+
+\vspace{0.45em}
+\degreeyear{B.Tech., Civil Engineering}{Amrita Vishwa Vidyapeetham~~·~~2011--2015}
+
+\section{Skills}
+\vspace{0.3em}
+\skillgroup{PROGRAMMING}{Python, SQL, C/C++, Swift, Bash}
+
+\skillgroup{MACHINE LEARNING}{PyTorch, JAX, scikit-learn; time-series deep learning, reinforcement learning, Bayesian optimization, physics-informed ML}
+
+\skillgroup{STATISTICS \& SIGNAL PROCESSING}{Probabilistic modeling, uncertainty quantification, anomaly detection, time-series filtering}
+
+\skillgroup{MLOPS \& CLOUD}{Flyte, MLflow, AWS, Google Cloud, Azure}
+
+\skillgroup{DATA ENGINEERING}{Real-time streaming pipelines, ETL, backend services}
+
+\section{Leadership \& Service}
+\vspace{0.3em}
+\serviceitem{Vice-chair}{Emerging Technologies subcommittee, ASCE EWRI Congress}
+
+\serviceitem{Organizing committee}{NeurIPS Gaussian Processes Workshop, 2024}
+
+\serviceitem{Peer reviewer}{11 journals, incl. \textit{Water Resources Research}}
+
+\serviceitem{Grand Prize}{LIFT Intelligent Water Systems Challenge, 2019}
+
+\section{Open Source}
+\vspace{0.3em}
+\textbf{pyswmm} \hfill {\metafont\footnotesize\textcolor{slate}{MAINTAINER}}\\
+{\small Python interface to EPA-SWMM, the industry standard for stormwater modeling.}
+\vspace{0.25em}
+
+\textbf{OpenFloodHub} \hfill {\metafont\footnotesize\textcolor{slate}{CREATOR}}\\
+{\small Per-gauge CNN streamflow forecasting, benchmarked against NOAA's models.}
+\vspace{0.25em}
+
+\textbf{flood sim} \hfill {\metafont\footnotesize\textcolor{slate}{CREATOR}}\\
+{\small GPU shallow-water flood simulation in the browser.}
+\vspace{0.25em}
+
+\textbf{realClippy} \hfill {\metafont\footnotesize\textcolor{slate}{CREATOR}}\\
+{\small macOS PDF reader with a local-LLM chatbot.}
+
+\end{flushleft}
+\end{paracol}
+\end{document}
