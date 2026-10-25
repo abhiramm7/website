@@ -312,17 +312,54 @@
     ],
   };
   // ART END
-  const SCALE = 3, SPEED = 30, SEED = 42;
+  const SCALE = 2, SPEED = 30, SEED = 42;
   const QUOTES = [
-    "I'm on cloud nine!",
-    'Every cloud has a silver lining.',
-    'Water you up to?',
-    'Ask me about stormwater!',
-    'Rain or shine, glad you stopped by.',
-    "Don't worry, it's only a drizzle.",
-    'Feeling a little under the weather?',
-    'Forecast: 100% chance of research.',
+    'Precipitation: 100%. p-value: also somehow 0.049.',
+    'My rainfall is i.i.d. Your excuses are autocorrelated.',
+    "I'm a 100-year storm. Third visit this decade. Stationarity is dead.",
+    "Infiltration is just rain with commitment issues.",
+    'Fun fact: I weigh 500 tonnes. Rude of you not to ask.',
+    'My dew point is higher than your test coverage.',
+    'Nash-Sutcliffe efficiency of your scrolling: -0.3.',
+    "I don't overfit. I overcast.",
+    'Sorry, I just exceeded my design storm.',
+    'Running SWMM in my head. Your basement is fine. Probably.',
+    'Clausius-Clapeyron says I hold 7% more water per degree. So, yes, I am bloated.',
+    'Rain is just gradient descent with gravity.',
+    "Peak flow? I'm peak flow.",
+    "Runoff coefficient of this page: 0.9. Nothing's soaking in.",
+    "I'm not a model. All models are wrong. I'm just mostly wrong.",
+    'Humidity: 98%. Training loss: also 98%.',
+    "My forecast has error bars. Your plans don't.",
+    "I'd do a Monte Carlo on whether you'll click me. Already converged: yes.",
+    "Evapotranspiration is the plants' version of ghosting.",
+    'Every puddle is an unsupervised clustering of rain.',
   ];
+  // Said when clicked, so poking it gets a reaction instead of a random line.
+  const POKED = [
+    'Hey! Hands off the cumulus.',
+    'Unhandled exception: PokeError at cloud.py:1',
+    'I have 10^9 droplets and you touched all of them.',
+    'Each click raises my convective potential. Just saying.',
+    "That's not how you sample a cloud.",
+    "Logged. Added to the training set of grudges.",
+  ];
+  const ANGRY = [
+    'Convective available potential energy: MAXED.',
+    'You have been rate-limited. By lightning.',
+    'kill -9 your_mood',
+  ];
+  // Said once when a section scrolls into the middle of the screen.
+  const SECTIONS = {
+    'side-quests': ['Baseflow separation: the art of telling rivers what they really are.', 'Side quests. Like a main quest, but with fewer reviewers.'],
+    experience: ["A data scientist who models water. I AM water. Awkward.", 'Hydraulic control engineer? So you are the one damming my plans.'],
+    projects: ['PySWMM: because Fortran-era engines deserve Python too.', "rrcf finds anomalies. It'd flag me in a heartbeat."],
+    publications: ['Peer review: when 3 strangers rain on your parade.', 'Bayesian optimization of stormwater. Finally, someone with priors.'],
+    blog: ['Blog posts. Like papers, minus Reviewer 2.', 'Governing equations from data? I am the governing equations.'],
+    rowing: ["Rowing: moving water by hand. Cute. I do it with gravity."],
+    otf: ['Splat points are just precipitation for sweat.'],
+    dogs: ['Dogs! Finally, data with zero noise. Pure signal.', 'Good dogs. Statistically significant good dogs.'],
+  };
 
   // mulberry32: Math.random can't be seeded, so this gives the same sequence on every load.
   const seeded = s => () => {
@@ -385,15 +422,24 @@
   bubble.append(text, tail);
   document.body.appendChild(bubble);
 
-  let lastQuote = -1, quoteLeft = 0, nextQuote = 3;
-  const sayQuote = () => {
-    // Offset from the previous index so the same quote never shows twice in a row.
-    lastQuote = lastQuote < 0 ? Math.floor(quoteRandom() * QUOTES.length)
-      : (lastQuote + 1 + Math.floor(quoteRandom() * (QUOTES.length - 1))) % QUOTES.length;
-    text.textContent = QUOTES[lastQuote];
+  let quoteLeft = 0, nextQuote = 3;
+  const sayQuote = (list = QUOTES) => {
+    let i = Math.floor(quoteRandom() * list.length);
+    // Step past the line already showing so the same quote never shows twice in a row.
+    if (list[i] === text.textContent) i = (i + 1) % list.length;
+    text.textContent = list[i];
     bubble.style.opacity = '1';
     quoteLeft = 4;
   };
+
+  // Thin band at mid-screen, so tall sections still trigger and each one fires once.
+  const seen = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    seen.unobserve(e.target);
+    sayQuote(SECTIONS[e.target.id]);
+    nextQuote = 12 + quoteRandom() * 8;
+  }), { rootMargin: '-45% 0px -45% 0px' });
+  for (const id in SECTIONS) { const s = document.getElementById(id); if (s) seen.observe(s); }
 
   const rand = (lo, hi) => lo + random() * (hi - lo);
   const EVENTS = {
@@ -407,7 +453,21 @@
   let x = 0, dir = 1, speed = SPEED, mode = 'drift', modeT = 5, t = 0, last = performance.now();
   let event = null, eventLeft = 0, nextEvent = rand(8, 16);
   const startEvent = () => { event = EVENTS[NAMES[Math.floor(weatherRandom() * NAMES.length)]]; eventLeft = event.length; };
-  el.addEventListener('click', () => { if (!event) startEvent(); });
+  // Each click gets a retort and some weather; 5 quick clicks and it storms off.
+  let clicks = 0, lastClick = -Infinity;
+  el.addEventListener('click', () => {
+    clicks = t - lastClick < 2 ? clicks + 1 : 1;
+    lastClick = t;
+    if (clicks >= 5) {
+      clicks = 0;
+      event = EVENTS.thunder; eventLeft = event.length;
+      mode = 'drift'; modeT = 2.5; speed = 140; dir = -dir;
+      sayQuote(ANGRY);
+      return;
+    }
+    sayQuote(POKED);
+    if (!event) startEvent();
+  });
 
   function tick(now) {
     const dt = Math.min((now - last) / 1000, 0.1);
