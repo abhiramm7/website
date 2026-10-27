@@ -135,10 +135,7 @@
                     </div>
                     <div class="publication-description">
                         <h3>HYSEP baseflow</h3>
-                        <p class="pub-summary">The 1996 USGS program that splits a daily streamflow
-                            record into baseflow and storm runoff, running in your browser. The methods
-                            are ported line for line from the original Fortran and checked against its
-                            output.</p>
+                        <p class="pub-summary">Splits a streamflow record into baseflow and storm runoff. A line-for-line port of the 1996 USGS Fortran program, running in your browser.</p>
                         <p class="pub-links"><a href="hysep/">app</a> / <a
                                 href="https://github.com/abhiramm7/hysep-terminal" target="_blank">code</a></p>
                     </div>
@@ -151,10 +148,7 @@
                     </div>
                     <div class="publication-description">
                         <h3>OpenFloodHub</h3>
-                        <p class="pub-summary">An open alternative to Google Flood Hub. Instead of one global model for
-                            every river, it trains a tiny CNN per gauge on that gauge's own history and forecasts the
-                            next 12 hours of streamflow. The DC map shows each gauge against its own flood thresholds,
-                            with NOAA's National Water Model plotted alongside for comparison.</p>
+                        <p class="pub-summary">An open take on Google Flood Hub. Each river gauge gets its own tiny model that forecasts the next 12 hours.</p>
                         <p class="pub-links"><a href="https://abhiramm7.github.io/openfloodhub/">demo</a> / <a
                                 href="https://github.com/abhiramm7/openfloodhub" target="_blank">code</a></p>
                     </div>
@@ -167,10 +161,7 @@
                     </div>
                     <div class="publication-description">
                         <h3>flood sim</h3>
-                        <p class="pub-summary">A city flood model that runs the actual shallow-water physics in your
-                            browser, on your GPU. The DC demo is built from open data: USGS lidar terrain, OpenStreetMap
-                            buildings, and river inflows pulled live from USGS gauges. The pipeline starts from a
-                            bounding box, so it should extend to pretty much any river.</p>
+                        <p class="pub-summary">Shallow-water flood physics on your GPU, in the browser. The DC demo is built from open data and should work for any river.</p>
                         <p class="pub-links"><a href="https://abhiramm7.github.io/dc-flood-sim/?flood=1">demo</a> / <a
                                 href="https://github.com/abhiramm7/dc-flood-sim" target="_blank">code</a></p>
                     </div>
@@ -183,8 +174,7 @@
                     </div>
                     <div class="publication-description">
                         <h3>Sift</h3>
-                        <p class="pub-summary">A fast, native macOS app to collect, tag, rate, and recall the papers I
-                            read. Plain files, no accounts, syncs through whatever cloud folder you already use.</p>
+                        <p class="pub-summary">A fast Mac app for saving, tagging, and finding the papers I read. Plain files, no accounts.</p>
                         <p class="pub-links"><a href="https://abhiramm7.github.io/sift/">webpage</a> / <a
                                 href="https://github.com/abhiramm7/sift" target="_blank">code</a></p>
                     </div>
@@ -192,26 +182,26 @@
             </div>
         </section>
 
-        <!-- Field Notes -->
-        <section id="field-notes" class="section">
-            <h2 class="section-title">Field notes</h2>
-            <p class="fn-blurb">Utilities and cities I've worked with, and the ones I'm working with now.</p>
-            <p class="fn-catch">Gotta catch 'em all. <img class="fn-sprite" src="data/images/charizard.png" alt="" width="40"
-                    height="40" onerror="this.remove()"></p>
-            <div class="tiles" id="fn-board"><div class="pop" id="fn-pop"></div></div>
-            <p class="fn-legend" id="fn-legend">
-                <button data-f="shipped" aria-pressed="false"><i class="l-ship"></i>shipped</button>
-                <button data-f="active" aria-pressed="false"><i class="l-prop"></i>working now</button>
-                <span><i class="l-none"></i>not yet</span>
-                <span><i class="l-lake"></i>Great Lakes</span>
-                <span>🏠 home</span>
-                <span>📜 grad school</span>
-            </p>
-        </section>
-
         <!-- Work Experience -->
         <section id="experience" class="section">
             <h2 class="section-title">Work Experience</h2>
+            <!-- Field Notes -->
+            <div id="field-notes" class="fn-sub">
+                <h3 class="section-title">Field notes</h3>
+                <p class="fn-blurb">Utilities and cities I've worked with, and the ones I'm working with now.</p>
+                <p class="fn-catch">Gotta catch 'em all. <img class="fn-sprite" src="data/images/charizard.png" alt="" width="40"
+                        height="40" onerror="this.remove()"></p>
+                <div class="tiles" id="fn-board"><div class="pop" id="fn-pop"></div></div>
+                <p class="fn-legend" id="fn-legend">
+                    <button data-f="shipped" aria-pressed="false"><i class="l-ship"></i>shipped</button>
+                    <button data-f="active" aria-pressed="false"><i class="l-prop"></i>working now</button>
+                    <span><i class="l-none"></i>not yet</span>
+                    <span><i class="l-lake"></i>Great Lakes</span>
+                    <span>🏠 home</span>
+                    <span>📜 grad school</span>
+                </p>
+            </div>
+
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
@@ -271,6 +261,7 @@
                     </div>
                 </div>
             </div>
+
         </section>
 
         <!-- Projects -->
@@ -282,8 +273,7 @@
                         <img src="data/images/pystorms.png" alt="pystorms" />
                     </div>
                     <h3>pystorms</h3>
-                    <p>Simulation sandbox for designing and evaluating stormwater control algorithms. Curated
-                        scenarios for benchmarking.</p>
+                    <p>A sandbox for testing stormwater control algorithms.</p>
                     <span class="project-tag">Python</span>
                 </a>
                 <a href="https://github.com/OpenWaterAnalytics/pyswmm" target="_blank" class="project-card">
@@ -291,8 +281,7 @@
                         <img src="data/images/pyswmm.png" alt="PySWMM" />
                     </div>
                     <h3>PySWMM</h3>
-                    <p>The Python interface to EPA's Stormwater Management Model. Enables real-time interaction with
-                        SWMM simulations.</p>
+                    <p>Python interface to EPA's SWMM. Step through and change simulations as they run.</p>
                     <span class="project-tag">Python</span>
                 </a>
                 <a href="https://github.com/kLabUM/rrcf" target="_blank" class="project-card">
@@ -300,8 +289,7 @@
                         <img src="data/images/rrcf1.png" alt="rrcf" />
                     </div>
                     <h3>rrcf</h3>
-                    <p>Robust Random Cut Forest for anomaly detection on streaming data. Detects shifts in data
-                        structure in real time.</p>
+                    <p>Spots anomalies in streaming data as it arrives.</p>
                     <span class="project-tag">Python</span>
                 </a>
                 <a href="https://github.com/kLabUM/StormReactor" target="_blank" class="project-card">
@@ -309,8 +297,7 @@
                         <img src="data/images/stormreactor.png" alt="StormReactor" />
                     </div>
                     <h3>StormReactor</h3>
-                    <p>Open-source package for integrated modeling of water quality and water balance in EPA-SWMM
-                        simulations.</p>
+                    <p>Adds water quality modeling to SWMM simulations.</p>
                     <span class="project-tag">Python</span>
                 </a>
                 <a href="https://github.com/abhiramm7/ewri2023_DigitalWater101" target="_blank" class="project-card">
@@ -318,8 +305,7 @@
                         <span style="font-size:2rem;line-height:56px;">💧</span>
                     </div>
                     <h3>Digital Water 101</h3>
-                    <p>Workshop materials for building digital twins of water systems. Covers mechanistic modeling,
-                        sensor data integration, and Python workflows.</p>
+                    <p>Workshop notebooks for building digital twins of water systems in Python.</p>
                     <span class="project-tag">Jupyter Notebook</span>
                 </a>
             </div>
@@ -341,8 +327,7 @@
                         <p class="pub-venue"><em>Journal of Water Resources Planning and Management</em>, 2026</p>
                         <p class="pub-links"><a
                                 href="https://ascelibrary.org/doi/abs/10.1061/JWRMD5.WRENG-7336">paper</a></p>
-                        <p class="pub-summary">Constrained Bayesian optimization for designing and controlling
-                            stormwater systems when system constraints are not known ahead of time.</p>
+                        <p class="pub-summary">Designing and controlling stormwater systems when you don't know the constraints up front.</p>
                     </div>
                 </div>
 
@@ -358,8 +343,7 @@
                         <p class="pub-venue"><em>Preprint</em>, 2023</p>
                         <p class="pub-links"><a href="data/papers/bayes_poster.pdf">poster</a> / <a
                                 href="https://arxiv.org/abs/2305.18630">paper</a></p>
-                        <p class="pub-summary">Bayesian optimization as a data-driven approach for identifying control
-                            strategies that achieve desired stormwater network responses.</p>
+                        <p class="pub-summary">Finding stormwater control strategies with Bayesian optimization, plus how uncertain they are.</p>
                     </div>
                 </div>
 
@@ -376,8 +360,7 @@
                         <p class="pub-venue"><em>Environmental Modelling and Software</em>, 2023</p>
                         <p class="pub-links"><a href="https://github.com/kLabUM/pystorms">code</a> / <a
                                 href="https://arxiv.org/abs/2110.12289">paper</a></p>
-                        <p class="pub-summary">Curated collection of stormwater control scenarios enabling development
-                            and comparison of control algorithms.</p>
+                        <p class="pub-summary">A set of stormwater control scenarios for building and comparing control algorithms.</p>
                     </div>
                 </div>
 
@@ -394,8 +377,7 @@
                         <p class="pub-venue"><em>Urban Water Journal</em>, 2022</p>
                         <p class="pub-links"><a href="https://github.com/bemason/RTC_GreenInfrastructure">code</a> / <a
                                 href="data/papers/phos_paper.pdf">paper</a></p>
-                        <p class="pub-summary">Real-time control improves nutrient capture efficiency in bioretention
-                            cells, reducing required infrastructure size.</p>
+                        <p class="pub-summary">Real-time control helps bioretention cells capture more nutrients, so they can be built smaller.</p>
                     </div>
                 </div>
 
@@ -412,8 +394,7 @@
                         <p class="pub-venue"><em>Environmental Modelling and Software</em>, 2021</p>
                         <p class="pub-links"><a href="https://github.com/kLabUM/StormReactor">code</a> / <a
                                 href="data/papers/stormreactor.pdf">paper</a></p>
-                        <p class="pub-summary">Python package for updating pollutant concentrations in EPA-SWMM during
-                            simulations.</p>
+                        <p class="pub-summary">Python package that adds pollutant modeling to SWMM simulations.</p>
                     </div>
                 </div>
 
@@ -431,7 +412,7 @@
                         <p class="pub-venue"><em>Journal of Open Source Software</em>, 2020</p>
                         <p class="pub-links"><a href="https://github.com/OpenWaterAnalytics/pyswmm">code</a> / <a
                                 href="https://joss.theoj.org/papers/10.21105/joss.02292">paper</a></p>
-                        <p class="pub-summary">Python wrapper for interfacing with EPA's Stormwater Management Model.
+                        <p class="pub-summary">Python wrapper for EPA's Stormwater Management Model.
                         </p>
                     </div>
                 </div>
@@ -452,8 +433,7 @@
                         <p class="pub-venue"><em>Advances in Water Resources</em>, 2020</p>
                         <p class="pub-links"><a href="https://github.com/kLabUM/rl-storm-control">code</a> / <a
                                 href="data/papers/rl.pdf">paper</a></p>
-                        <p class="pub-summary">Using reinforcement learning for autonomous stormwater systems that
-                            dynamically adapt to watershed conditions.</p>
+                        <p class="pub-summary">Reinforcement learning that lets stormwater systems adapt to changing conditions.</p>
                     </div>
                 </div>
 
@@ -469,8 +449,7 @@
                         <p class="pub-venue"><em>Journal of Open Source Software</em>, 2019</p>
                         <p class="pub-links"><a href="https://github.com/kLabUM/rrcf">code</a> / <a
                                 href="https://joss.theoj.org/papers/10.21105/joss.01336">paper</a></p>
-                        <p class="pub-summary">Detecting anomalies in streaming data by estimating structural shifts in
-                            random forests.</p>
+                        <p class="pub-summary">Finding anomalies in streaming data with random cut forests.</p>
                     </div>
                 </div>
 
@@ -486,8 +465,7 @@
                                 Wong</a>, <a href="https://public.websites.umich.edu/~bkerkez/">Branko Kerkez</a></p>
                         <p class="pub-venue"><em>Sensors</em>, 2018</p>
                         <p class="pub-links"><a href="data/papers/shapingwater.pdf">paper</a></p>
-                        <p class="pub-summary">Precisely shaping stormwater network response using wireless sensor
-                            network data.</p>
+                        <p class="pub-summary">Using wireless sensors to shape how a stormwater network responds to storms.</p>
                     </div>
                 </div>
 
@@ -503,8 +481,7 @@
                         <p class="pub-venue"><em>Environmental Science: Water Research and Technology</em>, 2017</p>
                         <p class="pub-links"><a href="https://github.com/kLabUM/control_sim">code</a> / <a
                                 href="data/papers/stormwatertheory.pdf">paper</a></p>
-                        <p class="pub-summary">Re-imagining physical watersheds as interconnected systems that can be
-                            dynamically reconfigured for targeted pollutant removal.</p>
+                        <p class="pub-summary">Treating watersheds as systems that can be reconfigured on the fly to remove pollutants.</p>
                     </div>
                 </div>
             </div>

@@ -821,7 +821,9 @@ footer {
 
 /* ─── Responsive ─── */
 /* ─── Field Notes (tile map of utilities, see fieldnotes.js) ─── */
-#field-notes .section-title { margin-bottom: var(--gap-sm); }
+#field-notes { margin-bottom: var(--gap-xl); }
+/* subheading inside Work Experience: same type, no rule underneath */
+#field-notes .section-title { margin-bottom: var(--gap-xs); padding-bottom: 0; border-bottom: 0; }
 .fn-blurb { margin: 0 0 var(--gap-xs); color: var(--secondary-text); }
 .fn-catch { font-size: 0.8rem; font-weight: 700; margin-bottom: var(--gap-md); display: flex; align-items: center; gap: 4px; min-height: 40px; }
 .fn-sprite { image-rendering: pixelated; margin: -10px 0; }
