@@ -820,6 +820,62 @@ footer {
 }
 
 /* ─── Responsive ─── */
+/* ─── Field Notes (tile map of utilities, see fieldnotes.js) ─── */
+#field-notes .section-title { margin-bottom: var(--gap-sm); }
+.fn-blurb { margin: 0 0 var(--gap-xs); color: var(--secondary-text); }
+.fn-catch { font-size: 0.8rem; font-weight: 700; margin-bottom: var(--gap-md); display: flex; align-items: center; gap: 4px; min-height: 40px; }
+.fn-sprite { image-rendering: pixelated; margin: -10px 0; }
+
+/* square tile grid (NPR / Bloomberg layout), 11 columns, full width */
+#field-notes .tiles { position: relative; display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 6px; }
+#field-notes .lbl { justify-self: end; align-self: end; margin-bottom: 4px; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted-text); }
+#field-notes .tile { aspect-ratio: 1; position: relative; display: flex; align-items: center; justify-content: center;
+    border: 1.5px solid #999; background: #fff; color: #999; font-size: 0.75rem; font-weight: 700;
+    transition: transform .15s ease, opacity .3s ease; }
+#field-notes .tile.shipped, #field-notes .tile.active { border: 2px solid #000; cursor: pointer; color: #fff; background: #000; }
+#field-notes .tile.active { background: var(--accent-hover); }
+#field-notes .tile.shipped:hover, #field-notes .tile.active:hover, #field-notes .tile.selected, #field-notes .tile:focus-visible {
+    transform: scale(1.08); z-index: 2; outline: none; box-shadow: 3px 3px 0 var(--accent-hover); }
+#field-notes .tile.active:hover, #field-notes .tile.active.selected { box-shadow: 3px 3px 0 #000; }
+#field-notes .tile .n { position: absolute; top: 3px; right: 5px; font-size: 0.6rem; }
+#field-notes .tile.shipped .n { color: var(--accent-hover); }
+#field-notes .tile .mark { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; line-height: 1; }
+#field-notes .tile.lake { border-color: #ccc; background: repeating-linear-gradient(135deg, #fff 0 3px, #eee 3px 6px); font-size: 1rem; }
+#field-notes .tile.lake.fav { border: 2px solid var(--accent-hover); cursor: pointer; }
+#field-notes .tile.lake.fav:hover, #field-notes .tile.lake.fav.selected { transform: scale(1.08); z-index: 2; box-shadow: 3px 3px 0 #000; }
+/* entrance, west to east */
+#field-notes .tiles:not(.in) .tile { opacity: 0; transform: scale(.5); }
+#field-notes .tiles.in .tile { transition: transform .35s cubic-bezier(.2,1.4,.4,1) calc(var(--c) * 30ms), opacity .25s ease calc(var(--c) * 30ms); }
+#field-notes .tiles.done .tile { transition-delay: 0s; transition-duration: .15s, .3s; }
+@media (prefers-reduced-motion: reduce) { #field-notes .tiles:not(.in) .tile { opacity: 1; transform: none; } }
+/* legend filter */
+#field-notes .f-shipped .tile.active, #field-notes .f-active .tile.shipped { opacity: .25; }
+
+/* popover anchored to the hovered tile */
+#field-notes .pop { position: absolute; z-index: 5; background: #000; color: #fff; font-size: 0.7rem; padding: 8px 10px; min-width: 180px; max-width: 260px;
+    box-shadow: 3px 3px 0 var(--accent-hover); display: none; pointer-events: none; }
+#field-notes .pop.show { display: block; }
+#field-notes .pop b { color: var(--accent-hover); text-transform: uppercase; letter-spacing: .04em; }
+#field-notes .pop ul { list-style: none; margin-top: 4px; }
+#field-notes .pop li { margin-top: 4px; }
+#field-notes .pop li span { color: #aaa; }
+#field-notes .pop .pill { font-size: 0.55rem; background: var(--accent-hover); color: #fff; padding: 0 4px; margin-left: 4px; text-transform: uppercase; }
+
+.fn-legend { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; margin-top: var(--gap-sm); color: var(--muted-text); display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; }
+.fn-legend button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-transform: inherit; letter-spacing: inherit; }
+.fn-legend button[aria-pressed="true"] { color: #000; text-decoration: underline; text-underline-offset: 3px; }
+.fn-legend i { display: inline-block; width: 12px; height: 12px; vertical-align: -1px; margin-right: 5px; border: 2px solid #000; }
+.fn-legend .l-ship { background: #000; }
+.fn-legend .l-prop { background: var(--accent-hover); border-color: var(--accent-hover); }
+.fn-legend .l-none { border: 1.5px solid #999; }
+.fn-legend .l-lake { border: 1.5px solid #ccc; background: repeating-linear-gradient(135deg, #fff 0 2px, #ddd 2px 4px); }
+
+@media (max-width: 600px) {
+    #field-notes .tiles { gap: 3px; }
+    #field-notes .tile { font-size: 0.5rem; border-width: 1px; }
+    #field-notes .tile .n, #field-notes .tile .mark { display: none; }
+}
+
 @media (max-width: 768px) {
     :root {
         --gap-xl: 40px;

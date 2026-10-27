@@ -352,6 +352,7 @@
   // Said once when a section scrolls into the middle of the screen.
   const SECTIONS = {
     'side-quests': ['Baseflow separation: the art of telling rivers what they really are.', 'Side quests. Like a main quest, but with fewer reviewers.'],
+    'field-notes': ["Gotta catch 'em all. I already caught every storm.", 'Sixteen badges and not one of them is a cloud. Rude.'],
     experience: ["A data scientist who models water. I AM water. Awkward.", 'Hydraulic control engineer? So you are the one damming my plans.'],
     projects: ['PySWMM: because Fortran-era engines deserve Python too.', "rrcf finds anomalies. It'd flag me in a heartbeat."],
     publications: ['Peer review: when 3 strangers rain on your parade.', 'Bayesian optimization of stormwater. Finally, someone with priors.'],
