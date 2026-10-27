@@ -314,52 +314,39 @@
   // ART END
   const SCALE = 2, SPEED = 30, SEED = 42;
   const QUOTES = [
-    'Precipitation: 100%. p-value: also somehow 0.049.',
-    'My rainfall is i.i.d. Your excuses are autocorrelated.',
-    "I'm a 100-year storm. Third visit this decade. Stationarity is dead.",
-    "Infiltration is just rain with commitment issues.",
-    'Fun fact: I weigh 500 tonnes. Rude of you not to ask.',
-    'My dew point is higher than your test coverage.',
-    'Nash-Sutcliffe efficiency of your scrolling: -0.3.',
+    'Chance of rain: yes.',
     "I don't overfit. I overcast.",
-    'Sorry, I just exceeded my design storm.',
-    'Running SWMM in my head. Your basement is fine. Probably.',
-    'Clausius-Clapeyron says I hold 7% more water per degree. So, yes, I am bloated.',
-    'Rain is just gradient descent with gravity.',
-    "Peak flow? I'm peak flow.",
-    "Runoff coefficient of this page: 0.9. Nothing's soaking in.",
-    "I'm not a model. All models are wrong. I'm just mostly wrong.",
-    'Humidity: 98%. Training loss: also 98%.',
-    "My forecast has error bars. Your plans don't.",
-    "I'd do a Monte Carlo on whether you'll click me. Already converged: yes.",
-    "Evapotranspiration is the plants' version of ghosting.",
-    'Every puddle is an unsupervised clustering of rain.',
+    '100-year storm. Third one this decade.',
+    'Running SWMM in my head. Your basement is probably fine.',
+    'Peak flow incoming.',
+    'Nothing soaks into this page.',
+    'Warm days make me heavier. Same.',
+    'Every puddle started as me.',
+    'All models are wrong. Some of them are clouds.',
+    "Nobody paid for the LLM integration, so I've got ten lines. This is one of them.",
   ];
-  // Said when clicked, so poking it gets a reaction instead of a random line.
+  // Said when clicked; ANGRY replaces it on the fifth quick click.
   const POKED = [
-    'Hey! Hands off the cumulus.',
-    'Unhandled exception: PokeError at cloud.py:1',
-    'I have 10^9 droplets and you touched all of them.',
-    'Each click raises my convective potential. Just saying.',
-    "That's not how you sample a cloud.",
-    "Logged. Added to the training set of grudges.",
+    'Hey.',
+    'That tickles.',
+    'Stop poking the cloud.',
+    'You just touched a billion droplets.',
   ];
   const ANGRY = [
-    'Convective available potential energy: MAXED.',
-    'You have been rate-limited. By lightning.',
-    'kill -9 your_mood',
+    "That's it. Thunder.",
+    "One more and it's hail.",
   ];
   // Said once when a section scrolls into the middle of the screen.
   const SECTIONS = {
-    'side-quests': ['Baseflow separation: the art of telling rivers what they really are.', 'Side quests. Like a main quest, but with fewer reviewers.'],
-    'field-notes': ["Gotta catch 'em all. I already caught every storm.", 'Sixteen badges and not one of them is a cloud. Rude.'],
-    experience: ["A data scientist who models water. I AM water. Awkward.", 'Hydraulic control engineer? So you are the one damming my plans.'],
-    projects: ['PySWMM: because Fortran-era engines deserve Python too.', "rrcf finds anomalies. It'd flag me in a heartbeat."],
-    publications: ['Peer review: when 3 strangers rain on your parade.', 'Bayesian optimization of stormwater. Finally, someone with priors.'],
-    blog: ['Blog posts. Like papers, minus Reviewer 2.', 'Governing equations from data? I am the governing equations.'],
-    rowing: ["Rowing: moving water by hand. Cute. I do it with gravity."],
-    otf: ['Splat points are just precipitation for sweat.'],
-    dogs: ['Dogs! Finally, data with zero noise. Pure signal.', 'Good dogs. Statistically significant good dogs.'],
+    'side-quests': ['The fun stuff. Version 0.1, forever.', 'Small projects, big puddles. Some of them will evaporate first.'],
+    'field-notes': ["Gotta catch 'em all.", "I've rained on most of these."],
+    experience: ['Models water for a living. I just am water.'],
+    projects: ['I worked on these too. Mostly the storm parts.'],
+    publications: ['Peer review: three people raining on your parade.'],
+    blog: ['Writing. Fewer reviewers here.'],
+    rowing: ['Rowing is moving water by hand. I use gravity.'],
+    otf: ['Splat points are basically sweat rain.'],
+    dogs: ['Dogs!', 'Good dogs. No notes.'],
   };
 
   // mulberry32: Math.random can't be seeded, so this gives the same sequence on every load.
